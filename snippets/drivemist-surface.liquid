@@ -1,0 +1,20 @@
+{%- liquid
+  case style
+    when 'sand'
+      echo 'bg-sand text-ink'
+    when 'shell'
+      echo 'bg-shell text-ink'
+    when 'deep'
+      echo 'bg-deep text-paper'
+    when 'ink'
+      echo 'bg-ink text-paper'
+    when 'accent'
+      echo 'bg-accent-soft text-accent-ink'
+    when 'cta'
+      echo 'bg-cta text-cta-ink'
+    when 'wash'
+      echo 'bg-accent-wash text-ink'
+    else
+      echo 'bg-paper text-ink'
+  endcase
+-%}

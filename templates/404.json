@@ -1,0 +1,73 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "header": {
+      "type": "drivemist-page-header",
+      "settings": {
+        "eyebrow": "404",
+        "heading": "This page took a wrong turn",
+        "intro": "<p>The link may be out of date or the page has moved. Get back on the road with our bestselling car humidifiers below.</p>",
+        "show_breadcrumbs": false,
+        "button_label": "Shop all car humidifiers",
+        "button_link": "shopify://collections/all",
+        "alignment": "center",
+        "background_style": "sand",
+        "padding_top": 112,
+        "padding_bottom": 112
+      }
+    },
+    "collection": {
+      "type": "drivemist-product-trio",
+      "settings": {
+        "eyebrow": "Discover DriveMist",
+        "heading": "Bestselling car humidifiers",
+        "intro": "",
+        "link_label": "",
+        "button_label": "View product",
+        "show_save_badge": true,
+        "image_ratio": "4 / 5",
+        "background_style": "paper",
+        "padding_top": 96,
+        "padding_bottom": 96
+      },
+      "blocks": {
+        "p1": {
+          "type": "product",
+          "settings": {
+            "product": "nissan-gtr-car-humidifier",
+            "eyebrow": "JDM legend",
+            "title_override": "Nissan GT-R Car Humidifier",
+            "description": "Cool mist from twin exhausts and glowing headlights.",
+            "fallback_link": "shopify://collections/all"
+          }
+        },
+        "p2": {
+          "type": "product",
+          "settings": {
+            "product": "bugatti-chiron-car-humidifier",
+            "eyebrow": "Hypercar",
+            "title_override": "Bugatti Chiron Car Humidifier",
+            "description": "Hypercar lines with a soft aroma mist for your cabin.",
+            "fallback_link": "shopify://collections/all"
+          }
+        }
+      },
+      "block_order": [
+        "p1",
+        "p2"
+      ]
+    }
+  },
+  "order": [
+    "header",
+    "collection"
+  ]
+}

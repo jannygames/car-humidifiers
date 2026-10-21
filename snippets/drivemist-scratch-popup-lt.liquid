@@ -1,0 +1,113 @@
+{%- liquid
+  assign co_lang = request.locale.iso_code | split: '-' | first | downcase
+-%}
+{%- if co_lang == 'lt' -%}
+  <script>
+    (function () {
+      var text = {
+        'sp-eyebrow': { 'Welcome offer': 'Specialus pasiūlymas' },
+        'sp-headline': { 'Scratch & Win!': 'Nutrinkite ir laimėkite!' },
+        'sp-body-text': { 'Scratch the card to reveal your exclusive discount': 'Nutrinkite kortelę ir gaukite nuolaidos kodą' },
+        'sp-code-reward-label': { 'Congratulations!': 'Sveikiname!' },
+        'sp-code-reward-sub': { 'Here is your exclusive discount code': 'Štai jūsų išskirtinis nuolaidos kodas' },
+        'sp-copy-label': { 'Copy': 'Kopijuoti', 'Copied!': 'Nukopijuota!', 'Copied': 'Nukopijuota' },
+        'sp-checkout-btn': { 'Apply to Checkout': 'Pritaikyti atsiskaitant' },
+        'sp-won-label': { 'You won!': 'Jūs laimėjote!' },
+        'sp-won-sub': { 'Claim it to lock in your reward.': 'Panaudokite nuolaidos kodą atsiskaitymo metu.' },
+        'sp-claim-label': { 'Claim': 'Gauti nuolaidą' },
+        'sp-email-heading': { 'Almost there!': 'Beveik viskas!' },
+        'sp-email-sub': { 'Enter your email to reveal your discount': 'Įveskite el. pašto adresą ir gaukite savo nuolaidą' },
+        'sp-email-error': {
+          'Please enter a valid email address.': 'Įveskite teisingą el. pašto adresą.',
+          'Please enter a valid phone number.': 'Įveskite teisingą telefono numerį.'
+        },
+        'sp-sms-consent-text': { 'I agree to receive recurring automated marketing text messages at the phone number provided.': 'Sutinku nurodytu telefono numeriu gauti pasikartojančias automatines rinkodaros SMS žinutes.' },
+        'sp-disclaimer-text': { 'I agree to receive marketing emails.': 'Sutinku gauti rinkodaros el. laiškus.' },
+        'sp-email-btn': { 'Get My Discount': 'Gauti nuolaidą' },
+        'sp-footer': { 'One-time use': 'Galioja vieną kartą' },
+        'sp-decline-btn': { 'No thanks, maybe later': 'Ne, ačiū, gal vėliau' }
+      };
+
+      var classText = {
+        '.sp-teaser-label': {
+          "Don't miss your discount": 'Nepraleiskite savo nuolaidos',
+          'Don\u2019t miss your discount': 'Nepraleiskite savo nuolaidos'
+        },
+        '.sp-teaser-badge': { 'Win': 'Laimėk' }
+      };
+
+      var attributes = {
+        'sp-teaser-tab': { 'aria-label': { 'Re-open scratch card': 'Vėl atidaryti nutrinamą kortelę' } },
+        'sp-close-btn': { 'aria-label': { 'Close popup': 'Uždaryti langą' } },
+        'sp-code-chip': { 'aria-label': { 'Copy discount code': 'Kopijuoti nuolaidos kodą' } },
+        'sp-email-input': { placeholder: { 'you@email.com': 'jusu@pastas.lt' } },
+        'sp-phone-input': { placeholder: { '(555) 555-5555': '+370 600 00000' } }
+      };
+
+      var amounts = ['sp-code-amount', 'sp-won-amount'];
+
+      function apply() {
+        Object.keys(text).forEach(function (id) {
+          var el = document.getElementById(id);
+          if (!el) return;
+          var key = (el.textContent || '').trim();
+          if (Object.prototype.hasOwnProperty.call(text[id], key)) el.textContent = text[id][key];
+        });
+
+        Object.keys(classText).forEach(function (selector) {
+          Array.prototype.forEach.call(document.querySelectorAll(selector), function (el) {
+            var key = (el.textContent || '').trim();
+            if (Object.prototype.hasOwnProperty.call(classText[selector], key)) {
+              el.textContent = classText[selector][key];
+            }
+          });
+        });
+
+        Object.keys(attributes).forEach(function (id) {
+          var el = document.getElementById(id);
+          if (!el) return;
+          Object.keys(attributes[id]).forEach(function (name) {
+            var value = (el.getAttribute(name) || '').trim();
+            if (Object.prototype.hasOwnProperty.call(attributes[id][name], value)) {
+              el.setAttribute(name, attributes[id][name][value]);
+            }
+          });
+        });
+
+        amounts.forEach(function (id) {
+          var el = document.getElementById(id);
+          if (!el) return;
+          var value = (el.textContent || '').trim();
+          if (/^free shipping$/i.test(value)) {
+            el.textContent = 'Nemokamas pristatymas';
+            return;
+          }
+          var match = value.match(/^(.+?)\s+off$/i);
+          if (match) el.textContent = match[1] + ' nuolaida';
+        });
+      }
+
+      var observer = new MutationObserver(schedule);
+      var scheduled = false;
+
+      function connect() {
+        observer.observe(document.documentElement, { childList: true, subtree: true, characterData: true });
+      }
+
+      function schedule() {
+        if (scheduled) return;
+        scheduled = true;
+        requestAnimationFrame(function () {
+          scheduled = false;
+          observer.disconnect();
+          apply();
+          connect();
+        });
+      }
+
+      apply();
+      connect();
+      document.addEventListener('DOMContentLoaded', apply);
+    })();
+  </script>
+{%- endif -%}

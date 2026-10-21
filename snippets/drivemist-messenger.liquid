@@ -1,0 +1,25 @@
+{%- liquid
+  assign co_fb_handle = settings.social_facebook_link | split: 'facebook.com/' | last | split: '/' | first | split: '?' | first
+-%}
+
+{%- if settings.social_facebook_link contains 'facebook.com/' and co_fb_handle != blank -%}
+  <div class="co-messenger" data-co-messenger>
+    <a
+      class="co-messenger__link"
+      href="https://m.me/{{ co_fb_handle }}"
+      target="_blank"
+      rel="noopener"
+      aria-label="{{ 'drivemist.contact.messenger' | t }}"
+    >
+      <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true">
+        <path
+          fill="currentColor"
+          d="M12 2C6.36 2 2 6.13 2 11.7c0 2.91 1.19 5.44 3.14 7.17.16.14.26.35.27.57l.05 1.78a.8.8 0 0 0 1.12.71l1.98-.87a.8.8 0 0 1 .53-.04c.91.25 1.87.38 2.91.38 5.64 0 10-4.13 10-9.7S17.64 2 12 2Zm6 7.46-2.94 4.66a1.5 1.5 0 0 1-2.17.4l-2.34-1.75a.6.6 0 0 0-.72 0l-3.16 2.4c-.42.32-.97-.18-.69-.63l2.94-4.66a1.5 1.5 0 0 1 2.17-.4l2.34 1.75a.6.6 0 0 0 .72 0l3.16-2.4c.42-.32.97.18.69.63Z"
+        />
+      </svg>
+    </a>
+    <button type="button" class="co-chat-close" data-co-messenger-close aria-label="{{ 'drivemist.contact.close_chat' | t }}">
+      <svg viewBox="0 0 12 12" width="10" height="10" aria-hidden="true"><path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+{%- endif -%}

@@ -1,0 +1,24 @@
+{%- liquid
+  assign co_align = align | default: 'center'
+  if co_align == 'center'
+    assign co_align_class = 'items-center text-center mx-auto'
+  else
+    assign co_align_class = 'items-start text-left'
+  endif
+  assign co_max = max_width | default: 'max-w-2xl'
+-%}
+{%- if eyebrow != blank or heading != blank or intro != blank -%}
+  <div class="co-reveal co-flex flex-col {{ co_align_class }} {{ co_max }} gap-4">
+    {%- if eyebrow != blank -%}
+      <p class="co-eyebrow text-accent">{{ eyebrow }}</p>
+    {%- endif -%}
+    {%- if heading != blank -%}
+      <h2 class="co-display text-[clamp(1.85rem,1.1rem+3.1vw,3.15rem)]">{{ heading }}</h2>
+    {%- endif -%}
+    {%- if intro != blank -%}
+      <div class="co-rte text-[1.0625rem] leading-relaxed text-muted {% if co_align == 'center' %}max-w-xl{% endif %}">
+        {{ intro }}
+      </div>
+    {%- endif -%}
+  </div>
+{%- endif -%}

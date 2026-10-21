@@ -1,0 +1,113 @@
+{%- doc -%}
+  Renders a variant picker in a modal dialog, so a card can offer add-to-cart on a product
+  with options instead of sending the customer to the product page.
+
+  @param {object} product - The product whose variants are offered
+  @param {string} dialog_id - Unique id; the trigger button points at it with aria-controls
+  @param {string} section_id - The section rendering the card, for the add-to-cart form
+  @param {string} title - Heading above the options
+  @param {string} [add_label] - Add to cart button text
+{%- enddoc -%}
+
+{%- liquid
+  assign co_dialog_variant = product.selected_or_first_available_variant
+  assign co_dialog_form_id = dialog_id | append: '-form'
+  assign co_dialog_add = 'actions.add_to_cart' | t
+  if add_label != blank
+    assign co_dialog_add = add_label
+  endif
+  assign co_dialog_sold_out = 'products.product.sold_out' | t
+  capture co_dialog_label
+    echo '<span data-co-atc-add>' | append: co_dialog_add | append: '</span>'
+    echo '<span data-co-atc-sold-out hidden>' | append: co_dialog_sold_out | append: '</span>'
+  endcapture
+-%}
+
+<dialog
+  id="{{ dialog_id }}"
+  class="co-variant-dialog"
+  data-co-variant-dialog
+  aria-label="{{ title | escape }}"
+>
+  <div class="co-variant-dialog__panel co-flex flex-col gap-5 p-6 sm:p-7">
+    <div class="co-flex items-start justify-between gap-4">
+      <div class="min-w-0">
+        <p class="co-eyebrow text-accent">{{ title }}</p>
+        <p class="mt-2 font-sub text-[1.0625rem] font-medium leading-snug">{{ product.title }}</p>
+      </div>
+      <button
+        type="button"
+        class="co-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-ink/15 transition-colors hover:bg-ink/5"
+        data-co-variant-close
+        aria-label="{{ 'accessibility.close_dialog' | t }}"
+      >
+        {% render 'drivemist-icon', icon: 'close', class: 'w-4 h-4' %}
+      </button>
+    </div>
+
+    <fieldset class="co-flex flex-col gap-2.5 border-0 p-0">
+      <legend class="visually-hidden">{{ title }}</legend>
+      {%- assign co_dialog_checked = false -%}
+      {%- assign co_dialog_note_keys = '' -%}
+      {%- for v in product.variants -%}
+        {%- unless v.available -%}
+          {%- capture co_dialog_key -%}{% render 'drivemist-sold-out-key', product: product, variant: v %}{%- endcapture -%}
+          {%- assign co_dialog_note_keys = co_dialog_note_keys | append: ',' | append: co_dialog_key -%}
+        {%- endunless -%}
+        <label class="co-variant-option">
+          <input
+            type="radio"
+            name="{{ dialog_id }}-option"
+            class="sr-only"
+            value="{{ v.id }}"
+            data-co-variant-choice
+            {% unless v.available %}data-co-sold-out="{{ co_dialog_key }}"{% endunless %}
+            {% if v.available and co_dialog_checked == false %}checked{% assign co_dialog_checked = true %}{% endif %}
+          >
+          <span class="co-variant-option__body">
+            <span class="co-variant-option__title">{{ v.title }}</span>
+            <span class="co-variant-option__price">
+              {%- if v.available -%}
+                <span class="co-variant-option__amount">{{ v.price | money_without_trailing_zeros }}</span>
+                {%- if v.compare_at_price > v.price -%}
+                  <s class="ms-1.5 text-muted/80">{{ v.compare_at_price | money_without_trailing_zeros }}</s>
+                {%- endif -%}
+              {%- else -%}
+                {{ 'products.product.sold_out' | t }}
+              {%- endif -%}
+            </span>
+          </span>
+        </label>
+      {%- endfor -%}
+    </fieldset>
+
+    {%- assign co_dialog_note_keys = co_dialog_note_keys | split: ',' | compact | uniq -%}
+    {%- for co_dialog_note_key in co_dialog_note_keys -%}
+      {%- if co_dialog_note_key != blank -%}
+        {% render 'drivemist-sold-out-note', key: co_dialog_note_key, hidden: true %}
+      {%- endif -%}
+    {%- endfor -%}
+
+    <product-form-component
+      class="block"
+      data-section-id="{{ section_id }}"
+      data-product-id="{{ product.id }}"
+      data-product-url="{{ product.url }}"
+      on:submit="/handleSubmit"
+      data-quantity-default="1"
+    >
+      <div class="visually-hidden" aria-live="assertive" role="status" aria-atomic="true" ref="liveRegion"></div>
+      {%- form 'product', product, id: co_dialog_form_id, data-type: 'add-to-cart-form', class: 'w-full' -%}
+        <input type="hidden" name="id" ref="variantId" value="{{ co_dialog_variant.id }}" data-co-variant-input>
+        <input type="hidden" name="quantity" value="1">
+        {% render 'add-to-cart-button',
+          class: 'add-to-cart-button co-card-atc w-full',
+          can_add_to_cart: true,
+          show_icon: true,
+          product: product,
+          add_to_cart_text: co_dialog_label
+        %}
+      {%- endform -%}
+    </product-form-component>
+  </div>
+</dialog>

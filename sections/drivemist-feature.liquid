@@ -1,0 +1,440 @@
+{%- liquid
+  assign s = section.settings
+  if s.image_position == 'right'
+    assign media_order = 'lg:order-2'
+    assign text_order = 'lg:order-1'
+  else
+    assign media_order = 'lg:order-1'
+    assign text_order = 'lg:order-2'
+  endif
+-%}
+
+<section
+  class="co co-section {% render 'drivemist-surface', style: s.background_style %}"
+  style="{% render 'drivemist-pad', padding_top: s.padding_top, padding_bottom: s.padding_bottom %}"
+
+  {% if s.anchor != blank %}id="{{ s.anchor }}"{% endif %}
+>
+  <div class="co-container">
+    <div class="co-grid items-center gap-10 lg:grid-cols-2 lg:gap-16 xl:gap-24">
+      <div class="co-reveal {{ media_order }}">
+        <div class="relative">
+          {% render 'drivemist-image',
+            image: s.image,
+            ratio: s.image_ratio,
+            class: 'co-media rounded-card',
+            sizes: '(min-width: 1024px) 50vw, 100vw',
+            alt: s.image_alt,
+            placeholder: 'lifestyle-2'
+          %}
+          {%- if s.image_secondary != blank -%}
+            <div class="absolute -bottom-8 -right-4 co-hide w-[42%] sm:block lg:-right-8">
+              {% render 'drivemist-image',
+                image: s.image_secondary,
+                ratio: '1 / 1',
+                class: 'co-media rounded-tile ring-8 ring-[var(--co-paper)]',
+                sizes: '25vw',
+                alt: s.image_alt
+              %}
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+
+      <div class="co-reveal {{ text_order }} max-w-[34rem]">
+        {%- if s.eyebrow != blank -%}
+          <p class="co-eyebrow text-accent">{{ s.eyebrow }}</p>
+        {%- endif -%}
+        {%- if s.heading != blank -%}
+          <h2 class="co-display mt-4 text-[clamp(1.85rem,1.1rem+3.1vw,3rem)]">{{ s.heading }}</h2>
+        {%- endif -%}
+        {%- if s.text != blank -%}
+          <div class="co-rte mt-5 text-[1.0625rem] leading-relaxed text-muted">{{ s.text }}</div>
+        {%- endif -%}
+
+        {%- if section.blocks.size > 0 -%}
+          <ul class="mt-8 co-flex flex-col divide-y divide-current/10 border-y border-current/10">
+            {%- for block in section.blocks -%}
+              <li class="co-flex items-start gap-4 py-4" {{ block.shopify_attributes }}>
+                <span class="mt-0.5 co-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent-wash text-accent">
+                  {% render 'drivemist-icon', icon: block.settings.icon, class: 'w-4 h-4' %}
+                </span>
+                <span class="co-flex flex-col gap-1">
+                  <span class="font-sub text-[0.9375rem] font-medium">{{ block.settings.title }}</span>
+                  {%- if block.settings.text != blank -%}
+                    <span class="text-[0.9375rem] leading-relaxed text-muted">{{ block.settings.text }}</span>
+                  {%- endif -%}
+                </span>
+              </li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+
+        {%- if s.button_label != blank -%}
+          <div class="mt-9">
+            {%- liquid
+              case s.button_style
+                when 'brand'
+                  assign co_btn_class = 'co-btn-brand'
+                when 'accent'
+                  assign co_btn_class = 'co-btn-accent'
+                when 'ghost'
+                  assign co_btn_class = 'co-btn-ghost'
+                else
+                  assign co_btn_class = 'co-btn-primary'
+              endcase
+            -%}
+            <a href="{{ s.button_link | default: '#' }}" class="co-btn {{ co_btn_class }}">
+              {{ s.button_label }}
+              {% render 'drivemist-icon', icon: 'arrow-right', class: 'w-4 h-4' %}
+            </a>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "DriveMist feature",
+  "tag": "section",
+  "class": "drivemist-section",
+  "max_blocks": 5,
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Car humidifier + aroma diffuser"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Looks like a model. Works like a humidifier."
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>A detailed car model shell, an ultrasonic mist module, LED lights and a refillable tank – built to earn its place on your dashboard every day.</p>"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image position",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_secondary",
+      "label": "Inset image"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Image alt text",
+      "default": "Close-up of mist flowing from the exhausts of a DriveMist car humidifier"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image ratio",
+      "options": [
+        {
+          "value": "4 / 5",
+          "label": "Portrait (4:5)"
+        },
+        {
+          "value": "1 / 1",
+          "label": "Square"
+        },
+        {
+          "value": "5 / 4",
+          "label": "Landscape (5:4)"
+        },
+        {
+          "value": "16 / 11",
+          "label": "Wide"
+        }
+      ],
+      "default": "5 / 4"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Label"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Link"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Style",
+      "options": [
+        {
+          "value": "brand",
+          "label": "Brand purple"
+        },
+        {
+          "value": "primary",
+          "label": "Primary"
+        },
+        {
+          "value": "accent",
+          "label": "Accent"
+        },
+        {
+          "value": "ghost",
+          "label": "Outline"
+        }
+      ],
+      "default": "brand"
+    },
+    {
+      "type": "header",
+      "content": "Section"
+    },
+    {
+      "type": "text",
+      "id": "anchor",
+      "label": "Anchor ID",
+      "info": "Used for on-page links, e.g. #how-it-works."
+    },
+    {
+      "type": "select",
+      "id": "background_style",
+      "label": "Background",
+      "options": [
+        {
+          "value": "paper",
+          "label": "Paper"
+        },
+        {
+          "value": "sand",
+          "label": "Sand"
+        },
+        {
+          "value": "shell",
+          "label": "Shell"
+        },
+        {
+          "value": "deep",
+          "label": "Deep purple"
+        },
+        {
+          "value": "ink",
+          "label": "Ink"
+        }
+      ],
+      "default": "paper"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 104
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 104
+    }
+  ],
+  "blocks": [
+    {
+      "type": "point",
+      "name": "Point",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Real exhaust mist"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Ultrasonic mist rolls out of the exhausts."
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            {
+              "value": "washer",
+              "label": "Washer"
+            },
+            {
+              "value": "marker",
+              "label": "Marker"
+            },
+            {
+              "value": "markers",
+              "label": "Markers"
+            },
+            {
+              "value": "droplet",
+              "label": "Droplet"
+            },
+            {
+              "value": "screen-off",
+              "label": "Screen off"
+            },
+            {
+              "value": "shirt",
+              "label": "Shirt"
+            },
+            {
+              "value": "leaf",
+              "label": "Leaf"
+            },
+            {
+              "value": "shield",
+              "label": "Shield"
+            },
+            {
+              "value": "heart",
+              "label": "Heart"
+            },
+            {
+              "value": "clock",
+              "label": "Clock"
+            },
+            {
+              "value": "ruler",
+              "label": "Ruler"
+            },
+            {
+              "value": "check",
+              "label": "Check"
+            },
+            {
+              "value": "sparkle",
+              "label": "Sparkle"
+            },
+            {
+              "value": "gift",
+              "label": "Gift"
+            },
+            {
+              "value": "car",
+              "label": "Car"
+            },
+            {
+              "value": "mist",
+              "label": "Mist"
+            },
+            {
+              "value": "wind",
+              "label": "Airflow"
+            },
+            {
+              "value": "usb",
+              "label": "USB power"
+            },
+            {
+              "value": "gauge",
+              "label": "Gauge"
+            },
+            {
+              "value": "bolt",
+              "label": "Power"
+            },
+            {
+              "value": "bulb",
+              "label": "Lights"
+            },
+            {
+              "value": "quiet",
+              "label": "Quiet"
+            },
+            {
+              "value": "steering",
+              "label": "Steering wheel"
+            },
+            {
+              "value": "key",
+              "label": "Key"
+            },
+            {
+              "value": "timer",
+              "label": "Timer"
+            },
+            {
+              "value": "trophy",
+              "label": "Trophy"
+            }
+          ],
+          "default": "check"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "DriveMist feature",
+      "blocks": [
+        {
+          "type": "point",
+          "settings": {
+            "title": "Real exhaust mist",
+            "text": "Glowing LEDs double as a soft night light.",
+            "icon": "mist"
+          }
+        },
+        {
+          "type": "point",
+          "settings": {
+            "title": "USB powered",
+            "text": "Works with your car, laptop or phone charger.",
+            "icon": "leaf"
+          }
+        },
+        {
+          "type": "point",
+          "settings": {
+            "title": "Soft and practical",
+            "text": "Switches itself off when the tank runs dry.",
+            "icon": "heart"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

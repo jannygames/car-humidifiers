@@ -1,0 +1,62 @@
+{%- doc -%}
+  Renders a flag as inline SVG.
+
+  Flag emoji are not an option: Windows ships no glyphs for regional indicator pairs, so
+  they fall back to two letters in a box. A flag library is not worth it either —
+  flag-icons is ~260 files and Shopify's assets/ is flat, with no subdirectories. Five
+  hand-drawn flags cost a few hundred bytes and never 404.
+
+  Each flag is drawn once on a 60x30 field. The circular shape re-crops that same
+  artwork to its middle square via the viewBox, which is how the official 1:1 variants
+  are derived.
+
+  @param {string} code - Language iso code (en, lt, lv, pl, de)
+  @param {string} [uid] - Suffix for the internal SVG ids, unique per rendered instance
+  @param {string} [shape] - 'circle' (default) or 'rounded'
+{%- enddoc -%}
+
+{%- liquid
+  assign co_code = code | downcase | split: '-' | first
+  assign co_uid = uid | default: co_code
+  assign co_shape = shape | default: 'circle'
+  if co_shape == 'circle'
+    assign co_box = '15 0 30 30'
+  else
+    assign co_box = '0 0 60 30'
+  endif
+-%}
+
+<span class="co-flag co-flag--{{ co_shape }}" aria-hidden="true">
+  <svg viewBox="{{ co_box }}" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+    {%- case co_code -%}
+      {%- when 'lt' -%}
+        <rect x="0" y="0" width="60" height="10" fill="#FDB913"/>
+        <rect x="0" y="10" width="60" height="10" fill="#006A44"/>
+        <rect x="0" y="20" width="60" height="10" fill="#C1272D"/>
+      {%- when 'lv' -%}
+        <rect x="0" y="0" width="60" height="30" fill="#9E3039"/>
+        <rect x="0" y="12" width="60" height="6" fill="#fff"/>
+      {%- when 'pl' -%}
+        <rect x="0" y="0" width="60" height="15" fill="#fff"/>
+        <rect x="0" y="15" width="60" height="15" fill="#DC143C"/>
+      {%- when 'de' -%}
+        <rect x="0" y="0" width="60" height="10" fill="#000"/>
+        <rect x="0" y="10" width="60" height="10" fill="#DD0000"/>
+        <rect x="0" y="20" width="60" height="10" fill="#FFCE00"/>
+      {%- when 'en' -%}
+        <clipPath id="co-uj-{{ co_uid }}">
+          <path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z"/>
+        </clipPath>
+        <rect x="0" y="0" width="60" height="30" fill="#012169"/>
+        <path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/>
+        <path d="M0,0 L60,30 M60,0 L0,30" clip-path="url(#co-uj-{{ co_uid }})" stroke="#C8102E" stroke-width="4"/>
+        <path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/>
+        <path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/>
+      {%- else -%}
+        <rect x="0" y="0" width="60" height="30" fill="#dbe2ea"/>
+        <text x="30" y="21" text-anchor="middle" font-size="15" font-family="sans-serif" fill="#566170">
+          {{- co_code | upcase -}}
+        </text>
+    {%- endcase -%}
+  </svg>
+</span>

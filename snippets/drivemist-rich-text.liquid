@@ -1,0 +1,79 @@
+{%- doc -%}
+  Renders a Shopify rich_text_field value as HTML.
+
+  Product metafields render rich text automatically when you output the metafield
+  itself. Metaobject fields do not — they hand back the raw JSON tree — so this walks
+  it. Shopify's schema is root > block nodes > inline nodes.
+
+  @param {object} value - the field's .value
+{%- enddoc -%}
+
+{%- for node in value.children -%}
+  {%- case node.type -%}
+    {%- when 'paragraph' -%}
+      {%- liquid
+        assign co_img_src = ''
+        assign co_img_alt = ''
+        assign co_img_width = 0
+        assign co_img_height = 0
+        assign co_para_text = ''
+        for child in node.children
+          if child.type == 'text'
+            assign co_para_text = co_para_text | append: child.value
+          endif
+        endfor
+        assign co_para_text = co_para_text | replace: '&lt;', '<' | replace: '&gt;', '>' | replace: '&quot;', '"' | replace: '&#39;', "'" | replace: '&amp;', '&'
+        if co_para_text contains '<img'
+          assign co_para_text = co_para_text | replace: '“', '"' | replace: '”', '"' | replace: "'", '"'
+          assign co_img_src = co_para_text | split: 'src="' | last | split: '"' | first | strip
+          if co_para_text contains 'alt="'
+            assign co_img_alt = co_para_text | split: 'alt="' | last | split: '"' | first
+          endif
+          if co_para_text contains 'width="'
+            assign co_img_width = co_para_text | split: 'width="' | last | split: '"' | first | plus: 0
+          endif
+          if co_para_text contains 'height="'
+            assign co_img_height = co_para_text | split: 'height="' | last | split: '"' | first | plus: 0
+          endif
+          unless co_img_src contains '//cdn.shopify.com/'
+            assign co_img_src = ''
+          endunless
+        endif
+      -%}
+      {%- if co_img_src != blank -%}
+        {% # theme-check-disable ImgWidthAndHeight %}
+        <img
+          src="{{ co_img_src | escape }}"
+          alt="{{ co_img_alt | escape }}"
+          {% if co_img_width > 0 and co_img_height > 0 %}width="{{ co_img_width }}" height="{{ co_img_height }}"{% endif %}
+          loading="lazy"
+        >
+        {% # theme-check-enable ImgWidthAndHeight %}
+      {%- else -%}
+        <p>
+          {%- for child in node.children -%}
+            {%- render 'drivemist-rich-text-inline', child: child -%}
+          {%- endfor -%}
+        </p>
+      {%- endif -%}
+    {%- when 'heading' -%}
+      {%- assign co_level = node.level | default: 3 -%}
+      {%- if co_level < 3 -%}{%- assign co_level = 3 -%}{%- endif -%}
+      {%- if co_level > 4 -%}{%- assign co_level = 4 -%}{%- endif -%}
+      <h{{ co_level }}>
+        {%- for child in node.children -%}
+          {%- render 'drivemist-rich-text-inline', child: child -%}
+        {%- endfor -%}
+      </h{{ co_level }}>
+    {%- when 'list' -%}
+      {%- if node.listType == 'ordered' -%}<ol>{%- else -%}<ul>{%- endif -%}
+        {%- for item in node.children -%}
+          <li>
+            {%- for child in item.children -%}
+              {%- render 'drivemist-rich-text-inline', child: child -%}
+            {%- endfor -%}
+          </li>
+        {%- endfor -%}
+      {%- if node.listType == 'ordered' -%}</ol>{%- else -%}</ul>{%- endif -%}
+  {%- endcase -%}
+{%- endfor -%}

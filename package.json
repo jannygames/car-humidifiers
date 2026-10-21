@@ -1,0 +1,22 @@
+{
+  "name": "drivemist-theme",
+  "version": "1.0.0",
+  "private": true,
+  "description": "DriveMist Shopify theme (Horizon base + Tailwind CSS)",
+  "scripts": {
+    "dev": "npm run build:css && concurrently -k -n \"css,shopify\" -c \"cyan,green\" \"npm:watch:css\" \"npm:dev:theme\"",
+    "dev:theme": "shopify theme dev -e development",
+    "watch:css": "tailwindcss -i ./src/drivemist.css -o ./assets/drivemist.css --watch=always",
+    "build:css": "tailwindcss -i ./src/drivemist.css -o ./assets/drivemist.css --minify",
+    "build": "npm run build:css",
+    "push": "npm run build:css && shopify theme push -e development",
+    "check": "shopify theme check",
+    "push:new": "npm run build:css && shopify theme push -e development --unpublished --theme \"DriveMist\"",
+    "check:fonts": "python3 scripts/check-fonts.py"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.1.11",
+    "concurrently": "^9.1.2",
+    "tailwindcss": "^4.1.11"
+  }
+}

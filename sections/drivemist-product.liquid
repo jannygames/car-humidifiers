@@ -1,0 +1,1756 @@
+{%- liquid
+  assign s = section.settings
+  if product == blank
+    assign product = collections.all.products.first
+  endif
+
+  comment
+    Everything product-specific comes from metafields so all products can share this
+    one template. Each falls back to the section setting, which keeps the page whole
+    before the metafields are filled in.
+  endcomment
+  assign co_ns = s.metafield_namespace | strip | default: 'custom'
+  assign co_fields = product.metafields[co_ns]
+  if co_fields == blank
+    assign co_fields = product.metafields.custom
+  endif
+  assign co_badge = co_fields.badge.value | default: s.badge_text
+  assign co_cert_image = co_fields.cert_image.value | default: s.cert_image
+  assign co_cert_title = co_fields.cert_title.value | default: s.cert_title
+  assign co_cert_text = co_fields.cert_text.value | default: s.cert_text
+  assign co_cert_link = co_fields.cert_link.value | default: s.cert_link
+  assign co_cert_number = co_fields.cert_number.value | default: s.cert_number
+  assign co_cert_alt = co_cert_title
+  if co_cert_number != blank
+    assign co_cert_alt = co_cert_title | append: ' — ' | append: co_cert_number
+  endif
+  assign co_show_cert = s.show_cert
+  if co_fields.cert_hide.type == 'boolean' and co_fields.cert_hide.value
+    assign co_show_cert = false
+  endif
+  if co_cert_title == blank and co_cert_text == blank
+    assign co_show_cert = false
+  endif
+  assign co_highlights = co_fields.highlights.value
+  assign co_specs = co_fields.specs.value
+  assign co_icon_names = 'check,marker,markers,washer,leaf,heart,ruler,clock,gift,sparkle,box,truck,refresh,lock,shield,chat,brush,palette,moon,users,droplet,screen-off,shirt,car,mist,wind,usb,gauge,bolt,bulb,quiet,steering,key,timer,trophy' | split: ','
+  assign co_product_fallback_title = 'drivemist.product.fallback_title' | t
+  assign co_product_fallback_name = 'drivemist.product.fallback_name' | t
+  assign co_add_to_cart_fallback = 'drivemist.product.add_to_cart' | t
+
+  assign variant = product.selected_or_first_available_variant
+  assign has_sale = false
+  if variant.compare_at_price > variant.price
+    assign has_sale = true
+    assign save_amount = variant.compare_at_price | minus: variant.price
+  endif
+
+  assign can_add_to_cart = false
+  assign add_to_cart_text = 'products.product.unavailable' | t
+  if variant
+    if variant.available
+      assign can_add_to_cart = true
+      assign add_to_cart_text = s.atc_label | default: co_add_to_cart_fallback
+    else
+      assign add_to_cart_text = 'products.product.sold_out' | t
+    endif
+  endif
+
+  assign qty_min = variant.quantity_rule.min | default: 1
+  assign form_id = 'DriveMistProductForm-' | append: section.id
+  assign atc_id = 'DriveMistAtc-' | append: section.id
+
+  assign now_ts = 'now' | date: '%s' | plus: 0
+  assign delivery_min_seconds = s.delivery_min_days | times: 86400
+  assign delivery_max_seconds = s.delivery_max_days | times: 86400
+  assign co_weekdays = 'drivemist.date.weekdays' | t | split: ','
+  assign co_months = 'drivemist.date.months' | t | split: ','
+  assign co_date_pattern = 'drivemist.date.pattern' | t
+
+  assign eta_from_ts = now_ts | plus: delivery_min_seconds
+  assign eta_from_wd = eta_from_ts | date: '%w' | plus: 0
+  assign eta_from_mo = eta_from_ts | date: '%-m' | plus: 0 | minus: 1
+  assign eta_from_day = eta_from_ts | date: '%-d'
+  assign eta_from = co_date_pattern | replace: '[weekday]', co_weekdays[eta_from_wd] | replace: '[day]', eta_from_day | replace: '[month]', co_months[eta_from_mo]
+
+  assign eta_to_ts = now_ts | plus: delivery_max_seconds
+  assign eta_to_wd = eta_to_ts | date: '%w' | plus: 0
+  assign eta_to_mo = eta_to_ts | date: '%-m' | plus: 0 | minus: 1
+  assign eta_to_day = eta_to_ts | date: '%-d'
+  assign eta_to = co_date_pattern | replace: '[weekday]', co_weekdays[eta_to_wd] | replace: '[day]', eta_to_day | replace: '[month]', co_months[eta_to_mo]
+-%}
+
+<section class="co bg-paper text-ink" style="{% render 'drivemist-pad', padding_top: s.padding_top, padding_bottom: s.padding_bottom %}">
+  <div class="co-container co-section">
+    {%- if s.show_breadcrumbs -%}
+      <nav class="mb-7 co-flex flex-wrap items-center gap-2 text-[0.8125rem] text-muted" aria-label="{{ 'drivemist.navigation.breadcrumb' | t }}">
+        <a href="{{ routes.root_url }}" class="transition-colors hover:text-ink">{{ 'drivemist.navigation.home' | t }}</a>
+        <span class="opacity-40">/</span>
+        <a href="{{ routes.all_products_collection_url }}" class="transition-colors hover:text-ink">{{ 'drivemist.navigation.shop' | t }}</a>
+        <span class="opacity-40">/</span>
+        <span class="text-ink">{{ product.title | default: co_product_fallback_title }}</span>
+      </nav>
+    {%- endif -%}
+
+    <div class="co-grid gap-10 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,1fr)] lg:gap-14 xl:gap-20">
+      {%- comment -%} ------------------------------- Gallery ------------------------------- {%- endcomment -%}
+      <div class="lg:sticky lg:top-24 lg:self-start" data-co-gallery>
+        {%- assign thumb_count = product.media.size | at_least: 4 -%}
+        <div class="co-gallery" style="--co-gallery-max: {{ s.image_max_height }}svh; --co-thumb-count: {{ thumb_count }};">
+        <div class="co-gallery__stage relative">
+          <div
+            class="co-gallery__viewport co-scrollbar-none co-flex snap-x snap-mandatory overflow-x-auto overflow-y-hidden rounded-card"
+            data-co-gallery-viewport
+          >
+            {%- if product.media.size > 0 -%}
+              {%- for media in product.media -%}
+                <div class="w-full shrink-0 snap-center" data-co-slide data-co-media-id="{{ media.id }}">
+                  {%- if media.media_type == 'image' -%}
+                    {%- liquid
+                      assign media_loading = 'lazy'
+                      assign media_priority = 'auto'
+                      if forloop.first
+                        assign media_loading = 'eager'
+                        assign media_priority = 'high'
+                      endif
+                    -%}
+                    <button
+                      type="button"
+                      class="co-gallery__zoom"
+                      data-co-zoom="{{ media.id }}"
+                      aria-haspopup="dialog"
+                      aria-label="{{ 'drivemist.product.enlarge_image' | t: index: forloop.index }}"
+                    >
+                      {% render 'drivemist-image',
+                        image: media,
+                        ratio: s.image_ratio,
+                        class: 'co-media',
+                        sizes: '(min-width: 1024px) 55vw, 100vw',
+                        loading: media_loading,
+                        fetchpriority: media_priority,
+                        alt: media.alt
+                      %}
+                    </button>
+                  {%- else -%}
+                    <div class="co-media" style="aspect-ratio: {{ s.image_ratio }};">
+                      {{ media | media_tag: image_size: '1200x' }}
+                    </div>
+                  {%- endif -%}
+                </div>
+              {%- endfor -%}
+            {%- else -%}
+              {%- for i in (1..3) -%}
+                <div class="w-full shrink-0 snap-center" data-co-slide>
+                  {% render 'drivemist-image', ratio: s.image_ratio, class: 'co-media', placeholder: 'product-apparel-2' %}
+                </div>
+              {%- endfor -%}
+            {%- endif -%}
+          </div>
+
+          {%- if co_badge != blank -%}
+            <span class="pointer-events-none absolute left-4 top-4 rounded-full bg-paper/95 px-3.5 py-1.5 text-[0.6875rem] font-medium uppercase tracking-[0.14em] shadow-lift backdrop-blur sm:left-5 sm:top-5">
+              {{ co_badge }}
+            </span>
+          {%- endif -%}
+
+          {%- if has_sale and s.show_save_badge -%}
+            <span class="pointer-events-none absolute right-4 top-4 rounded-full bg-sale px-3.5 py-1.5 text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-sale-ink sm:right-5 sm:top-5">
+              {%- assign co_save = save_amount | money_without_trailing_zeros -%}{{ 'drivemist.save' | t: amount: co_save }}
+            </span>
+          {%- endif -%}
+
+          <div class="pointer-events-none absolute inset-x-0 bottom-4 co-flex justify-center lg:hidden">
+            <span class="rounded-full bg-paper/90 px-3 py-1 text-[0.6875rem] tracking-wide backdrop-blur" data-co-gallery-counter></span>
+          </div>
+
+          {%- if product.media.size > 1 -%}
+            <button type="button" class="co-gallery__arrow co-gallery__arrow--prev" data-co-gallery-step="-1" aria-label="{{ 'drivemist.product.previous_image' | t }}">
+              {% render 'drivemist-icon', icon: 'arrow-left', class: 'w-4 h-4' %}
+            </button>
+            <button type="button" class="co-gallery__arrow co-gallery__arrow--next" data-co-gallery-step="1" aria-label="{{ 'drivemist.product.next_image' | t }}">
+              {% render 'drivemist-icon', icon: 'arrow-right', class: 'w-4 h-4' %}
+            </button>
+          {%- endif -%}
+        </div>
+
+        {%- if product.media.size > 1 -%}
+          <div class="co-gallery__thumbs co-scrollbar-none">
+            {%- for media in product.media -%}
+              <button
+                type="button"
+                class="co-gallery__thumb"
+                data-co-thumb
+                aria-label="{{ 'drivemist.product.view_image' | t: index: forloop.index }}"
+              >
+                {% render 'drivemist-image', image: media, ratio: '1 / 1', class: 'co-media', sizes: '110px', alt: media.alt %}
+              </button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+        </div>
+
+        {%- assign co_zoom_images = product.media | where: 'media_type', 'image' -%}
+        {%- if co_zoom_images.size > 0 -%}
+          <dialog class="co-lightbox" data-co-lightbox aria-label="{{ product.title | escape }}">
+            <div class="co-lightbox__viewport co-scrollbar-none" data-co-lightbox-viewport>
+              {%- for media in co_zoom_images -%}
+                <figure class="co-lightbox__slide" data-co-lightbox-slide data-co-media-id="{{ media.id }}">
+                  {{
+                    media
+                    | image_url: width: 2400
+                    | image_tag:
+                      loading: 'lazy',
+                      sizes: '100vw',
+                      widths: '800, 1200, 1600, 2000, 2400',
+                      alt: media.alt,
+                      class: 'co-lightbox__image'
+                  }}
+                </figure>
+              {%- endfor -%}
+            </div>
+
+            <div class="co-lightbox__bar">
+              <span class="co-lightbox__counter" data-co-lightbox-counter aria-live="polite"></span>
+              <button type="button" class="co-lightbox__button" data-co-lightbox-close aria-label="{{ 'actions.close' | t }}">
+                {% render 'drivemist-icon', icon: 'close', class: 'w-5 h-5' %}
+              </button>
+            </div>
+
+            {%- if co_zoom_images.size > 1 -%}
+              <button type="button" class="co-lightbox__button co-lightbox__arrow co-lightbox__arrow--prev" data-co-lightbox-step="-1" aria-label="{{ 'drivemist.product.previous_image' | t }}">
+                {% render 'drivemist-icon', icon: 'arrow-left', class: 'w-5 h-5' %}
+              </button>
+              <button type="button" class="co-lightbox__button co-lightbox__arrow co-lightbox__arrow--next" data-co-lightbox-step="1" aria-label="{{ 'drivemist.product.next_image' | t }}">
+                {% render 'drivemist-icon', icon: 'arrow-right', class: 'w-5 h-5' %}
+              </button>
+            {%- endif -%}
+          </dialog>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} ------------------------------- Buy box ------------------------------- {%- endcomment -%}
+      <div class="co-flex flex-col">
+        <div class="co-flex items-start justify-between gap-5">
+        <div class="min-w-0 flex-1">
+        {%- assign co_app_blocks = section.blocks | where: 'type', '@app' -%}
+        {%- if co_app_blocks.size > 0 -%}
+          <div class="co-rating-slot co-flex w-fit items-center gap-2.5">
+            {%- for block in co_app_blocks -%}
+              {% render block %}
+            {%- endfor -%}
+          </div>
+        {%- elsif s.show_rating -%}
+          {%- assign co_rating_link = s.rating_link | default: '#drivemist-reviews' -%}
+          {% render 'drivemist-rating',
+            product: product,
+            fallback: s.rating_text,
+            link: co_rating_link,
+            class: 'co-flex w-fit items-center gap-2.5'
+          %}
+        {%- endif -%}
+
+        <h1 class="co-display mt-2 text-[clamp(2rem,1.3rem+2.6vw,3rem)]">
+          {{ product.title | default: co_product_fallback_name }}
+        </h1>
+        </div>
+
+        {%- if co_show_cert and s.cert_placement != 'buy_box' -%}
+          {%- capture co_cert_seal -%}
+            {%- if co_cert_image != blank -%}
+              {{
+                co_cert_image
+                | image_url: width: 320
+                | image_tag:
+                  loading: 'eager',
+                  widths: '80, 120, 160, 240, 320',
+                  sizes: '80px',
+                  alt: co_cert_alt,
+                  class: 'h-16 w-auto max-w-24 object-contain sm:h-20'
+              }}
+            {%- else -%}
+              <span class="co-flex h-16 w-16 items-center justify-center rounded-full bg-accent-wash text-accent sm:h-20 sm:w-20" role="img" aria-label="{{ co_cert_alt | escape }}">
+                {%- render 'drivemist-icon', icon: 'shield', class: 'h-8 w-8 sm:h-9 sm:w-9' -%}
+              </span>
+            {%- endif -%}
+            {%- if co_cert_number != blank -%}
+              <span class="text-center text-[0.625rem] font-medium leading-tight tracking-wide text-muted">{{ co_cert_number }}</span>
+            {%- endif -%}
+          {%- endcapture -%}
+          {%- if co_cert_link != blank -%}
+            <a
+              href="{{ co_cert_link }}"
+              class="co-flex shrink-0 flex-col items-center gap-1.5 transition-opacity hover:opacity-70"
+              target="_blank"
+              rel="noopener"
+              title="{{ co_cert_alt | escape }}"
+            >{{ co_cert_seal }}</a>
+          {%- else -%}
+            <span class="co-flex shrink-0 flex-col items-center gap-1.5" title="{{ co_cert_alt | escape }}">
+              {{- co_cert_seal -}}
+            </span>
+          {%- endif -%}
+        {%- endif -%}
+        </div>
+
+
+
+        {%- comment -%}
+          Quantity sits with the price so the two read as one control. The input lives
+          outside the <form> now, so it carries a form attribute — form-associated
+          elements are still picked up by FormData wherever they sit in the DOM.
+        {%- endcomment -%}
+        <div class="mt-6 co-flex flex-wrap items-center gap-x-4 gap-y-3" data-co-price-group>
+          {%- if s.show_quantity -%}
+            <div
+              class="co-qty co-flex h-[3.25rem] shrink-0 items-center gap-1 rounded-full border border-ink/15 px-2"
+              data-co-qty
+            >
+              <button type="button" class="co-flex h-9 w-9 items-center justify-center rounded-full transition-colors hover:bg-ink/5" data-co-qty-step="-1" aria-label="{{ 'accessibility.decrease_quantity' | t }}">
+                {% render 'drivemist-icon', icon: 'minus', class: 'w-3.5 h-3.5' %}
+              </button>
+              <input
+                type="number"
+                name="quantity"
+                form="{{ form_id }}"
+                value="{{ qty_min }}"
+                min="{{ qty_min }}"
+                inputmode="numeric"
+                class="h-9 w-9 border-0 bg-transparent text-center font-sub text-[0.9375rem] outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                aria-label="{{ s.quantity_label }}"
+              >
+              <button type="button" class="co-flex h-9 w-9 items-center justify-center rounded-full transition-colors hover:bg-ink/5" data-co-qty-step="1" aria-label="{{ 'accessibility.increase_quantity' | t }}">
+                {% render 'drivemist-icon', icon: 'plus', class: 'w-3.5 h-3.5' %}
+              </button>
+            </div>
+          {%- endif -%}
+
+          <product-price
+            class="block"
+            data-block-id="drivemist-price-{{ section.id }}"
+            data-product-id="{{ product.id }}"
+          >
+            <div
+              ref="priceContainer"
+              class="co-flex flex-wrap items-baseline gap-x-3 gap-y-1"
+              data-co-price
+              data-co-unit-price="{{ variant.price }}"
+              data-co-unit-compare="{{ variant.compare_at_price | default: 0 }}"
+              data-co-money-format="{{ shop.money_format | strip_html | escape }}"
+              data-co-currency="{{ cart.currency.iso_code | default: shop.currency }}"
+            >
+              <span
+                class="font-sub text-[1.75rem] leading-none{% if has_sale %} font-semibold text-accent{% else %} font-medium{% endif %}"
+                data-co-price-value
+              >
+                {%- if product != blank -%}{{ variant.price | money_without_trailing_zeros }}{%- else -%}€59{%- endif -%}
+              </span>
+              {%- if has_sale -%}
+                <s class="font-sub text-[1.125rem] text-muted/80" data-co-price-compare>
+                  {{- variant.compare_at_price | money_without_trailing_zeros -}}
+                </s>
+                <span class="rounded-full bg-sale px-2.5 py-1 text-[0.75rem] font-semibold text-sale-ink" data-co-price-save data-co-save-percent data-co-save-template="{{ 'drivemist.save' | t: amount: '[amount]' | escape }}">
+                  {%- assign co_save_percent = save_amount | times: 100.0 | divided_by: variant.compare_at_price | round | append: '%' -%}{{ 'drivemist.save' | t: amount: co_save_percent }}
+                </span>
+              {%- endif -%}
+            </div>
+          </product-price>
+        </div>
+
+        {%- if s.price_note != blank -%}
+          <p class="mt-2 text-[0.8125rem] text-muted">{{ s.price_note }}</p>
+        {%- endif -%}
+
+        {%- if s.show_variant_picker and product.has_only_default_variant == false -%}
+          {%- assign variant_block = section.blocks | where: 'type', 'variants' | first -%}
+          <div class="co-native mt-6" data-co-main-variant>
+            {% render 'variant-main-picker',
+              product_resource: product,
+              section: section,
+              product: product,
+              block: variant_block
+            %}
+          </div>
+        {%- endif -%}
+
+        <div class="mt-6" id="{{ atc_id }}-anchor">
+          {%- if product != blank -%}
+            {% render 'drivemist-sold-out-note',
+              product: product,
+              variant: variant,
+              hidden: can_add_to_cart,
+              class: 'mb-4'
+            %}
+            <product-form-component
+              class="co-buy-form"
+              data-section-id="{{ section.id }}"
+              data-product-id="{{ product.id }}"
+              data-product-url="{{ product.url }}"
+              on:submit="/handleSubmit"
+              data-quantity-default="{{ qty_min }}"
+              data-quantity-error-max="{{ 'products.product.quantity_error_max' | t }}"
+            >
+              <div class="visually-hidden" aria-live="assertive" role="status" aria-atomic="true" ref="liveRegion"></div>
+
+              {%- form 'product', product, id: form_id, data-type: 'add-to-cart-form' -%}
+                <input type="hidden" name="id" ref="variantId" value="{{ variant.id }}">
+
+                <span class="product-form-text__error co-atc-error hidden mb-3 text-[0.8125rem] text-accent" ref="addToCartTextError">
+                  <span class="svg-wrapper">{{- 'icon-error.svg' | inline_asset_content -}}</span>
+                </span>
+
+                <div class="co-buy-stack" ref="productFormButtons">
+                  <div class="co-atc">
+                      {% render 'add-to-cart-button-styles' %}
+                      {% render 'fly-to-cart-styles' %}
+                      {% render 'add-to-cart-button',
+                        id: atc_id,
+                        class: 'add-to-cart-button co-atc__button',
+                        can_add_to_cart: can_add_to_cart,
+                        show_icon: true,
+                        product: product,
+                        add_to_cart_text: add_to_cart_text
+                      %}
+                  </div>
+
+                  {%- if s.show_dynamic_checkout and can_add_to_cart -%}
+                    <div class="co-accelerated" ref="acceleratedCheckoutButtonContainer">
+                      {{ form | payment_button }}
+                    </div>
+                  {%- endif -%}
+
+                  {%- comment -%}
+                    Slot for apps that inject themselves with JavaScript (free-gift widgets,
+                    subscriptions, upsells): point them at #drivemist-gift-slot. App blocks
+                    added in the theme editor render next to the title instead. Anything
+                    dropped into this stack is ordered last by CSS regardless, so it cannot
+                    break the quantity/add-to-cart row.
+                  {%- endcomment -%}
+                  <div class="co-gift-slot" id="drivemist-gift-slot"></div>
+                </div>
+              {%- endform -%}
+            </product-form-component>
+          {%- else -%}
+            <button type="button" class="co-btn co-btn-primary w-full" disabled>{{ 'drivemist.product.add_to_cart' | t }}</button>
+          {%- endif -%}
+        </div>
+
+        {%- assign bullets = section.blocks | where: 'type', 'bullet' -%}
+        {%- if co_highlights.size > 0 -%}
+          <ul class="mt-7 co-flex flex-col gap-3">
+            {%- for highlight in co_highlights -%}
+              {%- liquid
+                comment
+                  Entries may be written as "washer: Colour-fast at 30" to pick an icon.
+                  Anything else falls back to the section's default icon.
+                endcomment
+                assign co_parts = highlight | split: ':'
+                assign co_maybe_icon = co_parts[0] | strip | downcase
+                if co_parts.size > 1 and co_icon_names contains co_maybe_icon
+                  assign co_bullet_icon = co_maybe_icon
+                  assign co_bullet_text = highlight | remove_first: co_parts[0] | remove_first: ':' | strip
+                else
+                  assign co_bullet_icon = s.default_highlight_icon
+                  assign co_bullet_text = highlight
+                endif
+              -%}
+              <li class="co-flex items-start gap-3 text-[0.9375rem] leading-snug">
+                <span class="mt-px co-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-accent-wash text-accent">
+                  {% render 'drivemist-icon', icon: co_bullet_icon, class: 'w-3 h-3', stroke_width: 2 %}
+                </span>
+                <span>{{ co_bullet_text }}</span>
+              </li>
+            {%- endfor -%}
+          </ul>
+        {%- elsif bullets.size > 0 -%}
+          <ul class="mt-7 co-flex flex-col gap-3">
+            {%- for block in bullets -%}
+              <li class="co-flex items-start gap-3 text-[0.9375rem] leading-snug" {{ block.shopify_attributes }}>
+                <span class="mt-px co-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-accent-wash text-accent">
+                  {% render 'drivemist-icon', icon: block.settings.icon, class: 'w-3 h-3', stroke_width: 2 %}
+                </span>
+                <span>{{ block.settings.text }}</span>
+              </li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+
+
+        {%- if s.show_delivery -%}
+          <div class="mt-6 co-flex flex-col gap-2.5 rounded-2xl border border-ink/10 bg-sand/60 px-5 py-4">
+            {%- if s.shipping_text != blank -%}
+              <span class="co-flex items-center gap-2.5 text-[0.875rem]">
+                <span style="color: var(--co-success);">{% render 'drivemist-icon', icon: 'truck', class: 'w-4 h-4' %}</span>
+                <strong class="font-medium">{{ s.shipping_text }}</strong>
+              </span>
+            {%- endif -%}
+            <span class="co-flex items-center gap-2.5 text-[0.875rem]">
+              <span class="text-accent">{% render 'drivemist-icon', icon: 'clock', class: 'w-4 h-4' %}</span>
+              <span>{{ s.delivery_label }} <strong class="font-medium">{{ eta_from }} – {{ eta_to }}</strong></span>
+            </span>
+            {%- if s.stock_text != blank -%}
+              <span class="co-flex items-center gap-2.5 text-[0.875rem]">
+                <span class="co-flex h-4 w-4 items-center justify-center">
+                  <span class="h-2 w-2 rounded-full" style="background: var(--co-success);"></span>
+                </span>
+                <span>{{ s.stock_text }}</span>
+              </span>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+
+        {%- assign trust = section.blocks | where: 'type', 'trust' -%}
+        {%- if trust.size > 0 -%}
+          <div class="mt-6 co-grid grid-cols-2 gap-x-4 gap-y-4 border-y border-ink/10 py-5 sm:grid-cols-4">
+            {%- for block in trust -%}
+              <div class="co-flex flex-col items-center gap-2 text-center" {{ block.shopify_attributes }}>
+                <span class="text-muted">{% render 'drivemist-icon', icon: block.settings.icon, class: 'w-5 h-5' %}</span>
+                <span class="text-[0.75rem] leading-tight text-muted">{{ block.settings.text }}</span>
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+
+        {%- if co_show_cert and s.cert_placement != 'top' -%}
+          <div class="mt-6 co-flex items-center gap-4 rounded-2xl border border-ink/10 bg-shell/45 px-5 py-4">
+            <span class="co-flex shrink-0 items-center">
+              {%- if co_cert_image != blank -%}
+                {{
+                  co_cert_image
+                  | image_url: width: 320
+                  | image_tag:
+                    loading: 'lazy',
+                    widths: '80, 120, 160, 240, 320',
+                    sizes: '64px',
+                    alt: co_cert_title,
+                    class: 'h-14 w-auto max-w-24 object-contain'
+                }}
+              {%- else -%}
+                <span class="co-flex h-14 w-14 items-center justify-center rounded-full bg-accent-wash text-accent" role="img" aria-label="{{ co_cert_title | escape }}">
+                  {%- render 'drivemist-icon', icon: 'shield', class: 'h-7 w-7' -%}
+                </span>
+              {%- endif -%}
+            </span>
+            <span class="co-flex min-w-0 flex-col gap-1">
+              {%- if co_cert_title != blank -%}
+                <span class="font-sub text-[0.875rem] font-medium">{{ co_cert_title }}</span>
+              {%- endif -%}
+              {%- if co_cert_text != blank -%}
+                <span class="text-[0.8125rem] leading-snug text-muted">{{ co_cert_text }}</span>
+              {%- endif -%}
+              {%- if co_cert_link != blank and s.cert_link_label != blank -%}
+                <a
+                  href="{{ co_cert_link }}"
+                  class="co-flex w-fit items-center gap-1.5 text-[0.8125rem] font-medium text-accent underline underline-offset-2"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  {{ s.cert_link_label }}
+                  {% render 'drivemist-icon', icon: 'arrow-right', class: 'w-3.5 h-3.5' %}
+                </a>
+              {%- endif -%}
+            </span>
+          </div>
+        {%- endif -%}
+
+        {%- liquid
+          assign co_before = product.metafields.custom.before_image.value | default: s.before_image
+          assign co_after = product.metafields.custom.after_image.value | default: s.after_image
+        -%}
+        {%- if s.show_before_after and co_before != blank and co_after != blank -%}
+          <script src="{{ 'img-comparison-slider.js' | asset_url }}" defer></script>
+          {%- liquid
+            assign co_before_label = s.before_label
+            if co_before_label == 'Before'
+              assign co_before_label = 'drivemist.product.before' | t
+            endif
+            assign co_after_label = s.after_label
+            if co_after_label == 'After'
+              assign co_after_label = 'drivemist.product.after' | t
+            endif
+          -%}
+          <figure class="mt-8" style="--co-ba-ratio: {{ s.before_after_ratio | default: '1 / 1' }};">
+            {%- if s.before_after_title != blank -%}
+              <figcaption class="font-sub mb-3 text-[0.9375rem] font-medium">{{ s.before_after_title }}</figcaption>
+            {%- endif -%}
+            <img-comparison-slider class="co-ba" value="50">
+              <div slot="first" class="co-ba__pane">
+                {{
+                  co_before
+                  | image_url: width: 1400
+                  | image_tag:
+                    loading: 'lazy',
+                    widths: '480, 720, 960, 1200, 1400',
+                    sizes: '(min-width: 1024px) 45vw, 100vw',
+                    alt: co_before_label
+                }}
+                {%- if co_before_label != blank -%}
+                  <span class="co-ba__label co-ba__label--before">{{ co_before_label }}</span>
+                {%- endif -%}
+              </div>
+              <div slot="second" class="co-ba__pane">
+                {{
+                  co_after
+                  | image_url: width: 1400
+                  | image_tag:
+                    loading: 'lazy',
+                    widths: '480, 720, 960, 1200, 1400',
+                    sizes: '(min-width: 1024px) 45vw, 100vw',
+                    alt: co_after_label
+                }}
+                {%- if co_after_label != blank -%}
+                  <span class="co-ba__label co-ba__label--after">{{ co_after_label }}</span>
+                {%- endif -%}
+              </div>
+              <span slot="handle" class="co-ba__handle" aria-hidden="true">
+                {% render 'drivemist-icon', icon: 'arrow-left', class: 'w-3.5 h-3.5' %}
+                {% render 'drivemist-icon', icon: 'arrow-right', class: 'w-3.5 h-3.5' %}
+              </span>
+            </img-comparison-slider>
+          </figure>
+        {%- endif -%}
+
+        {%- assign rows = section.blocks | where: 'type', 'accordion' -%}
+        {%- if co_specs.size > 0 or rows.size > 0 or s.show_description -%}
+          <div class="mt-8 border-t border-ink/10" data-co-accordion>
+            {%- if s.show_description and product.description != blank -%}
+              <details class="co-details group border-b border-ink/10" {% if s.open_description %}open{% endif %}>
+                <summary class="co-flex w-full items-center justify-between gap-6 py-5">
+                  <span class="font-sub text-[0.9375rem] font-medium">{{ s.description_label }}</span>
+                  <span class="co-details__icon shrink-0 transition-transform duration-300">
+                    {% render 'drivemist-icon', icon: 'plus', class: 'w-4 h-4' %}
+                  </span>
+                </summary>
+                <div class="co-details__panel">
+                  <div>
+                    <div class="co-rte rte pb-6 text-[0.9375rem] leading-relaxed text-muted">{{ product.description }}</div>
+                  </div>
+                </div>
+              </details>
+            {%- endif -%}
+
+            {%- if co_specs.size > 0 -%}
+              {%- for spec in co_specs -%}
+                {%- liquid
+                  assign co_spec_icon = spec.icon.value | default: 'none' | downcase
+                  unless co_icon_names contains co_spec_icon
+                    assign co_spec_icon = 'none'
+                  endunless
+                -%}
+                <details class="co-details group border-b border-ink/10">
+                  <summary class="co-flex w-full items-center justify-between gap-6 py-5">
+                    <span class="co-flex items-center gap-3">
+                      {%- if co_spec_icon != 'none' -%}
+                        <span class="text-muted">{% render 'drivemist-icon', icon: co_spec_icon, class: 'w-4 h-4' %}</span>
+                      {%- endif -%}
+                      <span class="font-sub text-[0.9375rem] font-medium">{{ spec.title.value | default: spec.title }}</span>
+                    </span>
+                    <span class="co-details__icon shrink-0 transition-transform duration-300">
+                      {% render 'drivemist-icon', icon: 'plus', class: 'w-4 h-4' %}
+                    </span>
+                  </summary>
+                  <div class="co-details__panel">
+                    <div>
+                      <div class="co-rte pb-6 text-[0.9375rem] leading-relaxed text-muted">
+                        {%- if spec.content.type == 'rich_text_field' -%}
+                          {% render 'drivemist-rich-text', value: spec.content.value %}
+                        {%- else -%}
+                          {{ spec.content.value | newline_to_br }}
+                        {%- endif -%}
+                      </div>
+                    </div>
+                  </div>
+                </details>
+              {%- endfor -%}
+            {%- else -%}
+              {%- for block in rows -%}
+                <details class="co-details group border-b border-ink/10" {{ block.shopify_attributes }}>
+                  <summary class="co-flex w-full items-center justify-between gap-6 py-5">
+                    <span class="co-flex items-center gap-3">
+                      {%- if block.settings.icon != 'none' -%}
+                        <span class="text-muted">{% render 'drivemist-icon', icon: block.settings.icon, class: 'w-4 h-4' %}</span>
+                      {%- endif -%}
+                      <span class="font-sub text-[0.9375rem] font-medium">{{ block.settings.title }}</span>
+                    </span>
+                    <span class="co-details__icon shrink-0 transition-transform duration-300">
+                      {% render 'drivemist-icon', icon: 'plus', class: 'w-4 h-4' %}
+                    </span>
+                  </summary>
+                  <div class="co-details__panel">
+                    <div>
+                      <div class="co-rte pb-6 text-[0.9375rem] leading-relaxed text-muted">{{ block.settings.content }}</div>
+                    </div>
+                  </div>
+                </details>
+              {%- endfor -%}
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+
+        {%- if s.show_payment_icons and shop.enabled_payment_types.size > 0 -%}
+          <div class="mt-7 co-flex flex-col items-center gap-3">
+            <span class="text-[0.75rem] uppercase tracking-[0.14em] text-muted">{{ s.payment_note }}</span>
+            <div class="co-flex flex-wrap items-center justify-center gap-1.5">
+              {%- for type in shop.enabled_payment_types -%}
+                <span class="co-flex h-[1.6rem] w-[2.5rem] items-center justify-center overflow-hidden rounded-[5px] ring-1 ring-ink/10">
+                  {{ type | payment_type_svg_tag: class: 'h-4 w-auto' }}
+                </span>
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} ------------------------------- Sticky bar ------------------------------- {%- endcomment -%}
+  {%- if s.show_sticky_bar and product != blank -%}
+    <div
+      class="fixed inset-x-0 bottom-0 z-40 translate-y-full border-t border-ink/10 bg-paper/95 opacity-0 backdrop-blur transition-all duration-300 ease-out"
+      data-co-sticky-bar
+      data-co-sticky-anchor="{{ atc_id }}-anchor"
+      aria-hidden="true"
+    >
+      <div class="co-container co-flex items-center gap-4 py-3">
+        <div class="co-hide h-14 w-14 shrink-0 overflow-hidden rounded-tile sm:block">
+          {% render 'drivemist-image', image: product.featured_image, ratio: '1 / 1', class: 'co-media', sizes: '56px' %}
+        </div>
+        <div class="co-hide min-w-0 flex-1 flex-col sm:flex">
+          <span class="truncate font-sub text-[0.9375rem] font-medium">{{ product.title }}</span>
+          <span class="co-flex items-center gap-2 text-[0.8125rem] text-muted">
+            <span class="{% if has_sale %}font-semibold text-accent{% endif %}" data-co-sticky-price>{{ variant.price | money_without_trailing_zeros }}</span>
+            <s class="opacity-70" data-co-sticky-compare {% unless has_sale %}hidden{% endunless %}>
+              {{- variant.compare_at_price | money_without_trailing_zeros -}}
+            </s>
+          </span>
+        </div>
+        {%- if product.has_only_default_variant == false and product.variants.size > 1 -%}
+          <label class="co-cart-variant shrink-0 !mt-0">
+            <span class="visually-hidden">{{ product.options | join: ' / ' }}</span>
+            <select class="co-cart-variant__select min-h-[2.75rem] text-[0.875rem]" data-co-sticky-variant>
+              {%- for co_variant in product.variants -%}
+                <option
+                  value="{{ co_variant.id }}"
+                  data-co-options="{{ co_variant.options | json | escape }}"
+                  data-co-price="{{ co_variant.price | money_without_trailing_zeros | escape }}"
+                  data-co-compare="{% if co_variant.compare_at_price > co_variant.price %}{{ co_variant.compare_at_price | money_without_trailing_zeros | escape }}{% endif %}"
+                  {% if co_variant.id == variant.id %}selected{% endif %}
+                  {% unless co_variant.available %}disabled{% endunless %}
+                >
+                  {{- co_variant.title -}}
+                  {%- unless co_variant.available %} ({{ 'products.product.sold_out' | t }}){% endunless -%}
+                </option>
+              {%- endfor -%}
+            </select>
+            <span class="co-cart-variant__chevron" aria-hidden="true">{% render 'drivemist-icon', icon: 'chevron-down', class: 'w-3.5 h-3.5' %}</span>
+          </label>
+        {%- endif -%}
+        <button
+          type="button"
+          class="co-btn co-btn-cta h-[3.25rem] min-w-0 flex-1 sm:w-auto sm:flex-none sm:min-w-[14rem]"
+          data-co-sticky-submit="{{ atc_id }}"
+          {% unless can_add_to_cart %}disabled{% endunless %}
+        >
+          <span class="svg-wrapper add-to-cart-icon">{{- 'icon-add-to-cart.svg' | inline_asset_content -}}</span>
+          <span data-co-sticky-label data-co-add="{{ s.atc_label | default: co_add_to_cart_fallback | escape }}" data-co-sold-out="{{ 'products.product.sold_out' | t | escape }}">{{ add_to_cart_text }}</span> · <span data-co-sticky-btn-price>{{ variant.price | money_without_trailing_zeros }}</span>
+        </button>
+      </div>
+    </div>
+  {%- endif -%}
+
+  {%- if product != blank -%}
+    <script type="application/ld+json">
+      {{ product | structured_data }}
+    </script>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "DriveMist product",
+  "tag": "section",
+  "class": "drivemist-section drivemist-product",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_breadcrumbs",
+      "label": "Show breadcrumbs",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Per-product content"
+    },
+    {
+      "type": "paragraph",
+      "content": "Eyebrow, subtitle, badge, selling points and accordion rows are read from product metafields so all products share this one template. Anything left empty falls back to the settings below. Setup is in the theme's README."
+    },
+    {
+      "type": "text",
+      "id": "metafield_namespace",
+      "label": "Metafield namespace",
+      "default": "custom"
+    },
+    {
+      "type": "select",
+      "id": "default_highlight_icon",
+      "label": "Default selling-point icon",
+      "options": [
+        {
+          "value": "check",
+          "label": "Check"
+        },
+        {
+          "value": "marker",
+          "label": "Marker"
+        },
+        {
+          "value": "markers",
+          "label": "Markers"
+        },
+        {
+          "value": "droplet",
+          "label": "Droplet"
+        },
+        {
+          "value": "screen-off",
+          "label": "Screen off"
+        },
+        {
+          "value": "shirt",
+          "label": "Shirt"
+        },
+        {
+          "value": "washer",
+          "label": "Washer"
+        },
+        {
+          "value": "leaf",
+          "label": "Leaf"
+        },
+        {
+          "value": "heart",
+          "label": "Heart"
+        },
+        {
+          "value": "ruler",
+          "label": "Ruler"
+        },
+        {
+          "value": "clock",
+          "label": "Clock"
+        },
+        {
+          "value": "gift",
+          "label": "Gift"
+        },
+        {
+          "value": "sparkle",
+          "label": "Sparkle"
+        },
+        {
+          "value": "car",
+          "label": "Car"
+        },
+        {
+          "value": "mist",
+          "label": "Mist"
+        },
+        {
+          "value": "wind",
+          "label": "Airflow"
+        },
+        {
+          "value": "usb",
+          "label": "USB power"
+        },
+        {
+          "value": "gauge",
+          "label": "Gauge"
+        },
+        {
+          "value": "bolt",
+          "label": "Power"
+        },
+        {
+          "value": "bulb",
+          "label": "Lights"
+        },
+        {
+          "value": "quiet",
+          "label": "Quiet"
+        },
+        {
+          "value": "steering",
+          "label": "Steering wheel"
+        },
+        {
+          "value": "key",
+          "label": "Key"
+        },
+        {
+          "value": "timer",
+          "label": "Timer"
+        },
+        {
+          "value": "trophy",
+          "label": "Trophy"
+        }
+      ],
+      "default": "check",
+      "info": "Used when a metafield entry does not name its own icon."
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Image badge (fallback)",
+      "default": "Popular choice"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_save_badge",
+      "label": "Show discount badge",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image ratio",
+      "options": [
+        {
+          "value": "4 / 5",
+          "label": "Portrait (4:5)"
+        },
+        {
+          "value": "1 / 1",
+          "label": "Square"
+        },
+        {
+          "value": "3 / 4",
+          "label": "Tall (3:4)"
+        }
+      ],
+      "default": "1 / 1"
+    },
+    {
+      "type": "range",
+      "id": "image_max_height",
+      "label": "Maximum image height",
+      "min": 40,
+      "max": 90,
+      "step": 2,
+      "unit": "vh",
+      "default": 62,
+      "info": "Caps the main image so it and the thumbnails fit on screen together. The image crops rather than stretching."
+    },
+    {
+      "type": "header",
+      "content": "Rating"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "label": "Show rating",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "rating_text",
+      "label": "Rating text (before you have reviews)",
+      "default": "4.9 · 128 verified reviews",
+      "info": "Replaced automatically by the real score and count once a review app is installed."
+    },
+    {
+      "type": "url",
+      "id": "rating_link",
+      "label": "Rating link"
+    },
+    {
+      "type": "header",
+      "content": "Price"
+    },
+    {
+      "type": "text",
+      "id": "price_note",
+      "label": "Price note",
+      "default": "Taxes included. Free tracked shipping."
+    },
+    {
+      "type": "header",
+      "content": "Buy buttons"
+    },
+    {
+      "type": "text",
+      "id": "atc_label",
+      "label": "Add to cart label",
+      "default": "Add to basket"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_quantity",
+      "label": "Show quantity selector",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "quantity_label",
+      "label": "Quantity label",
+      "default": "Quantity"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_variant_picker",
+      "label": "Show variant picker",
+      "info": "Leave off when a bundle app like Katching picks the variant.",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dynamic_checkout",
+      "label": "Show dynamic checkout buttons",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sticky_bar",
+      "label": "Show sticky add to cart on scroll",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Delivery"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_delivery",
+      "label": "Show delivery estimate",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "shipping_text",
+      "label": "Shipping perk",
+      "default": "Free tracked shipping",
+      "info": "Shown first in the delivery box, directly under the buy button."
+    },
+    {
+      "type": "text",
+      "id": "delivery_label",
+      "label": "Delivery label",
+      "default": "Estimated arrival"
+    },
+    {
+      "type": "range",
+      "id": "delivery_min_days",
+      "label": "Earliest (days)",
+      "min": 1,
+      "max": 30,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "range",
+      "id": "delivery_max_days",
+      "label": "Latest (days)",
+      "min": 1,
+      "max": 45,
+      "step": 1,
+      "default": 9
+    },
+    {
+      "type": "text",
+      "id": "stock_text",
+      "label": "Stock text",
+      "default": "In stock and ready for dispatch"
+    },
+    {
+      "type": "header",
+      "content": "Certification"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cert",
+      "label": "Show certification badge",
+      "default": true,
+      "info": "Hidden on a single product with a `cert_hide` boolean metafield — use it on non-textile products."
+    },
+    {
+      "type": "select",
+      "id": "cert_placement",
+      "label": "Placement",
+      "options": [
+        {
+          "value": "top",
+          "label": "Seal beside the product title"
+        },
+        {
+          "value": "buy_box",
+          "label": "Card under the buy button"
+        },
+        {
+          "value": "both",
+          "label": "Both"
+        }
+      ],
+      "default": "top"
+    },
+    {
+      "type": "text",
+      "id": "cert_number",
+      "label": "Certificate number",
+      "default": "22.HCN.04157 · Hohenstein",
+      "info": "Shown under the badge, e.g. a test report or certificate number."
+    },
+    {
+      "type": "image_picker",
+      "id": "cert_image",
+      "label": "Certification logo",
+      "info": "Leave empty to show a text-only badge."
+    },
+    {
+      "type": "text",
+      "id": "cert_title",
+      "label": "Title",
+      "default": "CE · FCC · RoHS"
+    },
+    {
+      "type": "text",
+      "id": "cert_text",
+      "label": "Text",
+      "default": "Low-voltage USB device tested to CE, FCC and RoHS requirements."
+    },
+    {
+      "type": "url",
+      "id": "cert_link",
+      "label": "Certificate link"
+    },
+    {
+      "type": "text",
+      "id": "cert_link_label",
+      "label": "Certificate link label",
+      "default": "View certificate"
+    },
+    {
+      "type": "header",
+      "content": "Before and after"
+    },
+    {
+      "type": "paragraph",
+      "content": "Uses the product's custom.before_image and custom.after_image metafields when they are set, otherwise the two images below."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_before_after",
+      "label": "Show before and after slider",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "before_image",
+      "label": "Before image"
+    },
+    {
+      "type": "image_picker",
+      "id": "after_image",
+      "label": "After image"
+    },
+    {
+      "type": "text",
+      "id": "before_after_title",
+      "label": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "before_label",
+      "label": "Before label",
+      "default": "Before"
+    },
+    {
+      "type": "text",
+      "id": "after_label",
+      "label": "After label",
+      "default": "After"
+    },
+    {
+      "type": "select",
+      "id": "before_after_ratio",
+      "label": "Image shape",
+      "options": [
+        {
+          "value": "1 / 1",
+          "label": "Square"
+        },
+        {
+          "value": "4 / 5",
+          "label": "Portrait (4:5)"
+        },
+        {
+          "value": "3 / 4",
+          "label": "Tall (3:4)"
+        },
+        {
+          "value": "4 / 3",
+          "label": "Landscape (4:3)"
+        }
+      ],
+      "default": "1 / 1"
+    },
+    {
+      "type": "header",
+      "content": "Description"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "Show product description",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "open_description",
+      "label": "Open by default",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "description_label",
+      "label": "Description label",
+      "default": "Why drivers love it"
+    },
+    {
+      "type": "header",
+      "content": "Payment"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_payment_icons",
+      "label": "Show payment icons",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "payment_note",
+      "label": "Payment note",
+      "default": "Secure payments"
+    },
+    {
+      "type": "header",
+      "content": "Section"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 88
+    }
+  ],
+  "blocks": [
+    {
+      "type": "variants",
+      "name": "Variant picker",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Only shown when the product has more than one variant."
+        },
+        {
+          "type": "select",
+          "id": "variant_style",
+          "label": "Style",
+          "options": [
+            {
+              "value": "dropdowns",
+              "label": "Dropdowns"
+            },
+            {
+              "value": "buttons",
+              "label": "Buttons"
+            }
+          ],
+          "default": "buttons"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_swatches",
+          "label": "Show swatches",
+          "default": true
+        },
+        {
+          "type": "color",
+          "id": "option_label_text_color",
+          "label": "Label colour",
+          "placeholder": "Default",
+          "alpha": true
+        },
+        {
+          "type": "select",
+          "id": "variant_style_class",
+          "label": "Button style",
+          "options": [
+            {
+              "value": "default",
+              "label": "Default"
+            },
+            {
+              "value": "custom",
+              "label": "Custom"
+            }
+          ],
+          "default": "default",
+          "info": "Default styling is controlled in Theme settings › Variant pickers."
+        },
+        {
+          "type": "color",
+          "id": "custom_variant_background",
+          "label": "Background",
+          "default": "#f5f7fa",
+          "alpha": true,
+          "visible_if": "{{ block.settings.variant_style_class == 'custom' }}"
+        },
+        {
+          "type": "color",
+          "id": "custom_variant_text",
+          "label": "Text",
+          "default": "#0b1220",
+          "alpha": true,
+          "visible_if": "{{ block.settings.variant_style_class == 'custom' }}"
+        },
+        {
+          "type": "color",
+          "id": "custom_variant_border",
+          "label": "Borders",
+          "default": "#dbe2ea",
+          "alpha": true,
+          "visible_if": "{{ block.settings.variant_style_class == 'custom' }}"
+        },
+        {
+          "type": "select",
+          "id": "selected_variant_style_class",
+          "label": "Selected button style",
+          "options": [
+            {
+              "value": "default",
+              "label": "Default"
+            },
+            {
+              "value": "custom",
+              "label": "Custom"
+            }
+          ],
+          "default": "default",
+          "visible_if": "{{ block.settings.variant_style == 'buttons' }}"
+        },
+        {
+          "type": "color",
+          "id": "custom_selected_variant_background",
+          "label": "Background",
+          "default": "#0b1220",
+          "alpha": true,
+          "visible_if": "{{ block.settings.variant_style == 'buttons' and block.settings.selected_variant_style_class == 'custom' }}"
+        },
+        {
+          "type": "color",
+          "id": "custom_selected_variant_text",
+          "label": "Text",
+          "default": "#f5f7fa",
+          "alpha": true,
+          "visible_if": "{{ block.settings.variant_style == 'buttons' and block.settings.selected_variant_style_class == 'custom' }}"
+        },
+        {
+          "type": "color",
+          "id": "custom_selected_variant_border",
+          "label": "Borders",
+          "default": "#0b1220",
+          "alpha": true,
+          "visible_if": "{{ block.settings.variant_style == 'buttons' and block.settings.selected_variant_style_class == 'custom' }}"
+        },
+        {
+          "type": "text_alignment",
+          "id": "alignment",
+          "label": "Alignment",
+          "default": "left"
+        },
+        {
+          "type": "range",
+          "id": "padding-block-start",
+          "label": "Top padding",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "padding-block-end",
+          "label": "Bottom padding",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "default": 8
+        },
+        {
+          "type": "range",
+          "id": "padding-inline-start",
+          "label": "Left padding",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "padding-inline-end",
+          "label": "Right padding",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "default": 0
+        }
+      ]
+    },
+    {
+      "type": "bullet",
+      "name": "Selling point (fallback)",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Real exhaust mist + glowing LED lights"
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            {
+              "value": "check",
+              "label": "Check"
+            },
+            {
+              "value": "marker",
+              "label": "Marker"
+            },
+            {
+              "value": "markers",
+              "label": "Markers"
+            },
+            {
+              "value": "droplet",
+              "label": "Droplet"
+            },
+            {
+              "value": "screen-off",
+              "label": "Screen off"
+            },
+            {
+              "value": "shirt",
+              "label": "Shirt"
+            },
+            {
+              "value": "washer",
+              "label": "Washer"
+            },
+            {
+              "value": "leaf",
+              "label": "Leaf"
+            },
+            {
+              "value": "heart",
+              "label": "Heart"
+            },
+            {
+              "value": "ruler",
+              "label": "Ruler"
+            },
+            {
+              "value": "clock",
+              "label": "Clock"
+            },
+            {
+              "value": "gift",
+              "label": "Gift"
+            },
+            {
+              "value": "sparkle",
+              "label": "Sparkle"
+            },
+            {
+              "value": "car",
+              "label": "Car"
+            },
+            {
+              "value": "mist",
+              "label": "Mist"
+            },
+            {
+              "value": "wind",
+              "label": "Airflow"
+            },
+            {
+              "value": "usb",
+              "label": "USB power"
+            },
+            {
+              "value": "gauge",
+              "label": "Gauge"
+            },
+            {
+              "value": "bolt",
+              "label": "Power"
+            },
+            {
+              "value": "bulb",
+              "label": "Lights"
+            },
+            {
+              "value": "quiet",
+              "label": "Quiet"
+            },
+            {
+              "value": "steering",
+              "label": "Steering wheel"
+            },
+            {
+              "value": "key",
+              "label": "Key"
+            },
+            {
+              "value": "timer",
+              "label": "Timer"
+            },
+            {
+              "value": "trophy",
+              "label": "Trophy"
+            }
+          ],
+          "default": "check"
+        }
+      ]
+    },
+    {
+      "type": "trust",
+      "name": "Trust badge",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Free tracked shipping"
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            {
+              "value": "truck",
+              "label": "Delivery"
+            },
+            {
+              "value": "refresh",
+              "label": "Returns"
+            },
+            {
+              "value": "lock",
+              "label": "Secure"
+            },
+            {
+              "value": "shield",
+              "label": "Guarantee"
+            },
+            {
+              "value": "chat",
+              "label": "Support"
+            },
+            {
+              "value": "leaf",
+              "label": "Safe"
+            },
+            {
+              "value": "gift",
+              "label": "Gift"
+            },
+            {
+              "value": "car",
+              "label": "Car"
+            },
+            {
+              "value": "mist",
+              "label": "Mist"
+            },
+            {
+              "value": "wind",
+              "label": "Airflow"
+            },
+            {
+              "value": "usb",
+              "label": "USB power"
+            },
+            {
+              "value": "gauge",
+              "label": "Gauge"
+            },
+            {
+              "value": "bolt",
+              "label": "Power"
+            },
+            {
+              "value": "bulb",
+              "label": "Lights"
+            },
+            {
+              "value": "quiet",
+              "label": "Quiet"
+            },
+            {
+              "value": "steering",
+              "label": "Steering wheel"
+            },
+            {
+              "value": "key",
+              "label": "Key"
+            },
+            {
+              "value": "timer",
+              "label": "Timer"
+            },
+            {
+              "value": "trophy",
+              "label": "Trophy"
+            }
+          ],
+          "default": "truck"
+        }
+      ]
+    },
+    {
+      "type": "accordion",
+      "name": "Accordion row (fallback)",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "What’s in the box"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Content",
+          "default": "<p>Your car model humidifier, a USB cable and a quick-start guide in a gift-ready box.</p>"
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            {
+              "value": "none",
+              "label": "None"
+            },
+            {
+              "value": "box",
+              "label": "Box"
+            },
+            {
+              "value": "washer",
+              "label": "Care"
+            },
+            {
+              "value": "ruler",
+              "label": "Size"
+            },
+            {
+              "value": "truck",
+              "label": "Shipping"
+            },
+            {
+              "value": "refresh",
+              "label": "Returns"
+            },
+            {
+              "value": "leaf",
+              "label": "Materials"
+            },
+            {
+              "value": "gift",
+              "label": "Gifting"
+            },
+            {
+              "value": "car",
+              "label": "Car"
+            },
+            {
+              "value": "mist",
+              "label": "Mist"
+            },
+            {
+              "value": "wind",
+              "label": "Airflow"
+            },
+            {
+              "value": "usb",
+              "label": "USB power"
+            },
+            {
+              "value": "gauge",
+              "label": "Gauge"
+            },
+            {
+              "value": "bolt",
+              "label": "Power"
+            },
+            {
+              "value": "bulb",
+              "label": "Lights"
+            },
+            {
+              "value": "quiet",
+              "label": "Quiet"
+            },
+            {
+              "value": "steering",
+              "label": "Steering wheel"
+            },
+            {
+              "value": "key",
+              "label": "Key"
+            },
+            {
+              "value": "timer",
+              "label": "Timer"
+            },
+            {
+              "value": "trophy",
+              "label": "Trophy"
+            }
+          ],
+          "default": "none"
+        }
+      ]
+    },
+    {
+      "type": "@app"
+    }
+  ]
+}
+{% endschema %}

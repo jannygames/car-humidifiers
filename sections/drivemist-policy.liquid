@@ -1,0 +1,364 @@
+{%- liquid
+  assign s = section.settings
+
+  assign source = s.content
+  if source == blank
+    assign source = page.content
+  endif
+
+  assign toc = ''
+  assign chunks = source | split: '<h2'
+-%}
+
+{%- capture co_policy_body -%}
+  {{- chunks[0] -}}
+  {%- for chunk in chunks offset: 1 -%}
+    {%- liquid
+      assign halves = chunk | split: '</h2>'
+      assign head_parts = halves[0] | split: '>'
+      assign rest = ''
+      if halves.size > 1
+        assign rest = halves | slice: 1, 40 | join: '</h2>'
+      endif
+    -%}
+    {%- liquid
+      if head_parts.size > 1
+        assign head_inner = head_parts | slice: 1, 40 | join: '>'
+        assign head_label = head_inner | strip_html | strip
+        assign head_id = head_label | handleize | default: 'section'
+        assign head_id = head_id | prepend: 'policy-'
+        assign toc = toc | append: head_id | append: '|~|' | append: head_label | append: '||'
+        assign heading_html = '<h2 id="' | append: head_id | append: '" class="scroll-mt-32">' | append: head_inner | append: '</h2>'
+        assign heading_html = heading_html | append: rest
+      else
+        assign heading_html = chunk | prepend: '<h2'
+      endif
+      echo heading_html
+    -%}
+  {%- endfor -%}
+{%- endcapture -%}
+
+{%- liquid
+  assign toc_items = toc | split: '||'
+  assign show_toc = false
+  if s.show_toc and toc_items.size > 1
+    assign show_toc = true
+  endif
+-%}
+
+<section
+  class="co {% render 'drivemist-surface', style: s.background_style %}"
+  style="{% render 'drivemist-pad', padding_top: s.padding_top, padding_bottom: s.padding_bottom %}"
+>
+  <div class="co-container co-section">
+    <div class="co-grid gap-10 {% if show_toc %}lg:grid-cols-[minmax(0,17rem)_minmax(0,1fr)] lg:gap-16{% else %}mx-auto max-w-3xl{% endif %}">
+      {%- if show_toc -%}
+        {%- assign has_related_menu = false -%}
+        {%- if s.menu != blank and linklists[s.menu].links.size > 0 -%}
+          {%- assign has_related_menu = true -%}
+        {%- endif -%}
+        <aside class="co-reveal {% unless has_related_menu %}co-hide lg:block{% endunless %} lg:sticky lg:top-28 lg:self-start">
+          <nav
+            class="co-hide rounded-card border border-current/12 p-6 lg:block"
+            aria-labelledby="policy-toc-heading"
+          >
+            <p id="policy-toc-heading" class="co-eyebrow text-accent">{{ s.toc_title }}</p>
+            <ul class="mt-4 co-flex flex-col gap-2.5">
+              {%- for item in toc_items -%}
+                {%- assign entry = item | split: '|~|' -%}
+                {%- if entry.size > 1 -%}
+                  <li>
+                    <a
+                      href="#{{ entry[0] }}"
+                      class="text-[0.9375rem] leading-snug opacity-70 transition-opacity hover:opacity-100"
+                    >{{ entry[1] }}</a>
+                  </li>
+                {%- endif -%}
+              {%- endfor -%}
+            </ul>
+          </nav>
+
+          {%- if has_related_menu -%}
+            <nav class="lg:mt-4 rounded-card border border-current/12 p-6" aria-labelledby="policy-related-heading">
+              <p id="policy-related-heading" class="co-eyebrow text-accent">{{ s.menu_title }}</p>
+              <ul class="mt-4 co-flex flex-col gap-2.5">
+                {%- for link in linklists[s.menu].links -%}
+                  <li>
+                    <a
+                      href="{{ link.url }}"
+                      class="text-[0.9375rem] leading-snug {% if link.active %}font-medium{% else %}opacity-70{% endif %} transition-opacity hover:opacity-100"
+                      {% if link.active %}aria-current="page"{% endif %}
+                    >{{ link.title }}</a>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            </nav>
+          {%- endif -%}
+        </aside>
+      {%- endif -%}
+
+      <div class="{% unless show_toc %}max-w-3xl{% endunless %} min-w-0">
+        {%- if s.updated != blank -%}
+          <p class="co-flex items-center gap-2 text-[0.8125rem] opacity-60">
+            {% render 'drivemist-icon', icon: 'clock', class: 'w-4 h-4' %}
+            <span>{{ s.updated }}</span>
+          </p>
+        {%- endif -%}
+
+        {%- if s.intro != blank -%}
+          <div class="co-rte mt-5 text-[1.0625rem] leading-relaxed opacity-75">{{ s.intro }}</div>
+        {%- endif -%}
+
+        <div class="co-reveal co-rte rte drivemist-prose {% if s.updated != blank or s.intro != blank %}mt-10{% endif %} text-[1rem] leading-relaxed">
+          {{ co_policy_body }}
+        </div>
+
+        {%- if s.contact_title != blank or s.contact_text != blank -%}
+          <div class="co-reveal mt-14 rounded-card border border-current/12 bg-current/5 p-7 sm:p-8">
+            <div class="co-flex gap-4">
+              <span class="mt-0.5 text-accent">{% render 'drivemist-icon', icon: s.contact_icon, class: 'w-5 h-5' %}</span>
+              <div class="min-w-0">
+                {%- if s.contact_title != blank -%}
+                  <p class="font-sub text-[1.0625rem] font-medium">{{ s.contact_title }}</p>
+                {%- endif -%}
+                {%- if s.contact_text != blank -%}
+                  <div class="co-rte mt-2 text-[0.9375rem] leading-relaxed opacity-75">{{ s.contact_text }}</div>
+                {%- endif -%}
+                {%- if s.contact_label != blank -%}
+                  <a href="{{ s.contact_link | default: '/pages/contact' }}" class="co-btn co-btn-primary mt-5">
+                    {{ s.contact_label }}
+                    {% render 'drivemist-icon', icon: 'arrow-right', class: 'w-4 h-4' %}
+                  </a>
+                {%- endif -%}
+              </div>
+            </div>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "DriveMist policy",
+  "tag": "section",
+  "class": "drivemist-section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Write the policy in the page's own content editor. Every Heading 2 becomes a linked entry in the contents list automatically."
+    },
+    {
+      "type": "text",
+      "id": "updated",
+      "label": "Last updated",
+      "default": "Last updated 11 September 2026"
+    },
+    {
+      "type": "richtext",
+      "id": "intro",
+      "label": "Intro",
+      "info": "Optional short summary shown above the policy."
+    },
+    {
+      "type": "html",
+      "id": "content",
+      "label": "Content override",
+      "info": "Leave empty to use the page content from the Pages admin."
+    },
+    {
+      "type": "header",
+      "content": "Contents"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_toc",
+      "label": "Show contents list",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "toc_title",
+      "label": "Contents title",
+      "default": "On this page"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Related policies menu",
+      "info": "Optional. Links to your other policy pages."
+    },
+    {
+      "type": "text",
+      "id": "menu_title",
+      "label": "Related policies title",
+      "default": "More legal"
+    },
+    {
+      "type": "header",
+      "content": "Help card"
+    },
+    {
+      "type": "text",
+      "id": "contact_title",
+      "label": "Title",
+      "default": "Questions about this policy?"
+    },
+    {
+      "type": "richtext",
+      "id": "contact_text",
+      "label": "Text",
+      "default": "<p>Write to info@drivemist.com and a real person replies within one working day.</p>"
+    },
+    {
+      "type": "select",
+      "id": "contact_icon",
+      "label": "Icon",
+      "options": [
+        {
+          "value": "chat",
+          "label": "Chat"
+        },
+        {
+          "value": "mail",
+          "label": "Mail"
+        },
+        {
+          "value": "shield",
+          "label": "Guarantee"
+        },
+        {
+          "value": "truck",
+          "label": "Delivery"
+        },
+        {
+          "value": "refresh",
+          "label": "Returns"
+        },
+        {
+          "value": "lock",
+          "label": "Lock"
+        },
+        {
+          "value": "car",
+          "label": "Car"
+        },
+        {
+          "value": "mist",
+          "label": "Mist"
+        },
+        {
+          "value": "wind",
+          "label": "Airflow"
+        },
+        {
+          "value": "usb",
+          "label": "USB power"
+        },
+        {
+          "value": "gauge",
+          "label": "Gauge"
+        },
+        {
+          "value": "bolt",
+          "label": "Power"
+        },
+        {
+          "value": "bulb",
+          "label": "Lights"
+        },
+        {
+          "value": "quiet",
+          "label": "Quiet"
+        },
+        {
+          "value": "steering",
+          "label": "Steering wheel"
+        },
+        {
+          "value": "key",
+          "label": "Key"
+        },
+        {
+          "value": "timer",
+          "label": "Timer"
+        },
+        {
+          "value": "trophy",
+          "label": "Trophy"
+        }
+      ],
+      "default": "chat"
+    },
+    {
+      "type": "text",
+      "id": "contact_label",
+      "label": "Button label",
+      "default": "Contact us"
+    },
+    {
+      "type": "url",
+      "id": "contact_link",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Section"
+    },
+    {
+      "type": "select",
+      "id": "background_style",
+      "label": "Background",
+      "options": [
+        {
+          "value": "paper",
+          "label": "Paper"
+        },
+        {
+          "value": "sand",
+          "label": "Sand"
+        },
+        {
+          "value": "shell",
+          "label": "Shell"
+        },
+        {
+          "value": "deep",
+          "label": "Deep purple"
+        },
+        {
+          "value": "ink",
+          "label": "Ink"
+        }
+      ],
+      "default": "paper"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    }
+  ],
+  "presets": [
+    {
+      "name": "DriveMist policy"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,385 @@
+{%- liquid
+  assign s = section.settings
+
+  comment
+    One control: pick a collection and the page always shows it, leave it empty and the
+    page follows its own URL. An earlier version needed a separate dropdown switched on
+    as well, which was easy to miss.
+  endcomment
+  assign co_collection = collection
+  if s.featured_collection != blank
+    assign co_collection = s.featured_collection
+  endif
+  assign products = co_collection.products
+  assign co_shop_all = 'drivemist.collection.shop_all' | t
+  assign co_sold_out = 'drivemist.collection.sold_out' | t
+-%}
+
+<section
+  class="co {% render 'drivemist-surface', style: s.background_style %}"
+  style="{% render 'drivemist-pad', padding_top: s.padding_top, padding_bottom: s.padding_bottom %}"
+>
+  <div class="co-container co-section">
+    <div class="co-reveal max-w-2xl">
+      {%- if s.eyebrow != blank -%}
+        <p class="co-eyebrow text-accent">{{ s.eyebrow }}</p>
+      {%- endif -%}
+      <h1 class="co-display mt-4 text-[clamp(2.25rem,1.4rem+3.4vw,3.5rem)]">
+        {{ s.heading | default: co_collection.title | default: co_shop_all }}
+      </h1>
+      {%- if s.description != blank -%}
+        <div class="co-rte mt-5 text-[1.0625rem] leading-relaxed text-muted">{{ s.description }}</div>
+      {%- elsif co_collection.description != blank and s.show_collection_description -%}
+        <div class="co-rte mt-5 text-[1.0625rem] leading-relaxed text-muted">{{ co_collection.description }}</div>
+      {%- endif -%}
+    </div>
+
+    {%- if products.size > 0 -%}
+      {%- paginate products by s.products_per_page -%}
+        <div class="mt-12 co-grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:mt-16 lg:grid-cols-3 lg:gap-x-8">
+          {%- for p in products -%}
+            {%- liquid
+              assign p_variant = p.selected_or_first_available_variant
+              assign p_sale = false
+              if p_variant.compare_at_price > p_variant.price
+                assign p_sale = true
+                assign p_save_amount = p_variant.compare_at_price | minus: p_variant.price
+              endif
+              assign second_image = p.images[1]
+            -%}
+            <article
+              class="co-reveal group relative co-flex flex-col"
+              style="transition-delay: {{ forloop.index0 | modulo: 3 | times: 90 }}ms"
+            >
+              <div class="relative">
+                {% render 'drivemist-image',
+                  image: p.featured_image,
+                  ratio: s.image_ratio,
+                  class: 'co-media rounded-card',
+                  sizes: '(min-width: 1024px) 30vw, (min-width: 640px) 46vw, 92vw',
+                  alt: p.title,
+                  placeholder: 'product-apparel-2'
+                %}
+                {%- if second_image != blank -%}
+                  <div class="pointer-events-none absolute inset-0 co-hide opacity-0 transition-opacity duration-500 pointer-fine:block group-hover:opacity-100">
+                    {% render 'drivemist-image',
+                      image: second_image,
+                      ratio: s.image_ratio,
+                      class: 'co-media rounded-card',
+                      sizes: '(min-width: 1024px) 30vw, (min-width: 640px) 46vw, 92vw',
+                      alt: p.title
+                    %}
+                  </div>
+                {%- endif -%}
+                {%- if p_sale -%}
+                  <span class="absolute right-4 top-4 rounded-full bg-sale px-3 py-1.5 text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-sale-ink">
+                    {%- assign co_save = p_save_amount | money_without_trailing_zeros -%}{{ 'drivemist.save' | t: amount: co_save }}
+                  </span>
+                {%- endif -%}
+                {%- liquid
+                  comment
+                    Same custom.badge metafield the product page reads, so a badge set once
+                    shows on the card and the product page both.
+                  endcomment
+                  assign p_badge = p.metafields.custom.badge.value
+                  unless p.available
+                    assign p_badge = co_sold_out
+                  endunless
+                -%}
+                {%- if p_badge != blank and s.show_badge -%}
+                  <span class="absolute left-4 top-4 rounded-full bg-paper/95 px-3 py-1.5 text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-ink shadow-lift backdrop-blur">
+                    {{ p_badge }}
+                  </span>
+                {%- endif -%}
+              </div>
+
+              {%- liquid
+                assign p_subtitle = p.metafields.custom.subtitle.value | default: p.metafields.descriptors.subtitle
+                assign p_can_add = false
+                assign p_needs_choice = false
+                if p.available
+                  if p.variants.size == 1
+                    assign p_can_add = true
+                  else
+                    assign p_needs_choice = true
+                  endif
+                endif
+                assign p_form_id = 'CollCard-' | append: section.id | append: '-' | append: p.id
+                assign p_dialog_id = 'CollVariants-' | append: section.id | append: '-' | append: p.id
+              -%}
+              <div class="mt-5 co-flex flex-1 flex-col">
+                {% render 'drivemist-rating', product: p, size: 'xs', fallback: s.rating_fallback, class: 'mb-2 co-flex items-center gap-2' %}
+
+                <h2 class="co-display text-[1.375rem] leading-tight sm:text-[1.5rem]">
+                  <a href="{{ p.url }}" class="before:absolute before:inset-0 before:content-['']">{{ p.title }}</a>
+                </h2>
+
+                {%- if p_subtitle != blank -%}
+                  <p class="mt-2 text-[0.9375rem] leading-relaxed text-muted">{{ p_subtitle }}</p>
+                {%- endif -%}
+
+                <div class="mt-auto pt-4 co-flex items-baseline gap-2.5">
+                  <span class="font-sub text-[1.0625rem]{% if p_sale %} font-semibold text-accent{% else %} font-medium{% endif %}">
+                    {{- p_variant.price | money_without_trailing_zeros -}}
+                  </span>
+                  {%- if p_sale -%}
+                    <s class="text-[0.9375rem] text-muted/80">{{ p_variant.compare_at_price | money_without_trailing_zeros }}</s>
+                  {%- endif -%}
+                </div>
+
+                <div class="co-card-actions mt-5 co-flex items-stretch gap-2.5">
+                  {%- if p_can_add and s.show_add_to_cart -%}
+                    <product-form-component
+                      class="co-flex flex-1"
+                      data-section-id="{{ section.id }}"
+                      data-product-id="{{ p.id }}"
+                      data-product-url="{{ p.url }}"
+                      on:submit="/handleSubmit"
+                      data-quantity-default="1"
+                    >
+                      <div class="visually-hidden" aria-live="assertive" role="status" aria-atomic="true" ref="liveRegion"></div>
+                      {%- form 'product', p, id: p_form_id, data-type: 'add-to-cart-form', class: 'w-full' -%}
+                        <input type="hidden" name="id" ref="variantId" value="{{ p_variant.id }}">
+                        <input type="hidden" name="quantity" value="1">
+                        {% render 'add-to-cart-button-styles' %}
+                        {% render 'fly-to-cart-styles' %}
+                        {% render 'add-to-cart-button',
+                          id: p_form_id,
+                          class: 'add-to-cart-button co-card-atc',
+                          can_add_to_cart: true,
+                          show_icon: true,
+                          product: p,
+                          add_to_cart_text: s.add_to_cart_label
+                        %}
+                      {%- endform -%}
+                    </product-form-component>
+                  {%- endif -%}
+
+                  {%- if p_needs_choice and s.show_add_to_cart -%}
+                    <button
+                      type="button"
+                      class="button co-card-atc co-card-choose flex-1"
+                      data-co-variant-open
+                      aria-haspopup="dialog"
+                      aria-controls="{{ p_dialog_id }}"
+                    >
+                      <span aria-hidden="true" class="svg-wrapper add-to-cart-icon">
+                        {{- 'icon-add-to-cart.svg' | inline_asset_content -}}
+                      </span>
+                      {{- s.add_to_cart_label -}}
+                    </button>
+                  {%- endif -%}
+
+                  {%- if s.button_label != blank -%}
+                    <a
+                      href="{{ p.url }}"
+                      class="co-card-btn co-card-btn-outline {% if s.show_add_to_cart and p_can_add or s.show_add_to_cart and p_needs_choice %}shrink-0{% else %}flex-1{% endif %}"
+                    >
+                      {{ s.button_label }}
+                    </a>
+                  {%- endif -%}
+                </div>
+
+                {%- if p_needs_choice and s.show_add_to_cart -%}
+                  {% render 'drivemist-variant-dialog',
+                    product: p,
+                    dialog_id: p_dialog_id,
+                    section_id: section.id,
+                    title: s.variant_dialog_title,
+                    add_label: s.add_to_cart_label
+                  %}
+                {%- endif -%}
+              </div>
+            </article>
+          {%- endfor -%}
+        </div>
+
+        {%- if paginate.pages > 1 -%}
+          <div class="mt-16 co-flex justify-center gap-2">
+            {%- for part in paginate.parts -%}
+              {%- if part.is_link -%}
+                <a href="{{ part.url }}" class="co-flex h-11 w-11 items-center justify-center rounded-full border border-current/20 text-[0.875rem] transition-colors hover:bg-current/5">{{ part.title }}</a>
+              {%- else -%}
+                <span class="co-flex h-11 w-11 items-center justify-center rounded-full text-[0.875rem] {% if part.title == paginate.current_page %}bg-ink text-paper{% else %}opacity-40{% endif %}">{{ part.title }}</span>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      {%- endpaginate -%}
+    {%- else -%}
+      <div class="mt-12 rounded-card border border-current/12 p-10 text-center">
+        <p class="text-[1rem] text-muted">{{ s.empty_text }}</p>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "DriveMist collection",
+  "tag": "section",
+  "class": "drivemist-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Car humidifiers & diffusers"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "info": "Leave empty to use the collection title."
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "info": "Leave empty to use the collection description."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_description",
+      "label": "Show collection description",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Which products to show"
+    },
+    {
+      "type": "collection",
+      "id": "featured_collection",
+      "label": "Collection to show",
+      "info": "Pick your curated collection and this page always shows it — use this so Catalog never lists gift products or drafts. Leave empty and the page shows whichever collection the visitor opened."
+    },
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "label": "Products per page",
+      "min": 3,
+      "max": 24,
+      "step": 3,
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Product cards"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_badge",
+      "label": "Show badge",
+      "default": true,
+      "info": "Reads each product's custom.badge metafield, and falls back to Sold out when unavailable."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_add_to_cart",
+      "label": "Show add to cart",
+      "default": true,
+      "info": "Products with one variant add straight from the card. Products with options open a dialog to pick one first."
+    },
+    {
+      "type": "text",
+      "id": "rating_fallback",
+      "label": "Rating text (before you have reviews)",
+      "info": "Leave empty and stars appear only once a review app has written real ratings. Fill it in to show placeholder stars now."
+    },
+    {
+      "type": "text",
+      "id": "add_to_cart_label",
+      "label": "Add to cart label",
+      "default": "Add to basket"
+    },
+    {
+      "type": "text",
+      "id": "variant_dialog_title",
+      "label": "Variant dialog title",
+      "default": "Choose an option"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Secondary button label",
+      "default": "Explore this product"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image ratio",
+      "options": [
+        {
+          "value": "4 / 5",
+          "label": "Portrait (4:5)"
+        },
+        {
+          "value": "1 / 1",
+          "label": "Square"
+        },
+        {
+          "value": "3 / 4",
+          "label": "Tall (3:4)"
+        }
+      ],
+      "default": "4 / 5"
+    },
+    {
+      "type": "text",
+      "id": "empty_text",
+      "label": "Empty text",
+      "default": "Nothing here right now – new models are on their way."
+    },
+    {
+      "type": "header",
+      "content": "Section"
+    },
+    {
+      "type": "select",
+      "id": "background_style",
+      "label": "Background",
+      "options": [
+        {
+          "value": "paper",
+          "label": "Paper"
+        },
+        {
+          "value": "sand",
+          "label": "Sand"
+        },
+        {
+          "value": "shell",
+          "label": "Shell"
+        }
+      ],
+      "default": "paper"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 104
+    }
+  ],
+  "presets": [
+    {
+      "name": "DriveMist collection"
+    }
+  ]
+}
+{% endschema %}

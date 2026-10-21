@@ -1,0 +1,78 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "footer",
+  "name": "t:names.footer",
+  "sections": {
+    "drivemist_footer": {
+      "type": "drivemist-footer",
+      "blocks": {
+        "m1": {
+          "type": "menu",
+          "settings": {
+            "heading": "Shop DriveMist",
+            "menu": "main-menu"
+          }
+        },
+        "m3": {
+          "type": "policies",
+          "settings": {
+            "heading": "Help & legal",
+            "link_1_label": "Shipping policy",
+            "link_1_url": "/pages/shipping-policy",
+            "link_2_label": "Returns policy",
+            "link_2_url": "/pages/returns-policy",
+            "link_3_label": "Privacy policy",
+            "link_3_url": "/pages/privacy-policy",
+            "link_4_label": "Terms of service",
+            "link_4_url": "/pages/terms-of-service",
+            "link_5_label": "Safe use guide",
+            "link_5_url": "/pages/safety",
+            "link_6_label": "Payments",
+            "link_6_url": "/pages/payments",
+            "show_store_policies": false,
+            "show_contact": false
+          }
+        }
+      },
+      "block_order": [
+        "m1",
+        "m3"
+      ],
+      "settings": {
+        "logo_height": 44,
+        "wordmark": "DriveMist",
+        "tagline": "Car model humidifiers and aroma diffusers with real exhaust mist and glowing lights. Made for people who love cars.",
+        "contact_text": "Questions about a model or your order?\nWrite to us – we reply within 24 hours.",
+        "business_details": "<p>DriveMist · [Legal business name], Reg. No. [0000000]<br/>[Street address], [City], [Country]<br/><a href=\"mailto:info@drivemist.com\">info@drivemist.com</a></p>",
+        "payments_note": "<p>All prices are in euros (EUR). Payments are processed securely by the MakeCommerce.lt payment platform.</p>",
+        "legal_menu": "",
+        "show_policy_links": true,
+        "show_payment_icons": true,
+        "show_social": true,
+        "instagram": "https://www.instagram.com/drivemist/",
+        "tiktok": "https://www.tiktok.com/@drivemist",
+        "facebook": "https://www.facebook.com/drivemist/",
+        "youtube": "",
+        "pinterest": "",
+        "x": "",
+        "show_clouds": true,
+        "cloud_height": 88,
+        "cloud_height_mobile": 56,
+        "background_style": "deep",
+        "padding_top": 88,
+        "padding_bottom": 56
+      }
+    }
+  },
+  "order": [
+    "drivemist_footer"
+  ]
+}

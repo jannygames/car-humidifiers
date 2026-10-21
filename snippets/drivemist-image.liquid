@@ -1,0 +1,27 @@
+{%- liquid
+  assign co_class = class | default: 'co-media'
+  assign co_ratio = ratio | default: '4 / 5'
+  assign co_sizes = sizes | default: '(min-width: 1024px) 50vw, 100vw'
+  assign co_loading = loading | default: 'lazy'
+  assign co_placeholder = placeholder | default: 'lifestyle-1'
+  assign co_alt = alt | default: ''
+-%}
+<div class="{{ co_class }}" style="aspect-ratio: {{ co_ratio }};">
+  {%- if image != blank -%}
+    {{
+      image
+      | image_url: width: 2000
+      | image_tag:
+        loading: co_loading,
+        sizes: co_sizes,
+        widths: '320, 480, 640, 720, 800, 1000, 1200, 1400, 1600, 2000',
+        alt: co_alt,
+        fetchpriority: fetchpriority
+    }}
+  {%- else -%}
+    {% render 'drivemist-placeholder', kind: co_placeholder, label: co_alt %}
+  {%- endif -%}
+  {%- if overlay -%}
+    <div class="absolute inset-0" style="background: {{ overlay_color | default: '#0b1220' }}; opacity: {{ overlay_opacity | default: 25 | divided_by: 100.0 }};"></div>
+  {%- endif -%}
+</div>

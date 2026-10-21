@@ -1,0 +1,356 @@
+{%- liquid
+  assign s = section.settings
+
+  assign co_product = product
+  if co_product == blank
+    assign co_product = collections.all.products.first
+  endif
+
+  comment
+    Entries come from a list-of-metaobjects product metafield so every product carries
+    its own clips. Falls back to theme-editor blocks when the metafield is empty, so the
+    section is never blank in the editor and works without any metafield setup.
+  endcomment
+  assign co_ns = s.metafield_namespace | strip | default: 'custom'
+  assign co_key = s.metafield_key | strip | default: 'demos'
+  assign co_entries = co_product.metafields[co_ns][co_key].value
+
+  comment
+    Translation apps translate every text setting, including these two, which silently
+    breaks the lookup in that locale. Retry on the canonical namespace and key.
+  endcomment
+  if co_entries == blank
+    assign co_entries = co_product.metafields.custom.demos.value
+  endif
+
+  assign co_count = co_entries.size | default: 0
+-%}
+
+{%- if co_count > 0 or section.blocks.size > 0 -%}
+  <section
+    class="co co-section {% render 'drivemist-surface', style: s.background_style %}"
+    style="{% render 'drivemist-pad', padding_top: s.padding_top, padding_bottom: s.padding_bottom %}"
+    {% if s.anchor != blank %}id="{{ s.anchor }}"{% endif %}
+  >
+    <div class="co-container">
+      {%- if s.eyebrow != blank or s.heading != blank or s.intro != blank -%}
+        <div class="co-reveal co-flex max-w-2xl flex-col gap-4">
+          {%- if s.eyebrow != blank -%}
+            <p class="co-eyebrow text-accent">{{ s.eyebrow }}</p>
+          {%- endif -%}
+          {%- if s.heading != blank -%}
+            <h2 class="co-display text-[clamp(1.75rem,1.1rem+2.6vw,2.75rem)]">{{ s.heading }}</h2>
+          {%- endif -%}
+          {%- if s.intro != blank -%}
+            <div class="co-rte text-[1rem] leading-relaxed text-muted">{{ s.intro }}</div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      <div class="mt-10" data-co-gallery>
+      <div class="co-demo-track co-scrollbar-none" data-co-gallery-viewport>
+        {%- if co_count > 0 -%}
+          {%- for entry in co_entries limit: s.max_items -%}
+            {%- comment -%}
+              Captured and stripped so the caption works whether the field was set up as
+              multi-line text or rich text. Outputting a rich_text_field's .value renders
+              its raw JSON tree.
+            {%- endcomment -%}
+            {%- capture co_demo_text -%}
+              {%- if entry.text.type == 'rich_text_field' -%}
+                {% render 'drivemist-rich-text', value: entry.text.value %}
+              {%- else -%}
+                {{ entry.text.value }}
+              {%- endif -%}
+            {%- endcapture -%}
+            {%- assign co_demo_text = co_demo_text | strip_html | strip -%}
+            {%- capture co_demo_heading -%}
+              {%- if entry.heading.type == 'rich_text_field' -%}
+                {% render 'drivemist-rich-text', value: entry.heading.value %}
+              {%- else -%}
+                {{ entry.heading.value }}
+              {%- endif -%}
+            {%- endcapture -%}
+            {%- assign co_demo_heading = co_demo_heading | strip_html | strip -%}
+            {% render 'drivemist-demo-card',
+              media: entry.media.value,
+              poster: entry.poster.value,
+              heading: co_demo_heading,
+              text: co_demo_text,
+              ratio: s.media_ratio,
+              index: forloop.index0
+            %}
+          {%- endfor -%}
+        {%- else -%}
+          {%- for block in section.blocks -%}
+            {%- liquid
+              assign co_block_media = block.settings.video
+              if co_block_media == blank
+                assign co_block_media = block.settings.image
+              endif
+            -%}
+            {% render 'drivemist-demo-card',
+              media: co_block_media,
+              poster: block.settings.poster,
+              heading: block.settings.heading,
+              text: block.settings.text,
+              ratio: s.media_ratio,
+              index: forloop.index0
+            %}
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+
+      {%- liquid
+        if co_count > 0
+          assign co_slide_count = co_entries.size
+          if s.max_items < co_slide_count
+            assign co_slide_count = s.max_items
+          endif
+        else
+          assign co_slide_count = section.blocks.size
+        endif
+      -%}
+      {%- if co_slide_count > 1 -%}
+        {%- comment -%}
+          Mobile only: on desktop every card is already visible side by side, so there is
+          nothing to page through.
+        {%- endcomment -%}
+        <div class="co-demo-nav">
+          <button type="button" class="co-demo-arrow" data-co-gallery-step="-1" aria-label="Previous step">
+            {% render 'drivemist-icon', icon: 'arrow-left', class: 'w-4 h-4' %}
+          </button>
+          <div class="co-demo-dots">
+            {%- for i in (1..co_slide_count) -%}
+              <button type="button" class="co-demo-dot" data-co-thumb aria-label="Go to step {{ i }}"></button>
+            {%- endfor -%}
+          </div>
+          <button type="button" class="co-demo-arrow" data-co-gallery-step="1" aria-label="Next step">
+            {% render 'drivemist-icon', icon: 'arrow-right', class: 'w-4 h-4' %}
+          </button>
+        </div>
+      {%- endif -%}
+      </div>
+
+      {%- if s.note != blank -%}
+        <p class="co-reveal mt-8 text-[0.8125rem] text-muted">{{ s.note }}</p>
+      {%- endif -%}
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "DriveMist product demo",
+  "tag": "section",
+  "class": "drivemist-section",
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Shows short looping clips or GIFs pulled from each product's metafield. If a product has no entries, the blocks below are shown instead."
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "See it in action"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "The mist-and-light show, from every angle."
+    },
+    {
+      "type": "richtext",
+      "id": "intro",
+      "label": "Text",
+      "default": "<p>Short clips from real dashboards, desks and bedside tables.</p>"
+    },
+    {
+      "type": "text",
+      "id": "note",
+      "label": "Note under the clips"
+    },
+    {
+      "type": "header",
+      "content": "Product metafield"
+    },
+    {
+      "type": "text",
+      "id": "metafield_namespace",
+      "label": "Namespace",
+      "default": "custom"
+    },
+    {
+      "type": "text",
+      "id": "metafield_key",
+      "label": "Key",
+      "default": "demos",
+      "info": "A list-of-metaobject-references metafield. Setup instructions are in the theme's README."
+    },
+    {
+      "type": "range",
+      "id": "max_items",
+      "label": "Maximum clips",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Appearance"
+    },
+    {
+      "type": "select",
+      "id": "media_ratio",
+      "label": "Clip shape",
+      "options": [
+        {
+          "value": "9 / 16",
+          "label": "Portrait (9:16)"
+        },
+        {
+          "value": "3 / 4",
+          "label": "Tall (3:4)"
+        },
+        {
+          "value": "1 / 1",
+          "label": "Square"
+        },
+        {
+          "value": "16 / 9",
+          "label": "Landscape (16:9)"
+        }
+      ],
+      "default": "9 / 16"
+    },
+    {
+      "type": "select",
+      "id": "background_style",
+      "label": "Background",
+      "options": [
+        {
+          "value": "paper",
+          "label": "Paper"
+        },
+        {
+          "value": "sand",
+          "label": "Sand"
+        },
+        {
+          "value": "shell",
+          "label": "Shell"
+        },
+        {
+          "value": "deep",
+          "label": "Deep purple"
+        },
+        {
+          "value": "ink",
+          "label": "Ink"
+        }
+      ],
+      "default": "sand"
+    },
+    {
+      "type": "text",
+      "id": "anchor",
+      "label": "Anchor ID"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 88
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 88
+    }
+  ],
+  "blocks": [
+    {
+      "type": "clip",
+      "name": "Clip",
+      "settings": [
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Video"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image or GIF",
+          "info": "Used when no video is set. GIFs are served unresized so the animation survives."
+        },
+        {
+          "type": "image_picker",
+          "id": "poster",
+          "label": "Video poster"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Caption heading",
+          "default": "Ready from the box"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Caption text",
+          "default": "Unbox, fill the tank and plug in. Ready in under a minute."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "DriveMist product demo",
+      "blocks": [
+        {
+          "type": "clip",
+          "settings": {
+            "heading": "Ready from the box",
+            "text": "Unbox, fill the tank and plug in. Ready in under a minute."
+          }
+        },
+        {
+          "type": "clip",
+          "settings": {
+            "heading": "Exhaust mist",
+            "text": "Cool mist rolls out of the exhausts like an engine on a cold night."
+          }
+        },
+        {
+          "type": "clip",
+          "settings": {
+            "heading": "Night mode",
+            "text": "On the dash or by the bed, it doubles as a calming night light."
+          }
+        },
+        {
+          "type": "clip",
+          "settings": {
+            "heading": "Made to be enjoyed",
+            "text": "Lights on the moment you press the button."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

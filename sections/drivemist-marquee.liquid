@@ -1,0 +1,136 @@
+{%- liquid
+  assign s = section.settings
+-%}
+
+<section
+  class="co {% render 'drivemist-surface', style: s.background_style %} overflow-hidden border-y border-ink/10"
+  style="--co-marquee-duration: {{ s.speed }}s;"
+>
+  <div class="py-4 sm:py-5" data-co-marquee>
+    <div class="co-marquee-track co-flex w-max items-center" data-co-marquee-track>
+      {%- for i in (1..2) -%}
+        <div class="co-flex w-max items-center" {% if i == 2 %}aria-hidden="true"{% endif %}>
+          {%- for block in section.blocks -%}
+            <span class="co-flex items-center px-6 sm:px-9" {{ block.shopify_attributes }}>
+              <span class="co-eyebrow whitespace-nowrap">{{ block.settings.text }}</span>
+            </span>
+            {% render 'drivemist-icon', icon: 'flower', class: 'w-[1.15rem] h-[1.15rem] opacity-45' %}
+          {%- endfor -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "DriveMist ticker",
+  "tag": "section",
+  "class": "drivemist-section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "background_style",
+      "label": "Background",
+      "options": [
+        {
+          "value": "paper",
+          "label": "Paper"
+        },
+        {
+          "value": "sand",
+          "label": "Sand"
+        },
+        {
+          "value": "shell",
+          "label": "Shell"
+        },
+        {
+          "value": "deep",
+          "label": "Deep purple"
+        },
+        {
+          "value": "ink",
+          "label": "Ink"
+        },
+        {
+          "value": "accent",
+          "label": "Accent"
+        },
+        {
+          "value": "cta",
+          "label": "CTA orange"
+        }
+      ],
+      "default": "sand"
+    },
+    {
+      "type": "range",
+      "id": "speed",
+      "label": "Scroll duration",
+      "min": 15,
+      "max": 90,
+      "step": 5,
+      "unit": "s",
+      "default": 45
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Real exhaust mist effect"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "DriveMist ticker",
+      "blocks": [
+        {
+          "type": "item",
+          "settings": {
+            "text": "Real exhaust mist effect"
+          }
+        },
+        {
+          "type": "item",
+          "settings": {
+            "text": "Real exhaust mist"
+          }
+        },
+        {
+          "type": "item",
+          "settings": {
+            "text": "30-day returns"
+          }
+        },
+        {
+          "type": "item",
+          "settings": {
+            "text": "Worldwide delivery available"
+          }
+        },
+        {
+          "type": "item",
+          "settings": {
+            "text": "The gift every car lover wants"
+          }
+        },
+        {
+          "type": "item",
+          "settings": {
+            "text": "USB powered"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

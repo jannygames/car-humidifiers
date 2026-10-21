@@ -1,0 +1,110 @@
+{%- doc -%}
+  Renders one demo clip: a looping video, an animated GIF, or a still image,
+  with a caption underneath.
+
+  @param {object} [media] - A video, image or generic_file object
+  @param {object} [poster] - Optional poster image for videos
+  @param {string} [heading] - Caption heading
+  @param {string} [text] - Caption body
+  @param {string} [ratio] - Aspect ratio, e.g. '9 / 16'
+  @param {number} [index] - Position, used to pick the marker colour
+{%- enddoc -%}
+
+{%- liquid
+  assign co_ratio = ratio | default: '9 / 16'
+  assign co_index = index | default: 0
+  assign co_markers = 'var(--co-marker-1),var(--co-marker-2),var(--co-marker-3),var(--co-marker-4),var(--co-marker-5)' | split: ','
+  assign co_marker_index = co_index | modulo: 5
+  assign co_marker = co_markers[co_marker_index]
+
+  assign co_is_video = false
+  assign co_video_src = ''
+  assign co_poster_image = poster
+
+  if media.sources.size > 0
+    assign co_is_video = true
+    assign co_mp4 = media.sources | where: 'format', 'mp4' | first
+    assign co_video_src = co_mp4.url | default: media.sources.first.url
+    if co_poster_image == blank
+      assign co_poster_image = media.preview_image
+    endif
+  elsif media.url != blank and media.url contains '.mp4'
+    assign co_is_video = true
+    assign co_video_src = media.url
+  endif
+
+  unless co_is_video
+    assign co_image_url = media | image_url
+  endunless
+-%}
+
+<figure
+  class="co-reveal co-demo-card co-flex flex-col"
+  data-co-slide
+  style="transition-delay: {{ co_index | times: 80 }}ms"
+>
+  <div class="co-demo-media group relative overflow-hidden rounded-card bg-shell" style="aspect-ratio: {{ co_ratio }};">
+    {%- if co_is_video and co_video_src != blank -%}
+      <video
+        class="absolute inset-0 h-full w-full object-cover"
+        data-co-demo-video
+        muted
+        loop
+        playsinline
+        preload="none"
+        {% if co_poster_image != blank %}data-co-poster="{{ co_poster_image | image_url: width: 800 }}"{% endif %}
+        {% if heading != blank %}aria-label="{{ heading | escape }}"{% endif %}
+      >
+        <source src="{{ co_video_src }}" type="video/mp4">
+      </video>
+
+      <button
+        type="button"
+        class="co-demo-toggle absolute bottom-3 right-3 co-flex h-9 w-9 items-center justify-center rounded-full bg-paper/85 text-ink opacity-0 backdrop-blur transition-opacity duration-200 focus-visible:opacity-100 group-hover:opacity-100"
+        data-co-demo-toggle
+        aria-label="Pause clip"
+      >
+        <span data-co-demo-icon-pause>{% render 'drivemist-icon', icon: 'pause', class: 'w-3.5 h-3.5' %}</span>
+        <span data-co-demo-icon-play hidden>{% render 'drivemist-icon', icon: 'play', class: 'w-3.5 h-3.5' %}</span>
+      </button>
+
+    {%- elsif media != blank -%}
+      {%- if co_image_url contains '.gif' -%}
+        {%- comment -%} Untouched URL: resizing a GIF through the CDN can flatten the animation. {%- endcomment -%}
+        <img
+          src="{{ co_image_url }}"
+          alt="{{ heading | default: '' | escape }}"
+          width="{{ media.width | default: 800 }}"
+          height="{{ media.height | default: 1422 }}"
+          loading="lazy"
+          class="absolute inset-0 h-full w-full object-cover"
+        >
+      {%- else -%}
+        {{
+          media
+          | image_url: width: 1200
+          | image_tag:
+            loading: 'lazy',
+            sizes: '(min-width: 1024px) 25vw, 70vw',
+            widths: '320, 480, 640, 800, 1000, 1200',
+            alt: heading,
+            class: 'absolute inset-0 h-full w-full object-cover'
+        }}
+      {%- endif -%}
+    {%- else -%}
+      {% render 'drivemist-placeholder', kind: 'lifestyle-1', class: 'absolute inset-0 h-full w-full' %}
+    {%- endif -%}
+  </div>
+
+  {%- if heading != blank or text != blank -%}
+    <figcaption class="mt-4">
+      <span class="block h-[2px] w-8 rounded-full" style="background: {{ co_marker }};"></span>
+      {%- if heading != blank -%}
+        <span class="font-sub mt-3 block text-[0.9375rem] font-medium leading-snug">{{ heading }}</span>
+      {%- endif -%}
+      {%- if text != blank -%}
+        <p class="mt-1.5 text-[0.875rem] leading-relaxed text-muted">{{ text }}</p>
+      {%- endif -%}
+    </figcaption>
+  {%- endif -%}
+</figure>

@@ -1,0 +1,45 @@
+{%- doc -%}
+  Star rating. Supports fractional values by clipping a filled row over an outline row,
+  so 4.7 renders as 4.7 rather than rounding to 5.
+
+  @param {number} [rating] - 0–5
+  @param {string} [size] - xs | sm | lg
+{%- enddoc -%}
+
+{%- liquid
+  assign co_rating = rating | default: 5 | times: 1.0
+  assign co_size = size | default: 'sm'
+  case co_size
+    when 'xs'
+      assign co_dim = 12
+    when 'lg'
+      assign co_dim = 18
+    else
+      assign co_dim = 14
+  endcase
+  assign co_pct = co_rating | times: 20.0
+  if co_pct > 100
+    assign co_pct = 100
+  endif
+  if co_pct < 0
+    assign co_pct = 0
+  endif
+  assign co_star_path = 'M10 1.6l2.47 5.35 5.53.66-4.09 3.9 1.09 5.6L10 14.3l-5 2.81 1.09-5.6L2 7.61l5.53-.66L10 1.6z'
+-%}
+
+<span class="co-stars" style="--co-stars-fill: {{ co_pct }}%;" aria-hidden="true">
+  <span class="co-stars__row">
+    {%- for i in (1..5) -%}
+      <svg width="{{ co_dim }}" height="{{ co_dim }}" viewBox="0 0 20 20" fill="none">
+        <path d="{{ co_star_path }}" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round" />
+      </svg>
+    {%- endfor -%}
+  </span>
+  <span class="co-stars__row co-stars__row--fill">
+    {%- for i in (1..5) -%}
+      <svg width="{{ co_dim }}" height="{{ co_dim }}" viewBox="0 0 20 20" fill="none">
+        <path d="{{ co_star_path }}" fill="currentColor" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round" />
+      </svg>
+    {%- endfor -%}
+  </span>
+</span>

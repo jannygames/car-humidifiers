@@ -1,0 +1,338 @@
+{%- liquid
+  assign s = section.settings
+-%}
+
+<section
+  class="co co-section {% render 'drivemist-surface', style: s.background_style %}"
+  style="{% render 'drivemist-pad', padding_top: s.padding_top, padding_bottom: s.padding_bottom %}--co-compare: {{ s.highlight_color }};"
+
+  {% if s.anchor != blank %}id="{{ s.anchor }}"{% endif %}
+>
+  <div class="co-container">
+    {% render 'drivemist-section-header',
+      eyebrow: s.eyebrow,
+      heading: s.heading,
+      intro: s.intro,
+      align: 'center'
+    %}
+
+    <div class="co-reveal mx-auto mt-12 max-w-4xl overflow-hidden rounded-card border border-current/12 bg-paper text-ink shadow-lift">
+      <div class="co-grid grid-cols-[1fr_auto_auto] items-stretch">
+        <div class="border-b border-ink/8 px-5 py-5 sm:px-8 sm:py-6"></div>
+        <div class="co-flex w-[5.5rem] flex-col items-center justify-center gap-1 border-b border-ink/8 co-compare-column px-2 py-5 sm:w-[9rem] sm:py-6">
+          {%- if s.show_logo_us and settings.logo != blank -%}
+            <img
+              src="{{ settings.logo | image_url: width: 300 }}"
+              srcset="{{ settings.logo | image_url: width: 150 }} 150w, {{ settings.logo | image_url: width: 300 }} 300w"
+              sizes="{{ s.logo_height | times: 6 }}px"
+              width="{{ settings.logo.width }}"
+              height="{{ settings.logo.height }}"
+              alt="{{ s.column_us | escape }}"
+              class="co-compare-logo"
+              style="--co-compare-logo-h: {{ s.logo_height }}px;"
+              loading="lazy"
+              decoding="async"
+            >
+          {%- elsif s.show_logo_us -%}
+            <img
+              src="{{ 'drivemist-mark.svg' | asset_url }}"
+              width="64"
+              height="64"
+              alt="{{ s.column_us | escape }}"
+              class="co-compare-logo"
+              style="--co-compare-logo-h: {{ s.logo_height | times: 1.4 | round }}px;"
+              loading="lazy"
+              decoding="async"
+            >
+            <span class="co-eyebrow co-compare-label">{{ s.column_us }}</span>
+          {%- else -%}
+            <span class="co-eyebrow co-compare-label">{{ s.column_us }}</span>
+          {%- endif -%}
+        </div>
+        <div class="co-flex w-[5.5rem] flex-col items-center justify-center border-b border-ink/8 px-2 py-5 sm:w-[9rem] sm:py-6">
+          <span class="co-eyebrow text-muted">{{ s.column_them }}</span>
+        </div>
+
+        {%- for block in section.blocks -%}
+          <div class="co-flex flex-col justify-center border-b border-ink/8 px-5 py-4 last:border-b-0 sm:px-8 sm:py-5" {{ block.shopify_attributes }}>
+            <span class="text-[0.9375rem] font-medium leading-snug sm:text-[1rem]">{{ block.settings.label }}</span>
+            {%- if block.settings.note != blank -%}
+              <span class="mt-1 text-[0.8125rem] leading-snug text-muted">{{ block.settings.note }}</span>
+            {%- endif -%}
+          </div>
+          <div class="co-flex items-center justify-center border-b border-ink/8 co-compare-column px-2 py-4 sm:py-5">
+            {%- if block.settings.us -%}
+              <span class="co-flex h-7 w-7 items-center justify-center rounded-full co-compare-check">
+                {% render 'drivemist-icon', icon: 'check', class: 'w-3.5 h-3.5', stroke_width: 2.2 %}
+              </span>
+            {%- else -%}
+              <span class="text-ink/25">{% render 'drivemist-icon', icon: 'close', class: 'w-4 h-4' %}</span>
+            {%- endif -%}
+          </div>
+          <div class="co-flex items-center justify-center border-b border-ink/8 px-2 py-4 sm:py-5">
+            {%- if block.settings.them -%}
+              <span class="co-flex h-7 w-7 items-center justify-center rounded-full bg-ink/8 text-ink/60">
+                {% render 'drivemist-icon', icon: 'check', class: 'w-3.5 h-3.5', stroke_width: 2.2 %}
+              </span>
+            {%- else -%}
+              <span class="text-ink/25">{% render 'drivemist-icon', icon: 'close', class: 'w-4 h-4' %}</span>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+
+    {%- if s.button_label != blank -%}
+      <div class="co-reveal mt-10 co-flex flex-col items-center gap-3">
+        <a href="{{ s.button_link | default: '#' }}" class="co-btn co-btn-primary">
+          {{ s.button_label }}
+          {% render 'drivemist-icon', icon: 'arrow-right', class: 'w-4 h-4' %}
+        </a>
+        {%- if s.button_note != blank -%}
+          <span class="text-[0.8125rem] text-muted">{{ s.button_note }}</span>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "DriveMist comparison",
+  "tag": "section",
+  "class": "drivemist-section",
+  "max_blocks": 10,
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Why upgrade"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "More making, less scrolling."
+    },
+    {
+      "type": "richtext",
+      "id": "intro",
+      "label": "Text",
+      "default": "<p>Hanging air fresheners fade in a week. A DriveMist humidifier refreshes, humidifies and looks incredible doing it.</p>"
+    },
+    {
+      "type": "text",
+      "id": "column_us",
+      "label": "Your column",
+      "default": "DriveMist"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_logo_us",
+      "label": "Use the store logo for this column",
+      "default": true,
+      "info": "Falls back to the text above when no logo is set in Logo and favicon."
+    },
+    {
+      "type": "range",
+      "id": "logo_height",
+      "label": "Logo height",
+      "min": 16,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 26
+    },
+    {
+      "type": "text",
+      "id": "column_them",
+      "label": "Their column",
+      "default": "Air freshener"
+    },
+    {
+      "type": "color",
+      "id": "highlight_color",
+      "label": "Highlight colour",
+      "default": "#137a54",
+      "info": "Tints your column and its ticks. Green reads as \"yes\"; the accent works too if you prefer it on-brand."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Shop the collection"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "text",
+      "id": "button_note",
+      "label": "Button note",
+      "default": "Free tracked shipping · 30-day returns"
+    },
+    {
+      "type": "header",
+      "content": "Section"
+    },
+    {
+      "type": "text",
+      "id": "anchor",
+      "label": "Anchor ID",
+      "info": "Used for on-page links, e.g. #how-it-works."
+    },
+    {
+      "type": "select",
+      "id": "background_style",
+      "label": "Background",
+      "options": [
+        {
+          "value": "paper",
+          "label": "Paper"
+        },
+        {
+          "value": "sand",
+          "label": "Sand"
+        },
+        {
+          "value": "shell",
+          "label": "Shell"
+        },
+        {
+          "value": "deep",
+          "label": "Deep purple"
+        },
+        {
+          "value": "ink",
+          "label": "Ink"
+        }
+      ],
+      "default": "shell"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 104
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 104
+    }
+  ],
+  "blocks": [
+    {
+      "type": "row",
+      "name": "Row",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Real exhaust mist effect"
+        },
+        {
+          "type": "text",
+          "id": "note",
+          "label": "Note"
+        },
+        {
+          "type": "checkbox",
+          "id": "us",
+          "label": "Your column",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "them",
+          "label": "Their column",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "DriveMist comparison",
+      "blocks": [
+        {
+          "type": "row",
+          "settings": {
+            "label": "Focused play",
+            "note": "Ultrasonic mist flows from the exhausts like a car on a cold night",
+            "us": true,
+            "them": false
+          }
+        },
+        {
+          "type": "row",
+          "settings": {
+            "label": "Hands-on creativity",
+            "note": "Adds moisture to dry cabin and office air",
+            "us": true,
+            "them": false
+          }
+        },
+        {
+          "type": "row",
+          "settings": {
+            "label": "Refillable scent",
+            "note": "Swap essential oils whenever you like",
+            "us": true,
+            "them": false
+          }
+        },
+        {
+          "type": "row",
+          "settings": {
+            "label": "Something useful to enjoy",
+            "note": "Detailed collector styling on the dash or desk",
+            "us": true,
+            "them": false
+          }
+        },
+        {
+          "type": "row",
+          "settings": {
+            "label": "Auto shut-off",
+            "note": "A tactile alternative to digital entertainment",
+            "us": true,
+            "them": false
+          }
+        },
+        {
+          "type": "row",
+          "settings": {
+            "label": "Freshens the air",
+            "note": "Switches off by itself when the tank is empty",
+            "us": true,
+            "them": true
+          }
+        },
+        {
+          "type": "row",
+          "settings": {
+            "label": "Needs charging or updates",
+            "note": "",
+            "us": false,
+            "them": true
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

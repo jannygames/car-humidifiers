@@ -1,0 +1,568 @@
+{%- liquid
+  assign s = section.settings
+-%}
+
+{%- comment -%}
+  The cloud edge is drawn above the footer and overlaps whatever sits before it. Publish
+  its height so the last section on the page can reserve that space instead of having its
+  content run under the clouds.
+{%- endcomment -%}
+{% style %}
+  :root {
+    --co-cloud-edge: {% if s.show_clouds %}{{ s.cloud_height }}px{% else %}0px{% endif %};
+    --co-cloud-edge-mobile: {% if s.show_clouds %}{{ s.cloud_height_mobile }}px{% else %}0px{% endif %};
+  }
+{% endstyle %}
+
+<footer
+  class="co {% render 'drivemist-surface', style: s.background_style %}{% if s.show_clouds %} co-footer--clouds{% endif %}"
+  style="--co-cloud-height: {{ s.cloud_height }}px; --co-cloud-height-mobile: {{ s.cloud_height_mobile }}px;"
+  data-co-sticky-stop
+>
+  <div class="co-container co-section" style="{% render 'drivemist-pad', padding_top: s.padding_top, padding_bottom: s.padding_bottom %}">
+    <div>
+      <div class="co-footer-road" aria-hidden="true">
+        <span class="co-footer-road__car">
+          <svg viewBox="0 30 60 18" fill="currentColor">
+            <g class="co-footer-road__mist" fill="none" stroke-linecap="round">
+              <path d="M24 35.6C19 33 15 34.5 11.5 32C9 30.2 7.5 30.6 5.5 31.6" stroke-width="1.8" />
+              <path d="M15.5 38.6C12.5 37.2 10.5 39 7.6 38C6 37.4 5 37.6 4 38.2" stroke-width="1.5" opacity=".7" />
+              <path d="M14 42.2C12 41.6 10.5 43 8.5 42.4" stroke-width="1.2" opacity=".45" />
+            </g>
+            <path d="M14 41.5C14 39.6 15 38.4 16.8 37.9L24 36C27.5 32.6 31.5 31 36 31C40 31 43.3 32.2 46.2 34.6L48.6 36.4L54 37.6C55.6 38 56.6 39.2 56.6 40.8L56.6 42.6C56.6 43.6 55.8 44.4 54.8 44.4L51.6 44.4A4.6 4.6 0 0 0 42.4 44.4L28.6 44.4A4.6 4.6 0 0 0 19.4 44.4L15.6 44.4C14.7 44.4 14 43.7 14 42.8Z" />
+            <circle cx="24" cy="44.4" r="3.4" /><circle cx="47" cy="44.4" r="3.4" />
+            <rect x="53.6" y="38.8" width="2.6" height="1.5" rx=".75" fill="var(--color-accent-soft)" />
+            <rect x="14.4" y="39" width="1.8" height="1.5" rx=".75" fill="#ff7a45" />
+          </svg>
+        </span>
+      </div>
+      <div class="co-grid gap-12 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,2fr)] lg:gap-20">
+        <div>
+          {%- if s.logo != blank -%}
+            <img
+              src="{{ s.logo | image_url: width: 400 }}"
+              alt="{{ shop.name }}"
+              width="200"
+              height="60"
+              style="height: {{ s.logo_height }}px; width: auto;"
+              class="mb-6"
+            >
+          {%- else -%}
+            <img
+              src="{{ 'drivemist-logo-inverse.svg' | asset_url }}"
+              alt="{{ s.wordmark | default: shop.name | escape }}"
+              width="262"
+              height="64"
+              style="height: {{ s.logo_height }}px; width: auto;"
+              class="mb-6"
+              loading="lazy"
+            >
+          {%- endif -%}
+
+          {%- if s.tagline != blank -%}
+            <p class="max-w-[24rem] text-[0.9375rem] leading-relaxed opacity-70">{{ s.tagline }}</p>
+          {%- endif -%}
+
+          <div class="co-footer-dots mt-6 co-flex items-center gap-1.5" aria-hidden="true">
+            <span class="h-2.5 w-2.5 rounded-full" style="background: var(--co-marker-1); color: var(--co-marker-1)"></span>
+            <span class="h-2.5 w-2.5 rounded-full" style="background: var(--co-marker-2); color: var(--co-marker-2)"></span>
+            <span class="h-2.5 w-2.5 rounded-full" style="background: var(--co-marker-3); color: var(--co-marker-3)"></span>
+            <span class="h-2.5 w-2.5 rounded-full" style="background: var(--co-marker-4); color: var(--co-marker-4)"></span>
+            <span class="h-2.5 w-2.5 rounded-full" style="background: var(--co-marker-5); color: var(--co-marker-5)"></span>
+          </div>
+
+          {%- if s.contact_text != blank -%}
+            <p class="mt-8 max-w-[24rem] text-[0.875rem] leading-relaxed opacity-70">{{ s.contact_text }}</p>
+          {%- endif -%}
+
+          {%- comment -%}
+            Trading name, activity number, address and a customer-service contact, on every
+            page. MakeCommerce requires these to be findable without hunting through the
+            terms page.
+          {%- endcomment -%}
+          {%- if s.business_details != blank -%}
+            <div class="co-rte co-business-details mt-6 max-w-[24rem] text-[0.875rem] leading-relaxed" data-co-business-details>
+              {{ s.business_details }}
+            </div>
+          {%- endif -%}
+
+          {%- if s.show_social -%}
+            {%- comment -%}
+              URLs default to the global brand settings; the section fields below stay as
+              per-footer overrides for the rare case one needs to differ.
+            {%- endcomment -%}
+            {% render 'drivemist-social-links',
+              class: 'mt-7 co-flex flex-wrap items-center gap-2.5',
+              instagram: s.instagram,
+              facebook: s.facebook,
+              tiktok: s.tiktok,
+              youtube: s.youtube,
+              pinterest: s.pinterest,
+              x: s.x
+            %}
+          {%- endif -%}
+        </div>
+
+        <div class="co-grid gap-10 sm:grid-cols-3">
+          {%- for block in section.blocks -%}
+            {%- case block.type -%}
+              {%- when 'menu' -%}
+                <nav {{ block.shopify_attributes }}>
+                  {%- if block.settings.heading != blank -%}
+                    <p class="co-eyebrow opacity-60">{{ block.settings.heading }}</p>
+                  {%- endif -%}
+                  <ul class="mt-5 co-flex flex-col gap-3">
+                    {%- for link in block.settings.menu.links -%}
+                      <li>
+                        <a href="{{ link.url }}" class="text-[0.9375rem] opacity-80 transition-opacity hover:opacity-100">{{ link.title }}</a>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                </nav>
+              {%- when 'policies' -%}
+                <nav {{ block.shopify_attributes }}>
+                  {%- if block.settings.heading != blank -%}
+                    <p class="co-eyebrow opacity-60">{{ block.settings.heading }}</p>
+                  {%- endif -%}
+                  <ul class="mt-5 co-flex flex-col gap-3">
+                    {%- for i in (1..6) -%}
+                      {%- liquid
+                        assign label_key = 'link_' | append: i | append: '_label'
+                        assign url_key = 'link_' | append: i | append: '_url'
+                        assign link_label = block.settings[label_key]
+                        assign link_url = block.settings[url_key]
+                        assign link_first_char = link_url | slice: 0
+                        if routes.root_url != '/' and link_first_char == '/'
+                          assign link_url = routes.root_url | append: link_url
+                        endif
+                      -%}
+                      {%- if link_label != blank and link_url != blank -%}
+                        <li>
+                          <a href="{{ link_url }}" class="text-[0.9375rem] opacity-80 transition-opacity hover:opacity-100">{{ link_label }}</a>
+                        </li>
+                      {%- endif -%}
+                    {%- endfor -%}
+                    {%- if block.settings.show_store_policies -%}
+                      {%- for policy in shop.policies -%}
+                        {%- if policy != blank -%}
+                          <li>
+                            <a href="{{ policy.url }}" class="text-[0.9375rem] opacity-80 transition-opacity hover:opacity-100">{{ policy.title }}</a>
+                          </li>
+                        {%- endif -%}
+                      {%- endfor -%}
+                    {%- endif -%}
+                    {%- if block.settings.show_contact -%}
+                      <li>
+                        <a href="{{ routes.root_url }}pages/contact" class="text-[0.9375rem] opacity-80 transition-opacity hover:opacity-100">{{ 'drivemist.contact.contact_us' | t }}</a>
+                      </li>
+                    {%- endif -%}
+                  </ul>
+                </nav>
+              {%- when 'text' -%}
+                <div {{ block.shopify_attributes }}>
+                  {%- if block.settings.heading != blank -%}
+                    <p class="co-eyebrow opacity-60">{{ block.settings.heading }}</p>
+                  {%- endif -%}
+                  <div class="co-rte mt-5 text-[0.9375rem] leading-relaxed opacity-80">{{ block.settings.text }}</div>
+                </div>
+            {%- endcase -%}
+          {%- endfor -%}
+        </div>
+      </div>
+
+      {%- if s.payments_note != blank -%}
+        <div class="co-rte mt-12 border-t border-current/15 pt-8 text-[0.8125rem] leading-relaxed opacity-70" data-co-payments-note>
+          {{ s.payments_note }}
+        </div>
+      {%- endif -%}
+
+      <div class="{% if s.payments_note != blank %}mt-8{% else %}mt-14 border-t border-current/15 pt-8{% endif %} co-flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+        <div class="co-flex flex-wrap items-center gap-x-5 gap-y-2 text-[0.8125rem] opacity-60">
+          {%- assign brand_name = s.wordmark | default: shop.name -%}
+          <span>&copy; {{ 'now' | date: '%Y' }} {{ brand_name }}</span>
+          {%- if s.legal_menu.links.size > 0 -%}
+            {%- for link in s.legal_menu.links -%}
+              <a href="{{ link.url }}" class="transition-opacity hover:opacity-100">{{ link.title }}</a>
+            {%- endfor -%}
+          {%- elsif s.show_policy_links -%}
+            {%- for policy in shop.policies -%}
+              {%- if policy != blank -%}
+                {%- liquid
+                  assign co_policy_handle = policy.url | split: '/' | last
+                  if co_policy_handle == 'refund-policy'
+                    assign co_policy_handle = 'returns-policy'
+                  endif
+                  assign co_policy_page = pages[co_policy_handle]
+                -%}
+                {%- if co_policy_page != blank -%}
+                  <a href="{{ co_policy_page.url }}" class="transition-opacity hover:opacity-100">{{ co_policy_page.title }}</a>
+                {%- else -%}
+                  <a href="{{ policy.url }}" class="transition-opacity hover:opacity-100">{{ policy.title }}</a>
+                {%- endif -%}
+              {%- endif -%}
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+
+        {%- if s.show_payment_icons and shop.enabled_payment_types.size > 0 -%}
+          <div class="co-flex flex-wrap items-center gap-1.5">
+            {%- for type in shop.enabled_payment_types -%}
+              <span class="co-flex h-[1.6rem] w-[2.5rem] items-center justify-center overflow-hidden rounded-[5px] bg-paper/95 ring-1 ring-ink/8">
+                {{ type | payment_type_svg_tag: class: 'h-4 w-auto' }}
+              </span>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "DriveMist footer",
+  "tag": "div",
+  "max_blocks": 3,
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "range",
+      "id": "logo_height",
+      "label": "Logo height",
+      "min": 16,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "text",
+      "id": "wordmark",
+      "label": "Wordmark (used if no logo)",
+      "default": "DriveMist"
+    },
+    {
+      "type": "text",
+      "id": "tagline",
+      "label": "Tagline",
+      "default": "Car model humidifiers and aroma diffusers with real exhaust mist and glowing lights."
+    },
+    {
+      "type": "textarea",
+      "id": "contact_text",
+      "label": "Contact text",
+      "default": "Questions about products, orders or gifts? Contact our friendly customer care team."
+    },
+    {
+      "type": "richtext",
+      "id": "business_details",
+      "label": "Business details",
+      "default": "<p>DriveMist · [Legal business name], Reg. No. [0000000]<br/>[Street address], [City], [Country]<br/>info@drivemist.com</p>",
+      "info": "Trading name, address and a customer-service contact. Payment providers require these to be easy to find."
+    },
+    {
+      "type": "richtext",
+      "id": "payments_note",
+      "label": "Payments note",
+      "default": "<p>Atsiskaitymai galimi euro valiuta. Mokėjimai apdorojami naudojantis MakeCommerce.lt mokėjimų platforma.</p>",
+      "info": "Shown above the payment icons. State the currency and the payment platform."
+    },
+    {
+      "type": "link_list",
+      "id": "legal_menu",
+      "label": "Legal menu",
+      "info": "Leave empty to list your published store policies automatically."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_policy_links",
+      "label": "Show store policies when no legal menu is set",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_payment_icons",
+      "label": "Show payment icons",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Social"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social",
+      "label": "Show social links",
+      "default": true
+    },
+    {
+      "type": "url",
+      "id": "instagram",
+      "label": "Instagram"
+    },
+    {
+      "type": "url",
+      "id": "tiktok",
+      "label": "TikTok"
+    },
+    {
+      "type": "url",
+      "id": "facebook",
+      "label": "Facebook"
+    },
+    {
+      "type": "url",
+      "id": "youtube",
+      "label": "YouTube"
+    },
+    {
+      "type": "url",
+      "id": "pinterest",
+      "label": "Pinterest"
+    },
+    {
+      "type": "url",
+      "id": "x",
+      "label": "X (Twitter)"
+    },
+    {
+      "type": "header",
+      "content": "Cloud edge"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_clouds",
+      "label": "Cloud top edge",
+      "default": true,
+      "info": "An uneven bumped edge in the footer colour. Hidden automatically when the section above is the same colour, since there would be nothing to see."
+    },
+    {
+      "type": "range",
+      "id": "cloud_height",
+      "label": "Cloud height (desktop)",
+      "min": 32,
+      "max": 140,
+      "step": 4,
+      "unit": "px",
+      "default": 88
+    },
+    {
+      "type": "range",
+      "id": "cloud_height_mobile",
+      "label": "Cloud height (mobile)",
+      "min": 24,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 56,
+      "info": "Mobile uses its own wider, shallower cloud shape."
+    },
+    {
+      "type": "header",
+      "content": "Section"
+    },
+    {
+      "type": "select",
+      "id": "background_style",
+      "label": "Background",
+      "options": [
+        {
+          "value": "paper",
+          "label": "Paper"
+        },
+        {
+          "value": "sand",
+          "label": "Sand"
+        },
+        {
+          "value": "shell",
+          "label": "Shell"
+        },
+        {
+          "value": "deep",
+          "label": "Deep purple"
+        },
+        {
+          "value": "ink",
+          "label": "Ink"
+        }
+      ],
+      "default": "ink"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 88
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    }
+  ],
+  "blocks": [
+    {
+      "type": "menu",
+      "name": "Menu",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Shop"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Menu"
+        }
+      ]
+    },
+    {
+      "type": "policies",
+      "name": "Store policies",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Legal"
+        },
+        {
+          "type": "paragraph",
+          "content": "Link your policy pages below, or list every policy published in Settings › Policies, or both."
+        },
+        {
+          "type": "text",
+          "id": "link_1_label",
+          "label": "Link 1 label"
+        },
+        {
+          "type": "url",
+          "id": "link_1_url",
+          "label": "Link 1 URL"
+        },
+        {
+          "type": "text",
+          "id": "link_2_label",
+          "label": "Link 2 label"
+        },
+        {
+          "type": "url",
+          "id": "link_2_url",
+          "label": "Link 2 URL"
+        },
+        {
+          "type": "text",
+          "id": "link_3_label",
+          "label": "Link 3 label"
+        },
+        {
+          "type": "url",
+          "id": "link_3_url",
+          "label": "Link 3 URL"
+        },
+        {
+          "type": "text",
+          "id": "link_4_label",
+          "label": "Link 4 label"
+        },
+        {
+          "type": "url",
+          "id": "link_4_url",
+          "label": "Link 4 URL"
+        },
+        {
+          "type": "text",
+          "id": "link_5_label",
+          "label": "Link 5 label"
+        },
+        {
+          "type": "url",
+          "id": "link_5_url",
+          "label": "Link 5 URL"
+        },
+        {
+          "type": "text",
+          "id": "link_6_label",
+          "label": "Link 6 label"
+        },
+        {
+          "type": "url",
+          "id": "link_6_url",
+          "label": "Link 6 URL"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_store_policies",
+          "label": "Also list published store policies",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_contact",
+          "label": "Add a Contact us link",
+          "default": true
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Support"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Use our contact page for friendly help with models, orders and gifts.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "DriveMist footer",
+      "blocks": [
+        {
+          "type": "menu",
+          "settings": {
+            "heading": "Shop"
+          }
+        },
+        {
+          "type": "menu",
+          "settings": {
+            "heading": "Help"
+          }
+        },
+        {
+          "type": "menu",
+          "settings": {
+            "heading": "Company"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

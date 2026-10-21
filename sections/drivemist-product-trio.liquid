@@ -1,0 +1,500 @@
+{%- liquid
+  assign s = section.settings
+
+  assign co_has_header = false
+  if s.eyebrow != blank or s.heading != blank or s.intro != blank or s.link_label != blank
+    assign co_has_header = true
+  endif
+-%}
+
+<section
+  class="co co-section {% render 'drivemist-surface', style: s.background_style %}"
+  style="{% render 'drivemist-pad', padding_top: s.padding_top, padding_bottom: s.padding_bottom %}"
+
+  {% if s.anchor != blank %}id="{{ s.anchor }}"{% endif %}
+>
+  <div class="co-container">
+    {%- if co_has_header -%}
+    <div class="co-flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+      {% render 'drivemist-section-header',
+        eyebrow: s.eyebrow,
+        heading: s.heading,
+        intro: s.intro,
+        align: 'left',
+        max_width: 'max-w-2xl'
+      %}
+      {%- if s.link_label != blank -%}
+        <a
+          href="{{ s.link_url | default: '#' }}"
+          class="co-reveal inline-flex shrink-0 items-center gap-2 border-b border-ink/25 pb-1 text-[0.9375rem] transition-colors hover:border-accent hover:text-accent"
+        >
+          {{ s.link_label }}
+          {% render 'drivemist-icon', icon: 'arrow-right', class: 'w-4 h-4' %}
+        </a>
+      {%- endif -%}
+    </div>
+    {%- endif -%}
+
+    {%- liquid
+      comment
+        With only two products a three-column grid leaves an obvious hole, so the pair
+        is narrowed and centred with more air between them instead.
+      endcomment
+      if section.blocks.size == 2
+        assign co_grid_class = 'mx-auto max-w-3xl sm:grid-cols-2 lg:gap-x-24'
+      elsif section.blocks.size == 4
+        assign co_grid_class = 'sm:grid-cols-2 lg:grid-cols-4 lg:gap-x-6'
+      else
+        assign co_grid_class = 'sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-8'
+      endif
+    -%}
+    <div class="co-grid gap-x-6 gap-y-12{% if co_has_header %} mt-10 lg:mt-14{% endif %} {{ co_grid_class }}">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign p = block.settings.product
+          assign title = block.settings.title_override | default: p.title
+          assign url = p.url | default: block.settings.fallback_link
+          assign card_image = block.settings.image | default: p.featured_image
+          assign has_sale = false
+          if p != blank and p.compare_at_price > p.price
+            assign has_sale = true
+          endif
+        -%}
+        <article
+          class="co-reveal group relative co-flex flex-col"
+          style="transition-delay: {{ forloop.index0 | times: 90 }}ms"
+          {{ block.shopify_attributes }}
+        >
+          <div class="relative">
+            {% render 'drivemist-image',
+              image: card_image,
+              ratio: s.image_ratio,
+              class: 'co-media rounded-card',
+              sizes: '(min-width: 1024px) 30vw, (min-width: 640px) 46vw, 92vw',
+              alt: title,
+              placeholder: 'product-apparel-2'
+            %}
+
+            {%- if block.settings.hover_image != blank -%}
+              <div class="pointer-events-none absolute inset-0 co-hide opacity-0 transition-opacity duration-500 pointer-fine:block group-hover:opacity-100">
+                {% render 'drivemist-image',
+                  image: block.settings.hover_image,
+                  ratio: s.image_ratio,
+                  class: 'co-media rounded-card',
+                  sizes: '(min-width: 1024px) 30vw, (min-width: 640px) 46vw, 92vw',
+                  alt: title
+                %}
+              </div>
+            {%- endif -%}
+
+            {%- if block.settings.badge != blank -%}
+              <span class="absolute left-4 top-4 rounded-full bg-paper/95 px-3 py-1.5 text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-ink shadow-lift backdrop-blur">
+                {{ block.settings.badge }}
+              </span>
+            {%- endif -%}
+            {%- if has_sale and s.show_save_badge -%}
+              {%- comment -%}
+                The cash saving reads harder than a percentage on a low-priced item —
+                "Save €15" beats "Save 25%". money_without_trailing_zeros drops the ,00
+                on round amounts while keeping the store's currency and locale format.
+              {%- endcomment -%}
+              {%- assign save_amount = p.compare_at_price | minus: p.price -%}
+              <span class="absolute right-4 top-4 rounded-full bg-sale px-3 py-1.5 text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-sale-ink">
+                {%- assign co_save = save_amount | money_without_trailing_zeros -%}{{ 'drivemist.save' | t: amount: co_save }}
+              </span>
+            {%- endif -%}
+          </div>
+
+          <div class="mt-5 co-flex flex-1 flex-col">
+            {%- if block.settings.eyebrow != blank -%}
+              <p class="co-eyebrow mb-2 text-muted">{{ block.settings.eyebrow }}</p>
+            {%- endif -%}
+
+            {%- if block.settings.show_rating -%}
+              {%- liquid
+                assign co_badge = p.metafields.judgeme.badge.value | default: ''
+                assign co_badge = co_badge | replace: "style='display:none'", '' | replace: 'style="display:none"', ''
+              -%}
+              {%- if co_badge != blank -%}
+                <div class="co-rating-slot co-rating-slot--xs mb-2">
+                  <div class="jdgm-widget jdgm-preview-badge" data-id="{{ p.id }}" data-template="manual-installation">{{ co_badge }}</div>
+                </div>
+              {%- else -%}
+                {% render 'drivemist-rating',
+                  product: p,
+                  size: 'xs',
+                  fallback: block.settings.rating_text,
+                  class: 'mb-2 co-flex items-center gap-2'
+                %}
+              {%- endif -%}
+            {%- endif -%}
+
+            <h3 class="co-display text-[1.375rem] leading-tight sm:text-[1.5rem]">
+              <a href="{{ url | default: '#' }}" class="before:absolute before:inset-0 before:content-['']">
+                {{ title | default: 'Product name' }}
+              </a>
+            </h3>
+
+            {%- if block.settings.description != blank -%}
+              <p class="mt-2 text-[0.9375rem] leading-relaxed text-muted">{{ block.settings.description }}</p>
+            {%- endif -%}
+
+            <div class="mt-auto pt-4 co-flex items-baseline gap-2.5">
+              {%- if p != blank -%}
+                <span class="font-sub text-[1.0625rem]{% if has_sale %} font-semibold text-accent{% else %} font-medium{% endif %}">
+                  {{- p.price | money_without_trailing_zeros -}}
+                </span>
+                {%- if has_sale -%}
+                  <s class="text-[0.9375rem] text-muted/80">{{ p.compare_at_price | money_without_trailing_zeros }}</s>
+                {%- endif -%}
+              {%- else -%}
+                <span class="font-sub text-[1.0625rem] font-medium text-muted">{{ block.settings.price_placeholder }}</span>
+              {%- endif -%}
+            </div>
+
+            {%- liquid
+              assign co_variant = p.selected_or_first_available_variant
+              assign co_can_add = false
+              assign co_needs_choice = false
+              comment
+                One variant adds straight from the card. Anything with options gets the same
+                button, which opens a dialog to pick the variant before adding.
+              endcomment
+              if p != blank and p.available
+                if p.variants.size == 1
+                  assign co_can_add = true
+                else
+                  assign co_needs_choice = true
+                endif
+              endif
+              assign co_card_form_id = 'CardForm-' | append: section.id | append: '-' | append: block.id
+              assign co_dialog_id = 'CardVariants-' | append: section.id | append: '-' | append: block.id
+            -%}
+
+            <div class="co-card-actions mt-5 co-flex items-stretch gap-2.5">
+              {%- if co_can_add and s.show_add_to_cart -%}
+                <product-form-component
+                  class="co-flex flex-1"
+                  data-section-id="{{ section.id }}"
+                  data-product-id="{{ p.id }}"
+                  data-product-url="{{ p.url }}"
+                  on:submit="/handleSubmit"
+                  data-quantity-default="1"
+                >
+                  <div class="visually-hidden" aria-live="assertive" role="status" aria-atomic="true" ref="liveRegion"></div>
+                  {%- form 'product', p, id: co_card_form_id, data-type: 'add-to-cart-form', class: 'w-full' -%}
+                    <input type="hidden" name="id" ref="variantId" value="{{ co_variant.id }}">
+                    <input type="hidden" name="quantity" value="1">
+                    {% render 'add-to-cart-button-styles' %}
+                    {% render 'fly-to-cart-styles' %}
+                    {% render 'add-to-cart-button',
+                      id: co_card_form_id,
+                      class: 'add-to-cart-button co-card-atc',
+                      can_add_to_cart: true,
+                      show_icon: true,
+                      product: p,
+                      add_to_cart_text: s.add_to_cart_label
+                    %}
+                  {%- endform -%}
+                </product-form-component>
+              {%- endif -%}
+
+              {%- if co_needs_choice and s.show_add_to_cart -%}
+                <button
+                  type="button"
+                  class="button co-card-atc co-card-choose flex-1"
+                  data-co-variant-open
+                  aria-haspopup="dialog"
+                  aria-controls="{{ co_dialog_id }}"
+                >
+                  <span aria-hidden="true" class="svg-wrapper add-to-cart-icon">
+                    {{- 'icon-add-to-cart.svg' | inline_asset_content -}}
+                  </span>
+                  {{- s.add_to_cart_label -}}
+                </button>
+              {%- endif -%}
+
+              {%- if s.button_label != blank -%}
+                <a
+                  href="{{ url | default: '#' }}"
+                  class="co-card-btn co-card-btn-outline {% if s.show_add_to_cart and co_can_add or s.show_add_to_cart and co_needs_choice %}shrink-0{% else %}flex-1{% endif %}"
+                >
+                  {{ s.button_label }}
+                </a>
+              {%- endif -%}
+            </div>
+
+            {%- if co_needs_choice and s.show_add_to_cart -%}
+              {% render 'drivemist-variant-dialog',
+                product: p,
+                dialog_id: co_dialog_id,
+                section_id: section.id,
+                title: s.variant_dialog_title,
+                add_label: s.add_to_cart_label
+              %}
+            {%- endif -%}
+          </div>
+        </article>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "DriveMist product trio",
+  "tag": "section",
+  "class": "drivemist-section",
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "The collection"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Car humidifiers for every garage."
+    },
+    {
+      "type": "richtext",
+      "id": "intro",
+      "label": "Text",
+      "default": "<p>Supercar and muscle-car humidifiers with real exhaust mist, glowing lights and USB power.</p>"
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "Link label",
+      "default": "Shop all car humidifiers"
+    },
+    {
+      "type": "url",
+      "id": "link_url",
+      "label": "Link"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_add_to_cart",
+      "label": "Show add to cart on cards",
+      "default": true,
+      "info": "Products with one variant add straight from the card. Products with options open a dialog to pick one first."
+    },
+    {
+      "type": "text",
+      "id": "add_to_cart_label",
+      "label": "Add to cart label",
+      "default": "Add to basket"
+    },
+    {
+      "type": "text",
+      "id": "variant_dialog_title",
+      "label": "Variant dialog title",
+      "default": "Choose an option"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Secondary button label",
+      "default": "Explore product"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_save_badge",
+      "label": "Show discount badge",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image ratio",
+      "options": [
+        {
+          "value": "4 / 5",
+          "label": "Portrait (4:5)"
+        },
+        {
+          "value": "1 / 1",
+          "label": "Square"
+        },
+        {
+          "value": "3 / 4",
+          "label": "Tall (3:4)"
+        }
+      ],
+      "default": "4 / 5"
+    },
+    {
+      "type": "header",
+      "content": "Section"
+    },
+    {
+      "type": "text",
+      "id": "anchor",
+      "label": "Anchor ID",
+      "default": "collection",
+      "info": "Used for on-page links, e.g. #how-it-works."
+    },
+    {
+      "type": "select",
+      "id": "background_style",
+      "label": "Background",
+      "options": [
+        {
+          "value": "paper",
+          "label": "Paper"
+        },
+        {
+          "value": "sand",
+          "label": "Sand"
+        },
+        {
+          "value": "shell",
+          "label": "Shell"
+        },
+        {
+          "value": "deep",
+          "label": "Deep purple"
+        },
+        {
+          "value": "ink",
+          "label": "Ink"
+        }
+      ],
+      "default": "paper"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 104
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 104
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Product",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "label": "Eyebrow",
+          "default": "Car humidifier"
+        },
+        {
+          "type": "text",
+          "id": "title_override",
+          "label": "Title override"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Short description",
+          "default": "Exhaust mist, LED lights and USB power."
+        },
+        {
+          "type": "text",
+          "id": "badge",
+          "label": "Badge",
+          "default": "Popular"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_rating",
+          "label": "Show rating",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "rating_text",
+          "label": "Rating text",
+          "default": "128 reviews"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image override"
+        },
+        {
+          "type": "image_picker",
+          "id": "hover_image",
+          "label": "Hover image"
+        },
+        {
+          "type": "text",
+          "id": "price_placeholder",
+          "label": "Placeholder price",
+          "default": "From €49"
+        },
+        {
+          "type": "url",
+          "id": "fallback_link",
+          "label": "Fallback link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "DriveMist product trio",
+      "blocks": [
+        {
+          "type": "product",
+          "settings": {
+            "eyebrow": "Bestseller",
+            "title_override": "Nissan GT-R Car Humidifier",
+            "description": "Godzilla on your dashboard: cool mist from twin exhausts.",
+            "badge": "Popular",
+            "rating_text": "128 reviews",
+            "price_placeholder": "€49"
+          }
+        },
+        {
+          "type": "product",
+          "settings": {
+            "eyebrow": "Wearable creativity",
+            "title_override": "Bugatti Chiron Car Humidifier",
+            "description": "Hypercar lines and a soft aroma mist for your cabin.",
+            "badge": "New",
+            "rating_text": "46 reviews",
+            "price_placeholder": "€49"
+          }
+        },
+        {
+          "type": "product",
+          "settings": {
+            "eyebrow": "Hands-on creativity",
+            "title_override": "The Canvas Mug",
+            "description": "American muscle that rumbles out mist instead of smoke.",
+            "badge": "Gift under €50",
+            "rating_text": "71 reviews",
+            "price_placeholder": "€49"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

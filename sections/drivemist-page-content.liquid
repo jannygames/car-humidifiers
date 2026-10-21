@@ -1,0 +1,230 @@
+{%- liquid
+  assign s = section.settings
+-%}
+
+<section
+  class="co {% render 'drivemist-surface', style: s.background_style %}"
+  style="{% render 'drivemist-pad', padding_top: s.padding_top, padding_bottom: s.padding_bottom %}"
+>
+  <div class="co-section {% if s.width == 'narrow' %}co-container-narrow{% else %}co-container{% endif %}">
+    <div class="co-reveal co-rte rte drivemist-prose text-[1rem] leading-relaxed">
+      {%- if s.content != blank -%}
+        {{ s.content }}
+      {%- else -%}
+        {{ page.content }}
+      {%- endif -%}
+    </div>
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="mt-14 co-grid gap-4 sm:grid-cols-2">
+        {%- for block in section.blocks -%}
+          <div class="co-reveal co-flex gap-4 rounded-card border border-current/12 p-6" {{ block.shopify_attributes }}>
+            <span class="mt-0.5 text-accent">{% render 'drivemist-icon', icon: block.settings.icon, class: 'w-5 h-5' %}</span>
+            <span class="co-flex flex-col gap-1.5">
+              <span class="font-sub text-[0.9375rem] font-medium">{{ block.settings.title }}</span>
+              <span class="co-rte text-[0.9375rem] leading-relaxed opacity-75">{{ block.settings.text }}</span>
+            </span>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "DriveMist page content",
+  "tag": "section",
+  "class": "drivemist-section",
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "Content",
+      "info": "Leave empty to use the page content from the Pages admin."
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "Width",
+      "options": [
+        {
+          "value": "narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "wide",
+          "label": "Wide"
+        }
+      ],
+      "default": "narrow"
+    },
+    {
+      "type": "header",
+      "content": "Section"
+    },
+    {
+      "type": "select",
+      "id": "background_style",
+      "label": "Background",
+      "options": [
+        {
+          "value": "paper",
+          "label": "Paper"
+        },
+        {
+          "value": "sand",
+          "label": "Sand"
+        },
+        {
+          "value": "shell",
+          "label": "Shell"
+        },
+        {
+          "value": "deep",
+          "label": "Deep purple"
+        },
+        {
+          "value": "ink",
+          "label": "Ink"
+        }
+      ],
+      "default": "paper"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Highlight card",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Need a hand?"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Email info@drivemist.com and a real person replies within one working day.</p>"
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            {
+              "value": "chat",
+              "label": "Chat"
+            },
+            {
+              "value": "mail",
+              "label": "Mail"
+            },
+            {
+              "value": "truck",
+              "label": "Delivery"
+            },
+            {
+              "value": "refresh",
+              "label": "Returns"
+            },
+            {
+              "value": "shield",
+              "label": "Guarantee"
+            },
+            {
+              "value": "clock",
+              "label": "Clock"
+            },
+            {
+              "value": "box",
+              "label": "Box"
+            },
+            {
+              "value": "globe",
+              "label": "Globe"
+            },
+            {
+              "value": "car",
+              "label": "Car"
+            },
+            {
+              "value": "mist",
+              "label": "Mist"
+            },
+            {
+              "value": "wind",
+              "label": "Airflow"
+            },
+            {
+              "value": "usb",
+              "label": "USB power"
+            },
+            {
+              "value": "gauge",
+              "label": "Gauge"
+            },
+            {
+              "value": "bolt",
+              "label": "Power"
+            },
+            {
+              "value": "bulb",
+              "label": "Lights"
+            },
+            {
+              "value": "quiet",
+              "label": "Quiet"
+            },
+            {
+              "value": "steering",
+              "label": "Steering wheel"
+            },
+            {
+              "value": "key",
+              "label": "Key"
+            },
+            {
+              "value": "timer",
+              "label": "Timer"
+            },
+            {
+              "value": "trophy",
+              "label": "Trophy"
+            }
+          ],
+          "default": "chat"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "DriveMist page content"
+    }
+  ]
+}
+{% endschema %}

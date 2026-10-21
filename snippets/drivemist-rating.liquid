@@ -1,0 +1,53 @@
+{%- doc -%}
+  Product rating, read from Shopify's standard `reviews` metafields.
+
+  Judge.me, Loox, Okendo, Stamped and Yotpo all write to `reviews.rating` and
+  `reviews.rating_count`, so reading those keeps the theme app-agnostic — swap review
+  apps and every star on the site follows, with no template changes. Until an app is
+  installed the fallback text shows instead, so nothing looks broken.
+
+  @param {object} product - the product
+  @param {string} [size] - star size: xs | sm | lg
+  @param {string} [fallback] - text to show when no real reviews exist yet
+  @param {string} [link] - optional anchor to jump to the review widget
+  @param {string} [class] - wrapper classes
+{%- enddoc -%}
+
+{%- liquid
+  assign co_mf = product.metafields.reviews.rating
+  assign co_count = product.metafields.reviews.rating_count.value | default: 0 | plus: 0
+  assign co_has_reviews = false
+
+  if co_mf.value.rating != blank and co_count > 0
+    assign co_has_reviews = true
+    assign co_scale = co_mf.value.scale_max | default: 5 | times: 1.0
+    assign co_value = co_mf.value.rating | times: 1.0
+    assign co_stars = co_value | times: 5.0 | divided_by: co_scale
+    assign co_display = co_value | round: 1
+    if co_count == 1
+      assign co_label = '1 review'
+    else
+      assign co_label = co_count | append: ' reviews'
+    endif
+  else
+    assign co_stars = 5
+  endif
+
+  assign co_wrapper = class | default: 'mt-4 co-flex w-fit items-center gap-2.5'
+-%}
+
+{%- if co_has_reviews or fallback != blank -%}
+  {%- if link != blank -%}<a href="{{ link }}" class="{{ co_wrapper }}">{%- else -%}<span class="{{ co_wrapper }}">{%- endif -%}
+    <span class="text-accent">{% render 'drivemist-stars', rating: co_stars, size: size %}</span>
+    {%- if co_has_reviews -%}
+      <span class="text-[0.875rem] text-muted{% if link != blank %} underline-offset-4 hover:underline{% endif %}">
+        {{- co_display }} · {{ co_label -}}
+      </span>
+      <span class="sr-only">Rated {{ co_display }} out of 5 from {{ co_label }}</span>
+    {%- else -%}
+      <span class="text-[0.875rem] text-muted{% if link != blank %} underline-offset-4 hover:underline{% endif %}">
+        {{- fallback -}}
+      </span>
+    {%- endif -%}
+  {%- if link != blank -%}</a>{%- else -%}</span>{%- endif -%}
+{%- endif -%}

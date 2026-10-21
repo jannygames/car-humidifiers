@@ -1,0 +1,220 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "header": {
+      "type": "drivemist-page-header",
+      "settings": {
+        "eyebrow": "DriveMist help centre",
+        "heading": "Car humidifier FAQ",
+        "intro": "<p>Answers about our car model humidifiers, power, fragrance oils, cleaning, delivery and returns.</p>",
+        "show_breadcrumbs": true,
+        "alignment": "left",
+        "background_style": "sand",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    },
+    "faq": {
+      "type": "drivemist-faq",
+      "settings": {
+        "anchor": "faq",
+        "eyebrow": "",
+        "heading": "Everything you need to know",
+        "intro": "<p>Can’t find what you’re looking for? Get in touch with our team – we’re happy to help.</p>",
+        "support_label": "Contact our team",
+        "support_note": "Friendly help with models and orders",
+        "support_link": "/pages/contact",
+        "open_first": true,
+        "enable_schema": true,
+        "background_style": "paper",
+        "padding_top": 88,
+        "padding_bottom": 96
+      },
+      "blocks": {
+        "q1": {
+          "type": "question",
+          "settings": {
+            "question": "What is a car model humidifier?",
+            "answer": "<p>It is a detailed car model with a small ultrasonic humidifier inside. Fill it with water, plug it into USB and cool mist flows from the exhausts while the lights glow – a humidifier, aroma diffuser and display piece in one.</p>"
+          }
+        },
+        "q2": {
+          "type": "question",
+          "settings": {
+            "question": "How does it work?",
+            "answer": "<p>Open the water tank, fill it with clean tap water, add a few drops of car-safe diffuser oil if you like, and plug it into any USB port. Press the button once and cool mist rolls out of the exhausts while the headlights and tail-lights glow.</p>"
+          }
+        },
+        "q3": {
+          "type": "question",
+          "settings": {
+            "question": "How is it powered?",
+            "answer": "<p>Every DriveMist humidifier runs on 5 V USB power, so it works from the USB port in your car, a laptop, a power bank or a standard phone charger. The cable is included in the box.</p>"
+          }
+        },
+        "q4": {
+          "type": "question",
+          "settings": {
+            "question": "Can I use essential oils or car fragrance?",
+            "answer": "<p>Yes. Add 2–3 drops of water-soluble essential oil or car diffuser fragrance to the water tank and it doubles as an aroma diffuser and car air freshener. Avoid thick or oil-only perfumes, which can clog the atomiser.</p>"
+          }
+        },
+        "q5": {
+          "type": "question",
+          "settings": {
+            "question": "Is it safe to use in the car?",
+            "answer": "<p>Yes. It runs on low-voltage USB power and switches itself off automatically when the tank runs dry, so it never runs empty. Place it in a cup holder or on a flat, non-slip surface, never where it could block your view or an airbag, and refill it only while parked.</p>"
+          }
+        },
+        "q6": {
+          "type": "question",
+          "settings": {
+            "question": "Will it make my car or dashboard wet?",
+            "answer": "<p>No. The mist is very fine and evaporates quickly. Keep it upright, don’t overfill the tank, and point the exhausts away from screens and electronics.</p>"
+          }
+        },
+        "q7": {
+          "type": "question",
+          "settings": {
+            "question": "How long does one tank last?",
+            "answer": "<p>It depends on the model and the mist mode, but a full tank typically lasts a commute or a long evening. Check the product page for each model’s details.</p>"
+          }
+        },
+        "q8": {
+          "type": "question",
+          "settings": {
+            "question": "How do I clean it?",
+            "answer": "<p>Empty the tank after use, wipe it dry and clean the atomiser once a week with a cotton bud and a little white vinegar. That keeps the mist strong and the water fresh.</p>"
+          }
+        },
+        "q9": {
+          "type": "question",
+          "settings": {
+            "question": "Can I use it at home or in the office?",
+            "answer": "<p>Absolutely. Plenty of customers keep theirs on a desk, bedside table or gaming setup as a night light, mini humidifier and display model in one.</p>"
+          }
+        },
+        "q10": {
+          "type": "question",
+          "settings": {
+            "question": "How long does delivery take?",
+            "answer": "<p>Every order ships with free tracked delivery. Most parcels arrive within 7–14 working days, and you will see the estimated delivery date before you pay.</p><p><a href=\"/pages/track-your-order\">Track your order</a></p>"
+          }
+        },
+        "q11": {
+          "type": "question",
+          "settings": {
+            "question": "How much does delivery cost?",
+            "answer": "<p>Tracked delivery is free on every order. Any taxes or duties for your country are shown at checkout before you pay.</p><p>You can <a href=\"/pages/track-your-order\">track your order</a> once it ships.</p>"
+          }
+        },
+        "q12": {
+          "type": "question",
+          "settings": {
+            "question": "What if I change my mind?",
+            "answer": "<p>Changed your mind? You can return an unused car humidifier in its original packaging within 30 days of delivery.</p><p>Email us your order number and we will send you the return address and next steps. As soon as the parcel is back with us and checked, we refund what you paid for the item.</p><p><a href=\"/pages/contact\">Start a return</a></p>"
+          }
+        },
+        "q13": {
+          "type": "question",
+          "settings": {
+            "question": "Can I change my delivery address?",
+            "answer": "<p>Get in touch as soon as possible and include your order number. We will happily update the address before dispatch; once the parcel is with the courier, changes may no longer be possible.</p>"
+          }
+        },
+        "q14": {
+          "type": "question",
+          "settings": {
+            "question": "Does it come gift-ready?",
+            "answer": "<p>It is one of our most popular gifts for car lovers – for birthdays, Christmas, Father’s Day or a new car. Every model arrives in a protective gift-ready box.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5",
+        "q6",
+        "q7",
+        "q8",
+        "q9",
+        "q10",
+        "q11",
+        "q12",
+        "q13",
+        "q14"
+      ]
+    },
+    "guarantee": {
+      "type": "drivemist-guarantee",
+      "settings": {
+        "badge": false,
+        "icon": "shield",
+        "eyebrow": "Shop with confidence",
+        "heading": "",
+        "text": "",
+        "button_label": "",
+        "button_link": "",
+        "anchor": "",
+        "background_style": "shell",
+        "padding_top": 88,
+        "padding_bottom": 88
+      },
+      "blocks": {
+        "p1": {
+          "type": "pillar",
+          "settings": {
+            "title": "Free tracked shipping",
+            "text": "Every order ships tracked, free of charge.",
+            "icon": "truck"
+          }
+        },
+        "p2": {
+          "type": "pillar",
+          "settings": {
+            "title": "30-day returns",
+            "text": "Simple returns if it isn’t right.",
+            "icon": "refresh"
+          }
+        },
+        "p3": {
+          "type": "pillar",
+          "settings": {
+            "title": "Fast answers by email",
+            "text": "We reply within one working day.",
+            "icon": "chat"
+          }
+        },
+        "p4": {
+          "type": "pillar",
+          "settings": {
+            "title": "Secure checkout",
+            "text": "Pay safely by card or online banking.",
+            "icon": "lock"
+          }
+        }
+      },
+      "block_order": [
+        "p1",
+        "p2",
+        "p3",
+        "p4"
+      ]
+    }
+  },
+  "order": [
+    "header",
+    "faq",
+    "guarantee"
+  ]
+}

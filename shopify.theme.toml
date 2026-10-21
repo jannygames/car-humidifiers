@@ -1,0 +1,8 @@
+# Shopify CLI environments for the DriveMist theme.
+# `npm run dev` uses [environments.development].
+
+[environments.development]
+store = "drivemist-store"
+
+[environments.production]
+store = "drivemist-store"

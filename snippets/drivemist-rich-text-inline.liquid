@@ -1,0 +1,30 @@
+{%- doc -%}
+  Renders one inline node of a rich_text_field: text with optional bold/italic, or a link.
+
+  @param {object} child - the inline node
+{%- enddoc -%}
+
+{%- case child.type -%}
+  {%- when 'text' -%}
+    {%- assign co_text = child.value | escape -%}
+    {%- if child.bold and child.italic -%}
+      <strong><em>{{ co_text }}</em></strong>
+    {%- elsif child.bold -%}
+      <strong>{{ co_text }}</strong>
+    {%- elsif child.italic -%}
+      <em>{{ co_text }}</em>
+    {%- else -%}
+      {{- co_text -}}
+    {%- endif -%}
+  {%- when 'link' -%}
+    <a
+      href="{{ child.url }}"
+      {% if child.title != blank %}title="{{ child.title | escape }}"{% endif %}
+      {% if child.target != blank %}target="{{ child.target }}" rel="noopener"{% endif %}
+    >
+      {%- for grandchild in child.children -%}
+        {%- assign co_link_text = grandchild.value | escape -%}
+        {%- if grandchild.bold -%}<strong>{{ co_link_text }}</strong>{%- else -%}{{ co_link_text }}{%- endif -%}
+      {%- endfor -%}
+    </a>
+{%- endcase -%}

@@ -1,0 +1,757 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero": {
+      "type": "drivemist-hero",
+      "settings": {
+        "image_alt": "DriveMist sports car humidifier glowing on a car dashboard at night with cool mist flowing from the exhausts",
+        "min_height": 620,
+        "min_height_tablet": 560,
+        "min_height_mobile": 560,
+        "show_rating": true,
+        "rating_stars": 4.8,
+        "rating_text": "Loved by car enthusiasts",
+        "eyebrow": "Car model humidifiers & diffusers",
+        "heading": "Your dream car, <strong>misting on your dashboard</strong>",
+        "subheading": "<p>Hand-detailed supercar humidifiers with glowing lights and real exhaust mist. USB powered, whisper-quiet and the gift every car lover wants.</p>",
+        "text_color": "#ffffff",
+        "text_width": 50,
+        "text_shadow": true,
+        "overlay_opacity": 0,
+        "button_label": "Shop car humidifiers",
+        "button_link": "shopify://collections/all",
+        "button_style": "primary",
+        "button_2_label": "How it works",
+        "button_2_link": "/#how-it-works"
+      }
+    },
+    "ticker": {
+      "type": "drivemist-marquee",
+      "blocks": {
+        "i1": {
+          "type": "item",
+          "settings": {
+            "text": "FREE TRACKED SHIPPING"
+          }
+        },
+        "i2": {
+          "type": "item",
+          "settings": {
+            "text": "EXHAUST MIST + LED LIGHTS"
+          }
+        },
+        "i3": {
+          "type": "item",
+          "settings": {
+            "text": "30-DAY RETURNS"
+          }
+        },
+        "i4": {
+          "type": "item",
+          "settings": {
+            "text": "USB POWERED"
+          }
+        },
+        "i5": {
+          "type": "item",
+          "settings": {
+            "text": "THE GIFT FOR CAR LOVERS"
+          }
+        },
+        "i6": {
+          "type": "item",
+          "settings": {
+            "text": "AUTO SHUT-OFF"
+          }
+        }
+      },
+      "block_order": [
+        "i1",
+        "i2",
+        "i3",
+        "i4",
+        "i5",
+        "i6"
+      ],
+      "settings": {
+        "background_style": "deep",
+        "speed": 45
+      }
+    },
+    "collection": {
+      "type": "drivemist-product-trio",
+      "blocks": {
+        "p1": {
+          "type": "product",
+          "settings": {
+            "product": "nissan-gtr-car-humidifier",
+            "eyebrow": "",
+            "title_override": "Nissan GT-R Car Humidifier",
+            "description": "Godzilla on your dashboard: cool mist from twin exhausts and glowing headlights.",
+            "badge": "BESTSELLER",
+            "show_rating": true,
+            "rating_text": "",
+            "price_placeholder": "€49",
+            "fallback_link": "shopify://collections/all"
+          }
+        },
+        "p2": {
+          "type": "product",
+          "settings": {
+            "product": "bugatti-chiron-car-humidifier",
+            "eyebrow": "",
+            "title_override": "Bugatti Chiron Car Humidifier",
+            "description": "Hypercar lines, horseshoe grille and a soft aroma mist that fills the cabin.",
+            "badge": "NEW",
+            "show_rating": true,
+            "rating_text": "",
+            "price_placeholder": "€49",
+            "fallback_link": "shopify://collections/all"
+          }
+        },
+        "p3": {
+          "type": "product",
+          "settings": {
+            "product": "dodge-challenger-car-humidifier",
+            "eyebrow": "",
+            "title_override": "Dodge Challenger Car Humidifier",
+            "description": "American muscle that rumbles out mist instead of smoke. Perfect for the desk or the console.",
+            "badge": "",
+            "show_rating": true,
+            "rating_text": "",
+            "price_placeholder": "€49",
+            "fallback_link": "shopify://collections/all"
+          }
+        },
+        "p4": {
+          "type": "product",
+          "settings": {
+            "product": "pagani-car-humidifier",
+            "eyebrow": "",
+            "title_override": "Pagani Car Humidifier",
+            "description": "Italian supercar drama with quad-exhaust mist and LED light show.",
+            "badge": "LIMITED",
+            "show_rating": true,
+            "rating_text": "",
+            "price_placeholder": "€49",
+            "fallback_link": "shopify://collections/all"
+          }
+        }
+      },
+      "block_order": [
+        "p1",
+        "p2",
+        "p3",
+        "p4"
+      ],
+      "settings": {
+        "eyebrow": "Pick your model",
+        "heading": "Bestselling car humidifiers",
+        "intro": "<p>Every model is a working ultrasonic humidifier and aroma diffuser, styled after the supercars and muscle cars you love.</p>",
+        "link_label": "Shop all models",
+        "link_url": "shopify://collections/all",
+        "show_add_to_cart": true,
+        "add_to_cart_label": "Add to cart",
+        "variant_dialog_title": "Choose an option",
+        "button_label": "View product",
+        "show_save_badge": true,
+        "image_ratio": "1 / 1",
+        "anchor": "collection",
+        "background_style": "paper",
+        "padding_top": 72,
+        "padding_bottom": 104
+      }
+    },
+    "reviews": {
+      "type": "drivemist-reviews",
+      "blocks": {
+        "r1": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "title": "My husband hasn’t stopped showing it off",
+            "quote": "Bought the GT-R for his birthday. The mist coming out of the exhausts looks unreal at night and the lights are brighter than I expected. Best gift I’ve found in years.",
+            "author": "Laura P.",
+            "meta": "Nissan GT-R Car Humidifier",
+            "verified": false
+          }
+        },
+        "r2": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "title": "Car smells amazing now",
+            "quote": "I add three drops of vanilla oil and the whole cabin smells great for my commute. Sits perfectly in the cup holder and doesn’t move around.",
+            "author": "Tomas K.",
+            "meta": "Dodge Challenger Car Humidifier",
+            "verified": false
+          }
+        },
+        "r3": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "title": "Detail is way better than the price suggests",
+            "quote": "The Chiron has proper detail on the grille and wheels. Lives on my desk next to my monitors and works as a night light too.",
+            "author": "Mantas R.",
+            "meta": "Bugatti Chiron Car Humidifier",
+            "verified": false
+          }
+        },
+        "r4": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "title": "Quiet and easy",
+            "quote": "Plugged it into the USB port in my car and it just works. Barely makes a sound and switches off when the water runs out.",
+            "author": "Greta S.",
+            "meta": "Pagani Car Humidifier",
+            "verified": false
+          }
+        },
+        "r5": {
+          "type": "review",
+          "settings": {
+            "rating": 4,
+            "title": "Great gift for a car guy",
+            "quote": "Got it for my brother who builds model cars. He loves the exhaust effect. Took about ten days to arrive but the tracking was clear the whole way.",
+            "author": "Ieva D.",
+            "meta": "Nissan GT-R Car Humidifier",
+            "verified": false
+          }
+        },
+        "r6": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "title": "Kids think it’s magic",
+            "quote": "Our son is car obsessed and asks to turn on “the smoking car” every evening. We use it in his room as a humidifier and night light.",
+            "author": "Rasa L.",
+            "meta": "Dodge Challenger Car Humidifier",
+            "verified": false
+          }
+        },
+        "r7": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "title": "Bought a second one",
+            "quote": "Ordered the Pagani for my car and liked it so much I got the Bugatti for the office. Both look fantastic.",
+            "author": "Paulius M.",
+            "meta": "Pagani + Bugatti",
+            "verified": false
+          }
+        },
+        "r8": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "title": "Packaging was perfect",
+            "quote": "Arrived in a sturdy box, ready to give as a present. Set-up took a minute and the instructions were clear.",
+            "author": "Monika S.",
+            "meta": "Bugatti Chiron Car Humidifier",
+            "verified": false
+          }
+        }
+      },
+      "block_order": [
+        "r1",
+        "r2",
+        "r3",
+        "r4",
+        "r5",
+        "r6",
+        "r7",
+        "r8"
+      ],
+      "settings": {
+        "eyebrow": "Customer reviews",
+        "heading": "Why drivers choose DriveMist",
+        "show_summary": true,
+        "summary_score": "4.8",
+        "summary_text": "Customer reviews",
+        "button_label": "",
+        "button_link": "",
+        "anchor": "drivemist-reviews",
+        "background_style": "sand",
+        "padding_top": 104,
+        "padding_bottom": 104
+      }
+    },
+    "steps": {
+      "type": "drivemist-steps",
+      "blocks": {
+        "s1": {
+          "type": "step",
+          "settings": {
+            "title": "Fill the tank",
+            "text": "<p>Add clean water and, if you like, a few drops of your favourite car-safe fragrance oil.</p>",
+            "icon": "droplet"
+          }
+        },
+        "s2": {
+          "type": "step",
+          "settings": {
+            "title": "Plug in via USB",
+            "text": "<p>Use the included cable with your car’s USB port, a laptop or any 5 V phone charger.</p>",
+            "icon": "usb"
+          }
+        },
+        "s3": {
+          "type": "step",
+          "settings": {
+            "title": "Start your engine",
+            "text": "<p>Press the button. Cool mist rolls out of the exhausts and the lights come on. Auto shut-off takes care of the rest.</p>",
+            "icon": "mist"
+          }
+        }
+      },
+      "block_order": [
+        "s1",
+        "s2",
+        "s3"
+      ],
+      "settings": {
+        "eyebrow": "How it works",
+        "heading": "From box to exhaust mist in 60 seconds",
+        "intro": "<p>No tools, no batteries, no set-up. Everything you need is in the box, including the USB cable.</p>",
+        "alignment": "center",
+        "style": "image",
+        "image_width": 360,
+        "image_ratio": "4 / 3",
+        "show_connector": true,
+        "button_label": "",
+        "button_link": "",
+        "anchor": "how-it-works",
+        "background_style": "paper",
+        "padding_top": 104,
+        "padding_bottom": 104
+      }
+    },
+    "feature_ink": {
+      "type": "drivemist-feature",
+      "blocks": {
+        "p1": {
+          "type": "point",
+          "settings": {
+            "title": "Real exhaust mist effect",
+            "text": "Ultrasonic atomiser turns water into a fine, cool mist that flows from the exhausts just like a car revving at night.",
+            "icon": "mist"
+          }
+        },
+        "p2": {
+          "type": "point",
+          "settings": {
+            "title": "Glowing headlights and tail-lights",
+            "text": "Built-in LEDs light up the model and double as a soft ambient night light.",
+            "icon": "bulb"
+          }
+        },
+        "p3": {
+          "type": "point",
+          "settings": {
+            "title": "Aroma diffuser and air freshener",
+            "text": "Add a few drops of essential oil to turn your cabin, office or bedroom into a fresher-smelling space.",
+            "icon": "wind"
+          }
+        }
+      },
+      "block_order": [
+        "p1",
+        "p2",
+        "p3"
+      ],
+      "settings": {
+        "eyebrow": "Car humidifier + aroma diffuser",
+        "heading": "A supercar model that actually does something",
+        "text": "<p>DriveMist car humidifiers look like collector models and work like premium mini humidifiers. They add moisture to dry car and office air, spread your favourite scent, and put on a mist-and-light show every time you switch them on.</p>",
+        "image_position": "left",
+        "image_alt": "Close-up of cool mist flowing from the exhausts of a DriveMist car humidifier",
+        "image_ratio": "5 / 4",
+        "button_label": "Find your model",
+        "button_link": "shopify://collections/all",
+        "button_style": "brand",
+        "anchor": "",
+        "background_style": "sand",
+        "padding_top": 104,
+        "padding_bottom": 104
+      }
+    },
+    "feature_gift": {
+      "type": "drivemist-feature",
+      "blocks": {
+        "p1": {
+          "type": "point",
+          "settings": {
+            "title": "Gift-ready box",
+            "text": "Arrives in a protective box, ready to wrap or hand over as it is.",
+            "icon": "gift"
+          }
+        },
+        "p2": {
+          "type": "point",
+          "settings": {
+            "title": "For every kind of car fan",
+            "text": "JDM legends, Italian hypercars and American muscle – there is a model for every garage.",
+            "icon": "car"
+          }
+        },
+        "p3": {
+          "type": "point",
+          "settings": {
+            "title": "Fits car, desk or shelf",
+            "text": "Sized for a cup holder or dashboard, and just as at home on a desk or bedside table.",
+            "icon": "steering"
+          }
+        }
+      },
+      "block_order": [
+        "p1",
+        "p2",
+        "p3"
+      ],
+      "settings": {
+        "eyebrow": "Gifts for car lovers",
+        "heading": "The car gift they’ll actually use every day",
+        "text": "<p>Birthdays, Father’s Day, Christmas or a brand-new set of keys: a DriveMist car humidifier is the present car enthusiasts show off to everyone who gets in the passenger seat.</p>",
+        "image_position": "right",
+        "image_alt": "A DriveMist car model humidifier gift box next to a set of car keys",
+        "image_ratio": "5 / 4",
+        "button_label": "Shop car gifts",
+        "button_link": "shopify://collections/all",
+        "button_style": "brand",
+        "anchor": "",
+        "background_style": "paper",
+        "padding_top": 104,
+        "padding_bottom": 104
+      }
+    },
+    "compare": {
+      "type": "drivemist-compare",
+      "blocks": {
+        "r1": {
+          "type": "row",
+          "settings": {
+            "label": "Adds moisture to dry air",
+            "note": "Ultrasonic mist helps against dry eyes and throat from car heating and air conditioning",
+            "us": true,
+            "them": false
+          }
+        },
+        "r2": {
+          "type": "row",
+          "settings": {
+            "label": "Refillable scent, any fragrance",
+            "note": "Swap essential oils whenever you like instead of buying new cardboard trees",
+            "us": true,
+            "them": false
+          }
+        },
+        "r3": {
+          "type": "row",
+          "settings": {
+            "label": "Looks like a collector model",
+            "note": "Detailed supercar styling that turns heads on the dashboard or desk",
+            "us": true,
+            "them": false
+          }
+        },
+        "r4": {
+          "type": "row",
+          "settings": {
+            "label": "Light and mist show",
+            "note": "Glowing LEDs and exhaust mist instead of a plain plastic clip",
+            "us": true,
+            "them": false
+          }
+        },
+        "r5": {
+          "type": "row",
+          "settings": {
+            "label": "Auto shut-off",
+            "note": "Switches itself off when the tank is empty",
+            "us": true,
+            "them": false
+          }
+        },
+        "r6": {
+          "type": "row",
+          "settings": {
+            "label": "Makes the car smell good",
+            "note": "Both freshen the air – only one turns it into a show",
+            "us": true,
+            "them": true
+          }
+        }
+      },
+      "block_order": [
+        "r1",
+        "r2",
+        "r3",
+        "r4",
+        "r5",
+        "r6"
+      ],
+      "settings": {
+        "eyebrow": "Why upgrade",
+        "heading": "DriveMist vs. a regular car air freshener",
+        "intro": "<p>Hanging air fresheners fade in a week. A DriveMist humidifier refreshes, humidifies and looks incredible doing it.</p>",
+        "column_us": "DriveMist",
+        "show_logo_us": true,
+        "logo_height": 26,
+        "column_them": "Air freshener",
+        "highlight_color": "#137a54",
+        "button_label": "Shop car humidifiers",
+        "button_link": "shopify://collections/all",
+        "button_note": "Free tracked shipping · 30-day returns",
+        "anchor": "",
+        "background_style": "shell",
+        "padding_top": 104,
+        "padding_bottom": 104
+      }
+    },
+    "gallery": {
+      "type": "drivemist-gallery",
+      "settings": {
+        "eyebrow": "#DriveMist on the road",
+        "heading": "Spotted on dashboards, desks and gaming setups",
+        "intro": "",
+        "grid_width": "wide",
+        "cta_heading": "Show us your setup",
+        "cta_text": "Post your DriveMist on Instagram or TikTok and tag us. We feature our favourite setups every week, and every now and then we surprise the owner with a new model for their collection.",
+        "cta_button_label": "Follow @drivemist",
+        "cta_button_link": "https://www.instagram.com/drivemist/",
+        "cta_note": "Your account needs to be public so we can see your post.",
+        "cta_icon": "instagram",
+        "anchor": "",
+        "background_style": "paper",
+        "padding_top": 104,
+        "padding_bottom": 104
+      }
+    },
+    "bundle": {
+      "type": "drivemist-bundle",
+      "blocks": {
+        "p1": {
+          "type": "product",
+          "settings": {
+            "product": "nissan-gtr-car-humidifier",
+            "title_override": "Nissan GT-R Car Humidifier",
+            "price_placeholder": "€49"
+          }
+        },
+        "p2": {
+          "type": "product",
+          "settings": {
+            "product": "bugatti-chiron-car-humidifier",
+            "title_override": "Bugatti Chiron Car Humidifier",
+            "price_placeholder": "€49"
+          }
+        }
+      },
+      "block_order": [
+        "p1",
+        "p2"
+      ],
+      "settings": {
+        "eyebrow": "Garage Duo",
+        "bundle_product": "garage-duo-car-humidifier-set",
+        "heading": "One for the car, one for the desk",
+        "intro": "<p>Pair two models and save. A JDM legend for your daily drive and a hypercar for your workspace.</p>",
+        "total_label": "Duo total",
+        "total_placeholder": "€98",
+        "discount_fixed": 15,
+        "bundle_discount": 0,
+        "loading_label": "Adding…",
+        "added_label": "Added to cart",
+        "button_label": "Add the duo to cart",
+        "note": "Free tracked shipping · 30-day returns",
+        "anchor": "",
+        "background_style": "sand",
+        "padding_top": 96,
+        "padding_bottom": 104
+      }
+    },
+    "guarantee": {
+      "type": "drivemist-guarantee",
+      "blocks": {
+        "p1": {
+          "type": "pillar",
+          "settings": {
+            "title": "Free tracked shipping",
+            "text": "Every order ships tracked, free of charge.",
+            "icon": "truck"
+          }
+        },
+        "p2": {
+          "type": "pillar",
+          "settings": {
+            "title": "30-day returns",
+            "text": "Unused and in its box? Send it back within 30 days.",
+            "icon": "refresh"
+          }
+        },
+        "p3": {
+          "type": "pillar",
+          "settings": {
+            "title": "Real people, fast replies",
+            "text": "Questions about a model or an order? We reply within 24 hours.",
+            "icon": "chat"
+          }
+        },
+        "p4": {
+          "type": "pillar",
+          "settings": {
+            "title": "Secure checkout",
+            "text": "Pay safely by card or online banking.",
+            "icon": "lock"
+          }
+        }
+      },
+      "block_order": [
+        "p1",
+        "p2",
+        "p3",
+        "p4"
+      ],
+      "settings": {
+        "badge": false,
+        "icon": "shield",
+        "eyebrow": "Shop DriveMist with confidence",
+        "heading": "",
+        "text": "",
+        "button_label": "",
+        "button_link": "",
+        "anchor": "",
+        "background_style": "deep",
+        "padding_top": 88,
+        "padding_bottom": 88
+      }
+    },
+    "faq": {
+      "type": "drivemist-faq",
+      "blocks": {
+        "q1": {
+          "type": "question",
+          "settings": {
+            "question": "How does a car humidifier work?",
+            "answer": "<p>Open the water tank, fill it with clean tap water, add a few drops of car-safe diffuser oil if you like, and plug it into any USB port. Press the button once and cool mist rolls out of the exhausts while the headlights and tail-lights glow.</p>"
+          }
+        },
+        "q2": {
+          "type": "question",
+          "settings": {
+            "question": "How is it powered?",
+            "answer": "<p>Every DriveMist humidifier runs on 5 V USB power, so it works from the USB port in your car, a laptop, a power bank or a standard phone charger. The cable is included in the box.</p>"
+          }
+        },
+        "q3": {
+          "type": "question",
+          "settings": {
+            "question": "Can I use essential oils or car fragrance?",
+            "answer": "<p>Yes. Add 2–3 drops of water-soluble essential oil or car diffuser fragrance to the water tank and it doubles as an aroma diffuser and car air freshener. Avoid thick or oil-only perfumes, which can clog the atomiser.</p>"
+          }
+        },
+        "q4": {
+          "type": "question",
+          "settings": {
+            "question": "Is it safe to use while driving?",
+            "answer": "<p>Yes. It runs on low-voltage USB power and switches itself off automatically when the tank runs dry, so it never runs empty. Place it in a cup holder or on a flat, non-slip surface, never where it could block your view or an airbag, and refill it only while parked.</p>"
+          }
+        },
+        "q5": {
+          "type": "question",
+          "settings": {
+            "question": "Can I use it at home or in the office?",
+            "answer": "<p>Absolutely. Plenty of customers keep theirs on a desk, bedside table or gaming setup as a night light, mini humidifier and display model in one.</p>"
+          }
+        },
+        "q6": {
+          "type": "question",
+          "settings": {
+            "question": "Is it a good gift for car lovers?",
+            "answer": "<p>It is one of our most popular gifts for car lovers – for birthdays, Christmas, Father’s Day or a new car. Every model arrives in a protective gift-ready box.</p>"
+          }
+        },
+        "q7": {
+          "type": "question",
+          "settings": {
+            "question": "How long does delivery take?",
+            "answer": "<p>Every order ships with free tracked delivery. Most parcels arrive within 7–14 working days, and you will see the estimated delivery date before you pay.</p><p><a href=\"/pages/track-your-order\">Track your order</a></p>"
+          }
+        },
+        "q8": {
+          "type": "question",
+          "settings": {
+            "question": "What if I change my mind?",
+            "answer": "<p>Changed your mind? You can return an unused car humidifier in its original packaging within 30 days of delivery.</p><p>Email us your order number and we will send you the return address and next steps. As soon as the parcel is back with us and checked, we refund what you paid for the item.</p><p><a href=\"/pages/contact\">Start a return</a></p>"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5",
+        "q6",
+        "q7",
+        "q8"
+      ],
+      "settings": {
+        "eyebrow": "Car humidifier FAQ",
+        "heading": "Everything worth knowing before you order",
+        "intro": "<p>Power, fragrance oils, safety, delivery and returns. Still have a question? Our team is happy to help.</p>",
+        "support_label": "Contact our team",
+        "support_note": "Friendly help with models and orders",
+        "support_link": "/pages/contact",
+        "open_first": true,
+        "enable_schema": true,
+        "anchor": "faq",
+        "background_style": "paper",
+        "padding_top": 104,
+        "padding_bottom": 104
+      }
+    },
+    "newsletter": {
+      "type": "drivemist-newsletter",
+      "settings": {
+        "eyebrow": "10% off your first order",
+        "heading": "Join the DriveMist garage",
+        "text": "<p>Subscribe for new model drops, restock alerts and 10% off your first car humidifier.</p>",
+        "placeholder": "Your email address",
+        "button_label": "Get my 10% code",
+        "success_text": "You’re in! Your discount code is on its way to your inbox.",
+        "disclaimer": "One or two emails a month. Unsubscribe any time.",
+        "show_image": true,
+        "anchor": "",
+        "background_style": "wash",
+        "padding_top": 96,
+        "padding_bottom": 96
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "ticker",
+    "collection",
+    "reviews",
+    "steps",
+    "feature_ink",
+    "feature_gift",
+    "compare",
+    "gallery",
+    "bundle",
+    "guarantee",
+    "faq",
+    "newsletter"
+  ]
+}

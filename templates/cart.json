@@ -1,0 +1,100 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "cart-section": {
+      "type": "main-cart",
+      "blocks": {
+        "cart-page-title": {
+          "type": "_cart-title",
+          "static": true,
+          "settings": {
+            "title": "",
+            "show_count": true,
+            "type_preset": "h4",
+            "alignment": "left",
+            "text_color": "",
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "cart-page-items": {
+          "type": "_cart-products",
+          "static": true,
+          "settings": {
+            "gap": 24,
+            "image_ratio": "square",
+            "dividers": true,
+            "vendor": false,
+            "input_style": "default",
+            "input_background_color": "{{ settings.color_palette.background }}",
+            "input_text_color": "{{ settings.color_palette.foreground }}",
+            "input_border_color": "{{ settings.color_palette.foreground }}",
+            "border_width": 1,
+            "border_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "cart-page-summary": {
+          "type": "_cart-summary",
+          "static": true,
+          "settings": {
+            "extend_summary": true,
+            "background_color": "{{ settings.color_palette.color2 }}",
+            "text_color": "",
+            "border": "none",
+            "border_width": 1,
+            "border_opacity": 100,
+            "border_color": "",
+            "border_radius": 0
+          },
+          "blocks": {}
+        }
+      },
+      "settings": {
+        "section_width": "page-width",
+        "background_color": "{{ settings.color_palette.background }}",
+        "text_color": "",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "recommendations": {
+      "type": "drivemist-recommendations",
+      "settings": {
+        "eyebrow": "",
+        "heading": "Complete your garage",
+        "featured_collection": "all-products",
+        "products_to_show": 3,
+        "show_badge": true,
+        "show_add_to_cart": true,
+        "add_to_cart_label": "Add to cart",
+        "variant_dialog_title": "Choose an option",
+        "button_label": "View product",
+        "rating_fallback": "",
+        "image_ratio": "1 / 1",
+        "background_style": "sand",
+        "padding_top": 72,
+        "padding_bottom": 88
+      }
+    }
+  },
+  "order": [
+    "cart-section",
+    "recommendations"
+  ]
+}

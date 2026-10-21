@@ -1,0 +1,104 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "header": {
+      "type": "drivemist-page-header",
+      "settings": {
+        "eyebrow": "Safe use guide",
+        "intro": "<p>Where to place it, what to put in the tank, and how to keep it running cleanly for years.</p>",
+        "show_breadcrumbs": true,
+        "alignment": "left",
+        "background_style": "sand",
+        "padding_top": 72,
+        "padding_bottom": 72,
+        "heading": "Using your car humidifier safely"
+      }
+    },
+    "policy": {
+      "type": "drivemist-policy",
+      "settings": {
+        "updated": "Last checked 22 October 2026",
+        "show_toc": true,
+        "toc_title": "On this page",
+        "menu_title": "More legal",
+        "contact_title": "Not sure about something?",
+        "contact_text": "<p>Email info@drivemist.com with your model name and we’ll help you set it up safely.</p>",
+        "contact_icon": "shield",
+        "contact_label": "Contact us",
+        "contact_link": "/pages/contact",
+        "background_style": "paper",
+        "padding_top": 72,
+        "padding_bottom": 96
+      }
+    },
+    "guarantee": {
+      "type": "drivemist-guarantee",
+      "settings": {
+        "badge": false,
+        "icon": "shield",
+        "eyebrow": "Why drivers trust us",
+        "heading": "",
+        "text": "",
+        "button_label": "",
+        "button_link": "",
+        "anchor": "",
+        "background_style": "shell",
+        "padding_top": 80,
+        "padding_bottom": 80
+      },
+      "blocks": {
+        "p1": {
+          "type": "pillar",
+          "settings": {
+            "title": "Free tracked shipping",
+            "text": "Every order ships tracked, free of charge.",
+            "icon": "truck"
+          }
+        },
+        "p2": {
+          "type": "pillar",
+          "settings": {
+            "title": "30-day returns",
+            "text": "Simple returns if it isn’t right.",
+            "icon": "refresh"
+          }
+        },
+        "p3": {
+          "type": "pillar",
+          "settings": {
+            "title": "Fast answers by email",
+            "text": "We reply within one working day.",
+            "icon": "chat"
+          }
+        },
+        "p4": {
+          "type": "pillar",
+          "settings": {
+            "title": "Secure checkout",
+            "text": "Pay safely by card or online banking.",
+            "icon": "lock"
+          }
+        }
+      },
+      "block_order": [
+        "p1",
+        "p2",
+        "p3",
+        "p4"
+      ]
+    }
+  },
+  "order": [
+    "header",
+    "policy",
+    "guarantee"
+  ]
+}

@@ -1,0 +1,394 @@
+{%- liquid
+  assign s = section.settings
+  assign total = 0
+  assign compare_total = 0
+  assign ids = ''
+  assign available = true
+  for block in section.blocks
+    assign bp = block.settings.product
+    if bp != blank
+      assign bv = bp.selected_or_first_available_variant
+      assign total = total | plus: bv.price
+      if bv.compare_at_price > bv.price
+        assign compare_total = compare_total | plus: bv.compare_at_price
+      else
+        assign compare_total = compare_total | plus: bv.price
+      endif
+      assign ids = ids | append: bv.id | append: ','
+      unless bv.available
+        assign available = false
+      endunless
+    endif
+  endfor
+  assign ids = ids | split: ',' | join: ','
+  comment
+    A fixed saving beats a percentage on a two-item set — it lands on a round number
+    rather than €108,80. The percentage stays as a fallback.
+  endcomment
+  if s.discount_fixed > 0
+    assign discount_amount = s.discount_fixed | times: 100
+  else
+    assign discount_amount = total | times: s.bundle_discount | divided_by: 100 | round
+  endif
+  if discount_amount > total
+    assign discount_amount = 0
+  endif
+  assign discounted = total | minus: discount_amount
+
+  comment
+    A real bundle product takes over pricing and the add-to-cart: one line in the cart,
+    one price, and a comparison against what the parts cost separately. The blocks below
+    still supply the images, so the card keeps showing both products.
+  endcomment
+  assign bundle_product = s.bundle_product
+  assign use_bundle_product = false
+  assign compare_is_separate = false
+  if bundle_product != blank
+    assign bundle_variant = bundle_product.selected_or_first_available_variant
+    assign use_bundle_product = true
+    assign discounted = bundle_variant.price
+    assign compare_price = bundle_variant.compare_at_price
+    if compare_price > bundle_variant.price
+      assign discount_amount = compare_price | minus: bundle_variant.price
+    else
+      assign compare_price = 0
+      assign discount_amount = 0
+    endif
+    assign available = bundle_variant.available
+  else
+    comment
+      Without a bundle product there is no compare-at to read, so the only honest
+      comparison is what the parts cost separately.
+    endcomment
+    assign compare_price = total
+    assign compare_is_separate = true
+  endif
+  assign bundle_form_id = 'BundleForm-' | append: section.id
+-%}
+
+<section
+  class="co co-section {% render 'drivemist-surface', style: s.background_style %}"
+  style="{% render 'drivemist-pad', padding_top: s.padding_top, padding_bottom: s.padding_bottom %}"
+
+  {% if s.anchor != blank %}id="{{ s.anchor }}"{% endif %}
+>
+  <div class="co-container">
+    {% render 'drivemist-section-header',
+      eyebrow: s.eyebrow,
+      heading: s.heading,
+      intro: s.intro,
+      align: 'center'
+    %}
+
+    <div class="co-reveal mx-auto mt-12 max-w-5xl overflow-hidden rounded-card bg-paper text-ink shadow-lift ring-1 ring-ink/8">
+      <div class="co-grid items-center gap-8 p-6 sm:p-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-10 lg:p-10">
+        <div class="co-flex flex-wrap items-center justify-center gap-4 sm:gap-6 lg:justify-start">
+          {%- for block in section.blocks -%}
+            {%- liquid
+              assign bp = block.settings.product
+              assign bimg = block.settings.image | default: bp.featured_image
+              assign btitle = block.settings.title_override | default: bp.title | default: 'Product'
+            -%}
+            <div class="co-flex w-[7.5rem] shrink-0 flex-col gap-3 text-center sm:w-[9rem]" {{ block.shopify_attributes }}>
+              {% render 'drivemist-image',
+                image: bimg,
+                ratio: '1 / 1',
+                class: 'co-media rounded-tile ring-1 ring-ink/8',
+                sizes: '144px',
+                alt: btitle,
+                placeholder: 'product-apparel-2'
+              %}
+              <span class="co-flex flex-col gap-0.5">
+                <span class="text-[0.875rem] font-medium leading-tight">{{ btitle }}</span>
+                {%- if bp != blank -%}
+                  <span class="text-[0.8125rem] text-muted">{{ bp.selected_or_first_available_variant.price | money_without_trailing_zeros }}</span>
+                {%- else -%}
+                  <span class="text-[0.8125rem] text-muted">{{ block.settings.price_placeholder }}</span>
+                {%- endif -%}
+              </span>
+            </div>
+            {%- unless forloop.last -%}
+              <span class="co-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent-wash text-accent">
+                {% render 'drivemist-icon', icon: 'plus', class: 'w-4 h-4', stroke_width: 2.2 %}
+              </span>
+            {%- endunless -%}
+          {%- endfor -%}
+        </div>
+
+        <div class="co-flex w-full flex-col gap-4 rounded-card bg-accent-wash p-6 lg:w-[21rem]">
+          <span class="co-eyebrow text-accent">{{ s.total_label }}</span>
+
+          <div class="co-flex flex-wrap items-baseline gap-x-3 gap-y-1">
+            <span class="font-sub text-[2rem] font-medium leading-none">
+              {%- if discounted > 0 -%}{{ discounted | money_without_trailing_zeros }}{%- else -%}{{ s.total_placeholder }}{%- endif -%}
+            </span>
+            {%- if discount_amount > 0 -%}
+              <s class="font-sub text-[1.375rem] leading-none text-muted/80">
+                {{- compare_price | money_without_trailing_zeros -}}
+              </s>
+              {%- if compare_is_separate -%}
+                {%- comment -%}
+                  Only in the no-bundle-product path, where the comparison is what the parts
+                  cost separately rather than a previous price. Saying so keeps it accurate.
+                {%- endcomment -%}
+                <span class="text-[0.75rem] text-muted">bought separately</span>
+              {%- endif -%}
+            {%- endif -%}
+          </div>
+
+          {%- if discount_amount > 0 -%}
+            <span class="w-fit rounded-full bg-sale px-3 py-1.5 text-[0.75rem] font-semibold uppercase tracking-[0.14em] text-sale-ink">
+              {%- assign co_save = discount_amount | money_without_trailing_zeros -%}{{ 'drivemist.save' | t: amount: co_save }}
+            </span>
+          {%- endif -%}
+
+          {%- if use_bundle_product -%}
+            <product-form-component
+              class="block w-full"
+              data-section-id="{{ section.id }}"
+              data-product-id="{{ bundle_product.id }}"
+              data-product-url="{{ bundle_product.url }}"
+              on:submit="/handleSubmit"
+              data-quantity-default="1"
+            >
+              <div class="visually-hidden" aria-live="assertive" role="status" aria-atomic="true" ref="liveRegion"></div>
+              {%- form 'product', bundle_product, id: bundle_form_id, data-type: 'add-to-cart-form', class: 'w-full' -%}
+                <input type="hidden" name="id" ref="variantId" value="{{ bundle_variant.id }}">
+                <input type="hidden" name="quantity" value="1">
+                {% render 'add-to-cart-button-styles' %}
+                {% render 'fly-to-cart-styles' %}
+                {% render 'add-to-cart-button',
+                  id: bundle_form_id,
+                  class: 'add-to-cart-button co-bundle-atc',
+                  can_add_to_cart: available,
+                  show_icon: true,
+                  product: bundle_product,
+                  add_to_cart_text: s.button_label
+                %}
+              {%- endform -%}
+            </product-form-component>
+          {%- else -%}
+            <button
+              type="button"
+              class="co-btn co-btn-brand w-full"
+              data-co-bundle-add="{{ ids }}"
+              data-co-loading-label="{{ s.loading_label }}"
+              data-co-added-label="{{ s.added_label }}"
+              {% unless available and ids != blank %}disabled{% endunless %}
+            >
+              {{ s.button_label }}
+            </button>
+          {%- endif -%}
+
+          {%- if s.note != blank -%}
+            <p class="text-center text-[0.75rem] leading-relaxed text-muted">{{ s.note }}</p>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "DriveMist bundle",
+  "tag": "section",
+  "class": "drivemist-section",
+  "max_blocks": 4,
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Complete the set"
+    },
+    {
+      "type": "product",
+      "id": "bundle_product",
+      "label": "Bundle product",
+      "info": "Adds this single product to the cart as one line, at its own price. The blocks below still supply the images. Leave empty to add each product separately instead."
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "One box each. One very good weekend."
+    },
+    {
+      "type": "richtext",
+      "id": "intro",
+      "label": "Text",
+      "default": "<p>Pair two models and save – one for the car, one for the desk.</p>"
+    },
+    {
+      "type": "text",
+      "id": "total_label",
+      "label": "Total label",
+      "default": "Set price"
+    },
+    {
+      "type": "text",
+      "id": "total_placeholder",
+      "label": "Placeholder total",
+      "default": "€98"
+    },
+    {
+      "type": "number",
+      "id": "discount_fixed",
+      "label": "Set saving (fixed)",
+      "default": 0,
+      "info": "In whole currency units, e.g. 18 for €18. Overrides the percentage. Display only — pair it with an automatic discount in Shopify. Ignored when a bundle product is set — its own price is used."
+    },
+    {
+      "type": "range",
+      "id": "bundle_discount",
+      "label": "Set discount (%)",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "%",
+      "default": 0,
+      "info": "Used only when the fixed saving below is zero. Display only — create a matching automatic discount in Shopify so it applies at checkout. Ignored when a bundle product is set — its own price is used."
+    },
+    {
+      "type": "text",
+      "id": "loading_label",
+      "label": "Button label while adding",
+      "default": "Adding…"
+    },
+    {
+      "type": "text",
+      "id": "added_label",
+      "label": "Button label after adding",
+      "default": "Added to cart"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Add the duo to cart"
+    },
+    {
+      "type": "text",
+      "id": "note",
+      "label": "Note",
+      "default": "Free tracked shipping · 30-day returns"
+    },
+    {
+      "type": "header",
+      "content": "Section"
+    },
+    {
+      "type": "text",
+      "id": "anchor",
+      "label": "Anchor ID",
+      "info": "Used for on-page links, e.g. #how-it-works."
+    },
+    {
+      "type": "select",
+      "id": "background_style",
+      "label": "Background",
+      "options": [
+        {
+          "value": "paper",
+          "label": "Paper"
+        },
+        {
+          "value": "sand",
+          "label": "Sand"
+        },
+        {
+          "value": "shell",
+          "label": "Shell"
+        },
+        {
+          "value": "deep",
+          "label": "Deep purple"
+        },
+        {
+          "value": "ink",
+          "label": "Ink"
+        }
+      ],
+      "default": "sand"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Product",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "text",
+          "id": "title_override",
+          "label": "Title override"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image override"
+        },
+        {
+          "type": "text",
+          "id": "price_placeholder",
+          "label": "Placeholder price",
+          "default": "€49"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "DriveMist bundle",
+      "blocks": [
+        {
+          "type": "product",
+          "settings": {
+            "title_override": "Nissan GT-R Car Humidifier",
+            "price_placeholder": "€49"
+          }
+        },
+        {
+          "type": "product",
+          "settings": {
+            "title_override": "Bugatti Chiron Car Humidifier",
+            "price_placeholder": "€49"
+          }
+        },
+        {
+          "type": "product",
+          "settings": {
+            "title_override": "The Canvas Mug",
+            "price_placeholder": "€49"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,103 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "header": {
+      "type": "drivemist-page-header",
+      "settings": {
+        "eyebrow": "Atsiskaitymai",
+        "intro": "<p>Payment methods, currency and refunds – all in one place.</p>",
+        "show_breadcrumbs": true,
+        "alignment": "left",
+        "background_style": "sand",
+        "padding_top": 72,
+        "padding_bottom": 72
+      }
+    },
+    "policy": {
+      "type": "drivemist-policy",
+      "settings": {
+        "updated": "Last updated 22 October 2026",
+        "show_toc": true,
+        "toc_title": "On this page",
+        "menu_title": "More documents",
+        "contact_title": "Questions about payment?",
+        "contact_text": "<p>Email info@drivemist.com and we’ll reply within one working day.</p>",
+        "contact_icon": "lock",
+        "contact_label": "Susisiekite",
+        "contact_link": "/pages/contact",
+        "background_style": "paper",
+        "padding_top": 72,
+        "padding_bottom": 96
+      }
+    },
+    "guarantee": {
+      "type": "drivemist-guarantee",
+      "settings": {
+        "badge": false,
+        "icon": "shield",
+        "eyebrow": "Why drivers trust us",
+        "heading": "",
+        "text": "",
+        "button_label": "",
+        "button_link": "",
+        "anchor": "",
+        "background_style": "shell",
+        "padding_top": 80,
+        "padding_bottom": 80
+      },
+      "blocks": {
+        "p1": {
+          "type": "pillar",
+          "settings": {
+            "title": "Free tracked shipping",
+            "text": "Every order ships tracked, free of charge.",
+            "icon": "truck"
+          }
+        },
+        "p2": {
+          "type": "pillar",
+          "settings": {
+            "title": "30-day returns",
+            "text": "Simple returns if it isn’t right.",
+            "icon": "refresh"
+          }
+        },
+        "p3": {
+          "type": "pillar",
+          "settings": {
+            "title": "Fast answers by email",
+            "text": "We reply within one working day.",
+            "icon": "chat"
+          }
+        },
+        "p4": {
+          "type": "pillar",
+          "settings": {
+            "title": "Secure checkout",
+            "text": "Pay safely by card or online banking.",
+            "icon": "lock"
+          }
+        }
+      },
+      "block_order": [
+        "p1",
+        "p2",
+        "p3",
+        "p4"
+      ]
+    }
+  },
+  "order": [
+    "header",
+    "policy",
+    "guarantee"
+  ]
+}

@@ -1,0 +1,454 @@
+{%- liquid
+  assign s = section.settings
+  assign markers = 'var(--co-marker-1),var(--co-marker-2),var(--co-marker-3),var(--co-marker-4),var(--co-marker-5)' | split: ','
+-%}
+
+<section
+  class="co co-section {% render 'drivemist-surface', style: s.background_style %}"
+  style="{% render 'drivemist-pad', padding_top: s.padding_top, padding_bottom: s.padding_bottom %}"
+
+  {% if s.anchor != blank %}id="{{ s.anchor }}"{% endif %}
+>
+  <div class="co-container">
+    {% render 'drivemist-section-header',
+      eyebrow: s.eyebrow,
+      heading: s.heading,
+      intro: s.intro,
+      align: s.alignment
+    %}
+
+    <div class="relative mt-12 lg:mt-16">
+      {%- if s.show_connector and s.style != 'image' -%}
+        {%- comment -%} Sits on the marker's centre line, which moves with the marker size. {%- endcomment -%}
+        {%- if s.style == 'image' -%}{%- assign co_line_top = '2.75rem' -%}{%- else -%}{%- assign co_line_top = '2.25rem' -%}{%- endif -%}
+        <div
+          class="pointer-events-none absolute inset-x-0 co-hide h-px bg-current opacity-15 lg:block"
+          style="top: {{ co_line_top }};"
+        ></div>
+      {%- endif -%}
+
+      <div class="co-grid gap-10 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+        {%- for block in section.blocks -%}
+          {%- liquid
+            assign marker = markers[forloop.index0] | default: 'var(--co-marker-1)'
+          -%}
+          <div
+            class="co-reveal relative co-flex flex-col {% if s.alignment == 'center' %}items-center text-center{% endif %}"
+            style="transition-delay: {{ forloop.index0 | times: 110 }}ms"
+            {{ block.shopify_attributes }}
+          >
+            {%- case s.style -%}
+              {%- when 'image' -%}
+                {%- comment -%}
+                  The image is the marker. Portrait and rounded, with a marker-tinted ring
+                  so the row still reads as a set before the real artwork is uploaded.
+                {%- endcomment -%}
+                <div
+                  class="relative w-full overflow-hidden rounded-card"
+                  style="max-width: {{ s.image_width }}px; background: color-mix(in oklab, {{ marker }} 12%, transparent); box-shadow: inset 0 0 0 1px color-mix(in oklab, {{ marker }} 28%, transparent);"
+                >
+                  {% render 'drivemist-image',
+                    image: block.settings.image,
+                    ratio: s.image_ratio,
+                    class: 'co-media w-full bg-transparent',
+                    sizes: '(min-width: 1024px) 380px, 88vw',
+                    alt: block.settings.title,
+                    placeholder: 'image'
+                  %}
+                </div>
+
+              {%- when 'icon' -%}
+                <span
+                  class="relative co-flex h-[4.5rem] w-[4.5rem] items-center justify-center rounded-full"
+                  style="background: color-mix(in oklab, {{ marker }} 14%, transparent); color: {{ marker }};"
+                >
+                  {% render 'drivemist-icon', icon: block.settings.icon, class: 'w-7 h-7' %}
+                </span>
+
+              {%- else -%}
+                <span
+                  class="font-sub relative co-flex h-[4.5rem] w-[4.5rem] items-center justify-center rounded-full text-[1.25rem] font-medium"
+                  style="background: color-mix(in oklab, {{ marker }} 14%, transparent); color: {{ marker }};"
+                >
+                  {{ forloop.index }}
+                </span>
+            {%- endcase -%}
+
+            {%- if s.style != 'image' and block.settings.image != blank -%}
+              <div class="mt-6 w-full">
+                {% render 'drivemist-image',
+                  image: block.settings.image,
+                  ratio: '4 / 3',
+                  class: 'co-media rounded-tile',
+                  sizes: '(min-width: 1024px) 30vw, 92vw',
+                  alt: block.settings.title
+                %}
+              </div>
+            {%- endif -%}
+
+            <h3 class="co-display mt-6 text-[1.375rem] leading-tight">{{ block.settings.title }}</h3>
+            {%- if block.settings.text != blank -%}
+              <div class="co-rte mt-3 max-w-[24rem] text-[0.9375rem] leading-relaxed text-muted">
+                {{ block.settings.text }}
+              </div>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+
+    {%- if s.button_label != blank -%}
+      <div class="co-reveal mt-12 co-flex {% if s.alignment == 'center' %}justify-center{% endif %}">
+        <a href="{{ s.button_link | default: '#' }}" class="co-btn co-btn-primary">
+          {{ s.button_label }}
+          {% render 'drivemist-icon', icon: 'arrow-right', class: 'w-4 h-4' %}
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "DriveMist steps",
+  "tag": "section",
+  "class": "drivemist-section",
+  "max_blocks": 5,
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "How it works"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "From box to exhaust mist in 60 seconds."
+    },
+    {
+      "type": "richtext",
+      "id": "intro",
+      "label": "Text",
+      "default": "<p>No tools, no batteries. The USB cable is included in the box.</p>"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Alignment",
+      "options": [
+        {
+          "value": "center",
+          "label": "Centered"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "Step marker",
+      "options": [
+        {
+          "value": "image",
+          "label": "Image"
+        },
+        {
+          "value": "number",
+          "label": "Numbers"
+        },
+        {
+          "value": "icon",
+          "label": "Icons"
+        }
+      ],
+      "default": "image"
+    },
+    {
+      "type": "range",
+      "id": "image_width",
+      "label": "Image width",
+      "min": 100,
+      "max": 480,
+      "step": 10,
+      "unit": "px",
+      "default": 360,
+      "info": "Only used when Step marker is set to Image."
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image shape",
+      "options": [
+        {
+          "value": "4 / 3",
+          "label": "Landscape (4:3)"
+        },
+        {
+          "value": "3 / 2",
+          "label": "Wide (3:2)"
+        },
+        {
+          "value": "16 / 9",
+          "label": "Widescreen (16:9)"
+        },
+        {
+          "value": "1 / 1",
+          "label": "Square"
+        },
+        {
+          "value": "3 / 4",
+          "label": "Portrait (3:4)"
+        },
+        {
+          "value": "4 / 5",
+          "label": "Portrait (4:5)"
+        }
+      ],
+      "default": "4 / 3"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_connector",
+      "label": "Show connecting line",
+      "default": true,
+      "info": "Hidden automatically when the step marker is an image."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Section"
+    },
+    {
+      "type": "text",
+      "id": "anchor",
+      "label": "Anchor ID",
+      "default": "how-it-works",
+      "info": "Used for on-page links, e.g. #how-it-works."
+    },
+    {
+      "type": "select",
+      "id": "background_style",
+      "label": "Background",
+      "options": [
+        {
+          "value": "paper",
+          "label": "Paper"
+        },
+        {
+          "value": "sand",
+          "label": "Sand"
+        },
+        {
+          "value": "shell",
+          "label": "Shell"
+        },
+        {
+          "value": "deep",
+          "label": "Deep purple"
+        },
+        {
+          "value": "ink",
+          "label": "Ink"
+        }
+      ],
+      "default": "sand"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 104
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 104
+    }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Open the box"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Fill the tank with water and a few drops of fragrance oil.</p>"
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            {
+              "value": "box",
+              "label": "Box"
+            },
+            {
+              "value": "marker",
+              "label": "Marker"
+            },
+            {
+              "value": "markers",
+              "label": "Markers"
+            },
+            {
+              "value": "droplet",
+              "label": "Droplet"
+            },
+            {
+              "value": "screen-off",
+              "label": "Screen off"
+            },
+            {
+              "value": "shirt",
+              "label": "Shirt"
+            },
+            {
+              "value": "washer",
+              "label": "Washer"
+            },
+            {
+              "value": "palette",
+              "label": "Palette"
+            },
+            {
+              "value": "heart",
+              "label": "Heart"
+            },
+            {
+              "value": "gift",
+              "label": "Gift"
+            },
+            {
+              "value": "sparkle",
+              "label": "Sparkle"
+            },
+            {
+              "value": "brush",
+              "label": "Brush"
+            },
+            {
+              "value": "car",
+              "label": "Car"
+            },
+            {
+              "value": "mist",
+              "label": "Mist"
+            },
+            {
+              "value": "wind",
+              "label": "Airflow"
+            },
+            {
+              "value": "usb",
+              "label": "USB power"
+            },
+            {
+              "value": "gauge",
+              "label": "Gauge"
+            },
+            {
+              "value": "bolt",
+              "label": "Power"
+            },
+            {
+              "value": "bulb",
+              "label": "Lights"
+            },
+            {
+              "value": "quiet",
+              "label": "Quiet"
+            },
+            {
+              "value": "steering",
+              "label": "Steering wheel"
+            },
+            {
+              "value": "key",
+              "label": "Key"
+            },
+            {
+              "value": "timer",
+              "label": "Timer"
+            },
+            {
+              "value": "trophy",
+              "label": "Trophy"
+            }
+          ],
+          "default": "box"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "Shown as the step's marker when Step marker is set to Image. A placeholder stands in until you upload one."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "DriveMist steps",
+      "blocks": [
+        {
+          "type": "step",
+          "settings": {
+            "title": "Open the box",
+            "text": "<p>Fill the tank with water and a few drops of fragrance oil.</p>",
+            "icon": "box"
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "title": "Make it their own",
+            "text": "<p>Plug it into your car’s USB port, a laptop or a phone charger.</p>",
+            "icon": "car"
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "title": "Press start",
+            "text": "<p>Mist and lights on. Auto shut-off when the tank runs dry.</p>",
+            "icon": "mist"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

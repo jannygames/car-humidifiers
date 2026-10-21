@@ -1,0 +1,285 @@
+{%- liquid
+  assign s = section.settings
+-%}
+
+<section
+  class="co co-section {% render 'drivemist-surface', style: s.background_style %}"
+  style="{% render 'drivemist-pad', padding_top: s.padding_top, padding_bottom: s.padding_bottom %}"
+
+  {% if s.anchor != blank %}id="{{ s.anchor }}"{% endif %}
+>
+  <div class="co-container">
+    <div class="co-grid gap-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-20">
+      <div class="co-reveal lg:sticky lg:top-28 lg:self-start">
+        {%- if s.eyebrow != blank -%}
+          <p class="co-eyebrow text-accent">{{ s.eyebrow }}</p>
+        {%- endif -%}
+        {%- if s.heading != blank -%}
+          <h2 class="co-display mt-4 text-[clamp(1.85rem,1.1rem+3.1vw,3rem)]">{{ s.heading }}</h2>
+        {%- endif -%}
+        {%- if s.intro != blank -%}
+          <div class="co-rte mt-5 text-[1rem] leading-relaxed text-muted">{{ s.intro }}</div>
+        {%- endif -%}
+        {%- if s.support_label != blank -%}
+          <a
+            href="{{ s.support_link | default: '#' }}"
+            class="mt-8 inline-flex items-center gap-3 rounded-2xl border border-current/15 px-5 py-4 transition-colors hover:border-accent hover:text-accent"
+          >
+            <span class="co-flex h-9 w-9 items-center justify-center rounded-full bg-accent-wash text-accent">
+              {% render 'drivemist-icon', icon: 'chat', class: 'w-4 h-4' %}
+            </span>
+            <span class="co-flex flex-col text-left">
+              <span class="text-[0.9375rem] font-medium leading-tight">{{ s.support_label }}</span>
+              {%- if s.support_note != blank -%}
+                <span class="text-[0.8125rem] leading-tight text-muted">{{ s.support_note }}</span>
+              {%- endif -%}
+            </span>
+          </a>
+        {%- endif -%}
+      </div>
+
+      <div class="co-reveal">
+        <div class="border-t border-current/12" data-co-accordion>
+          {%- for block in section.blocks -%}
+            <details class="co-details group border-b border-current/12" {% if forloop.first and s.open_first %}open{% endif %} {{ block.shopify_attributes }}>
+              <summary class="co-flex w-full items-start justify-between gap-6 py-5 text-left sm:py-6">
+                <span class="font-sub text-[1rem] font-medium leading-snug sm:text-[1.0625rem]">{{ block.settings.question }}</span>
+                <span class="co-details__icon mt-0.5 shrink-0 transition-transform duration-300 ease-out">
+                  {% render 'drivemist-icon', icon: 'plus', class: 'w-4 h-4' %}
+                </span>
+              </summary>
+              <div class="co-details__panel">
+                <div>
+                  <div class="co-rte max-w-[42rem] pb-6 pr-8 text-[0.9375rem] leading-relaxed text-muted">
+                    {{ block.settings.answer }}
+                  </div>
+                </div>
+              </div>
+            </details>
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {%- if s.enable_schema -%}
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {%- for block in section.blocks -%}
+            {
+              "@type": "Question",
+              "name": {{ block.settings.question | json }},
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": {{ block.settings.answer | strip_html | json }}
+              }
+            }{% unless forloop.last %},{% endunless %}
+          {%- endfor -%}
+        ]
+      }
+    </script>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "DriveMist FAQ",
+  "tag": "section",
+  "class": "drivemist-section",
+  "max_blocks": 20,
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Questions"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Everything to know before choosing a DriveMist gift."
+    },
+    {
+      "type": "richtext",
+      "id": "intro",
+      "label": "Text",
+      "default": "<p>Power, fragrance oils, cleaning, delivery and returns. Contact our team if you still need help.</p>"
+    },
+    {
+      "type": "text",
+      "id": "support_label",
+      "label": "Support link label",
+      "default": "Talk to us"
+    },
+    {
+      "type": "text",
+      "id": "support_note",
+      "label": "Support link note",
+      "default": "Friendly help with products, orders and gifts"
+    },
+    {
+      "type": "url",
+      "id": "support_link",
+      "label": "Support link"
+    },
+    {
+      "type": "checkbox",
+      "id": "open_first",
+      "label": "Open first question",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_schema",
+      "label": "Add FAQ rich snippet markup",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Section"
+    },
+    {
+      "type": "text",
+      "id": "anchor",
+      "label": "Anchor ID",
+      "default": "faq",
+      "info": "Used for on-page links, e.g. #how-it-works."
+    },
+    {
+      "type": "select",
+      "id": "background_style",
+      "label": "Background",
+      "options": [
+        {
+          "value": "paper",
+          "label": "Paper"
+        },
+        {
+          "value": "sand",
+          "label": "Sand"
+        },
+        {
+          "value": "shell",
+          "label": "Shell"
+        },
+        {
+          "value": "deep",
+          "label": "Deep purple"
+        },
+        {
+          "value": "ink",
+          "label": "Ink"
+        }
+      ],
+      "default": "paper"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 104
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 104
+    }
+  ],
+  "blocks": [
+    {
+      "type": "question",
+      "name": "Question",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "How does a DriveMist car humidifier work?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer",
+          "default": "<p>Fill the water tank, add a few drops of fragrance oil if you like and plug it into USB. Press the button and cool mist rolls out of the exhausts while the lights glow.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "DriveMist FAQ",
+      "blocks": [
+        {
+          "type": "question",
+          "settings": {
+            "question": "How does a DriveMist car humidifier work?",
+            "answer": "<p>Fill the water tank, add a few drops of fragrance oil if you like and plug it into any USB port. Press the button and cool mist rolls out of the exhausts while the headlights and tail-lights glow.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "Can I use essential oils?",
+            "answer": "<p>Yes. Add 2–3 drops of water-soluble essential oil or car diffuser fragrance to the tank. Avoid thick, oil-only perfumes, which can clog the atomiser.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "How is it powered?",
+            "answer": "<p>Every model runs on 5 V USB power from your car, a laptop, a power bank or a phone charger. The cable is included.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "Who are DriveMist products designed for?",
+            "answer": "<p>Anyone who loves cars. Each model fits most cup holders and dashboards and works just as well on a desk or bedside table.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "Will it fit my cup holder?",
+            "answer": "<p>Exact dimensions are listed on each product page, so you can check the fit for your cup holder or dashboard before ordering.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "How can I check when my order will arrive?",
+            "answer": "<p>Delivery estimates are shown at checkout. Once your parcel has been dispatched, we will send tracking details so you can follow its journey.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "Can I return it if it isn’t right?",
+            "answer": "<p>Unused and in its original box? Return it within 30 days of delivery. Contact us and we’ll send you the steps.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "Do you ship internationally?",
+            "answer": "<p>Tracked delivery is free on every order. The estimated delivery date is shown at checkout.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

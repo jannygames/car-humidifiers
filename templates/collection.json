@@ -1,0 +1,112 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "drivemist-collection",
+      "settings": {
+        "eyebrow": "Car humidifiers & diffusers",
+        "heading": "",
+        "description": "",
+        "show_collection_description": false,
+        "featured_collection": "products",
+        "products_per_page": 24,
+        "show_badge": true,
+        "show_add_to_cart": true,
+        "rating_fallback": "",
+        "add_to_cart_label": "Add to cart",
+        "button_label": "View product",
+        "image_ratio": "1 / 1",
+        "empty_text": "Nothing here right now – new models are on their way.",
+        "background_style": "paper",
+        "padding_top": 64,
+        "padding_bottom": 96
+      }
+    },
+    "value_props": {
+      "type": "drivemist-value-props",
+      "blocks": {
+        "p1": {
+          "type": "prop",
+          "settings": {
+            "title": "Real exhaust mist",
+            "text": "Ultrasonic mist flows from the exhausts of every model.",
+            "icon": "mist"
+          }
+        },
+        "p2": {
+          "type": "prop",
+          "settings": {
+            "title": "USB powered",
+            "text": "Car USB port, laptop or phone charger – cable included.",
+            "icon": "usb"
+          }
+        },
+        "p3": {
+          "type": "prop",
+          "settings": {
+            "title": "Aroma diffuser",
+            "text": "Add a few drops of oil for a fresher-smelling cabin.",
+            "icon": "wind"
+          }
+        },
+        "p4": {
+          "type": "prop",
+          "settings": {
+            "title": "30-day returns",
+            "text": "Not quite right? Send it back within 30 days.",
+            "icon": "shield"
+          }
+        }
+      },
+      "block_order": [
+        "p1",
+        "p2",
+        "p3",
+        "p4"
+      ],
+      "settings": {
+        "eyebrow": "",
+        "heading": "",
+        "intro": "",
+        "alignment": "center",
+        "mobile_carousel": true,
+        "carousel_speed": 2.5,
+        "carousel_item_width": 72,
+        "anchor": "",
+        "background_style": "sand",
+        "padding_top": 72,
+        "padding_bottom": 72
+      }
+    },
+    "newsletter": {
+      "type": "drivemist-newsletter",
+      "settings": {
+        "eyebrow": "10% off your first order",
+        "heading": "Join the DriveMist garage",
+        "text": "<p>Subscribe for new model drops, restock alerts and 10% off your first car humidifier.</p>",
+        "placeholder": "Your email address",
+        "button_label": "Get my 10% code",
+        "success_text": "You’re in! Your discount code is on its way to your inbox.",
+        "disclaimer": "One or two emails a month. Unsubscribe any time.",
+        "show_image": true,
+        "anchor": "",
+        "background_style": "wash",
+        "padding_top": 88,
+        "padding_bottom": 88
+      }
+    }
+  },
+  "order": [
+    "main",
+    "value_props",
+    "newsletter"
+  ]
+}

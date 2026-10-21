@@ -1,0 +1,15 @@
+{%- liquid
+  assign co_pt = padding_top | default: 96
+  assign co_pb = padding_bottom | default: 96
+  assign co_ptm = co_pt | times: 0.62 | round
+  assign co_pbm = co_pb | times: 0.62 | round
+  echo '--co-pt:'
+  echo co_pt
+  echo 'px;--co-pb:'
+  echo co_pb
+  echo 'px;--co-pt-m:'
+  echo co_ptm
+  echo 'px;--co-pb-m:'
+  echo co_pbm
+  echo 'px;'
+-%}

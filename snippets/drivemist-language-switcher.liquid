@@ -1,0 +1,75 @@
+{%- doc -%}
+  Language switcher with flags.
+
+  Horizon's own control is a native <select>, which cannot render an image inside an
+  option, so this is a <details> disclosure instead. It stays keyboard-accessible with no
+  JavaScript; drivemist.js only adds close-on-outside-click and Escape.
+
+  @param {string} id - Unique suffix, since several instances render per page
+  @param {string} [placement] - 'header' (compact) or 'drawer'
+{%- enddoc -%}
+
+{%- liquid
+  assign co_id = id | default: 'lang'
+  assign co_placement = placement | default: 'header'
+  assign co_current = localization.language
+  assign co_return_to = request.path | default: routes.root_url
+-%}
+
+{%- if localization.available_languages.size > 1 -%}
+  <div class="co-lang co-lang--{{ co_placement }}" data-co-lang>
+    {%- form 'localization', class: 'co-lang__form', return_to: co_return_to -%}
+      {%- if co_placement == 'drawer' -%}
+        {%- comment -%}
+          A dropdown inside a drawer means a popover inside a popover, for a choice
+          between two. Lay the languages out instead: one tap, nothing to open.
+        {%- endcomment -%}
+        <p class="co-lang__label">{{ 'content.language' | t }}</p>
+        <div class="co-lang__segments">
+          {%- for language in localization.available_languages -%}
+            <button
+              type="submit"
+              name="language_code"
+              value="{{ language.iso_code }}"
+              class="co-lang__segment"
+              lang="{{ language.iso_code }}"
+              {% if language.iso_code == co_current.iso_code %}aria-current="true"{% endif %}
+            >
+              {% render 'drivemist-flag', code: language.iso_code, uid: language.iso_code %}
+              <span>{{ language.endonym_name | capitalize }}</span>
+            </button>
+          {%- endfor -%}
+        </div>
+      {%- else -%}
+      <details class="co-lang__details" data-co-lang-details>
+        <summary class="co-lang__summary" aria-label="{{ 'content.language' | t }}">
+          {% render 'drivemist-flag', code: co_current.iso_code, uid: co_id %}
+          <span class="co-lang__name">{{ co_current.endonym_name | capitalize }}</span>
+          {% render 'drivemist-icon', icon: 'chevron-down', class: 'co-lang__caret' %}
+        </summary>
+
+        <ul class="co-lang__list" role="list">
+          {%- for language in localization.available_languages -%}
+            <li>
+              <button
+                type="submit"
+                name="language_code"
+                value="{{ language.iso_code }}"
+                class="co-lang__option"
+                lang="{{ language.iso_code }}"
+                {% if language.iso_code == co_current.iso_code %}aria-current="true"{% endif %}
+              >
+                {% render 'drivemist-flag', code: language.iso_code, uid: language.iso_code %}
+                <span>{{ language.endonym_name | capitalize }}</span>
+                {%- if language.iso_code == co_current.iso_code -%}
+                  {% render 'drivemist-icon', icon: 'check', class: 'co-lang__tick' %}
+                {%- endif -%}
+              </button>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </details>
+      {%- endif -%}
+    {%- endform -%}
+  </div>
+{%- endif -%}

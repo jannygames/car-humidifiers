@@ -1,0 +1,140 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "header": {
+      "type": "drivemist-page-header",
+      "settings": {
+        "eyebrow": "Contact DriveMist",
+        "heading": "Questions? We’re in the driver’s seat",
+        "intro": "<p>Need help choosing a model, with an order or with setting up your car humidifier? Send us a message and we’ll get right back to you.</p>",
+        "show_breadcrumbs": true,
+        "button_label": "",
+        "button_link": "",
+        "alignment": "left",
+        "background_style": "sand",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    },
+    "contact": {
+      "type": "drivemist-contact",
+      "blocks": {
+        "d1": {
+          "type": "detail",
+          "settings": {
+            "title": "Customer service",
+            "text": "<p>Use the form or email <a href=\"mailto:info@drivemist.com\">info@drivemist.com</a> and we’ll get back to you as soon as we can.</p>"
+          }
+        },
+        "d2": {
+          "type": "detail",
+          "settings": {
+            "title": "Response time",
+            "text": "<p>We reply to every message within 24 hours on working days.</p>"
+          }
+        },
+        "d3": {
+          "type": "detail",
+          "settings": {
+            "title": "Track your order",
+            "text": "<p>As soon as your order leaves our warehouse we email you a tracking link. You can also check the latest status any time on the <a href=\"/pages/track-your-order\" title=\"Track your order\">Track your order</a> page.</p>"
+          }
+        },
+        "d4": {
+          "type": "detail",
+          "settings": {
+            "title": "30-day returns",
+            "text": "<p>Email us your order number and we’ll send you the return address and next steps.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "d1",
+        "d2",
+        "d3",
+        "d4"
+      ],
+      "settings": {
+        "eyebrow": "Write to us",
+        "heading": "How can we help?",
+        "intro": "<p>If your question is about an existing order, add the order number so we can help faster.</p>",
+        "show_social": true,
+        "social_title": "Follow DriveMist",
+        "business_title": "Rekvizitai",
+        "business_details": "<p>DriveMist · [Legal business name], Reg. No. [0000000]<br/>[Street address], [City], [Country]<br/><a href=\"mailto:info@drivemist.com\">info@drivemist.com</a></p>",
+        "button_label": "Send message",
+        "success_text": "Thanks – we’ve got your message and will be in touch soon.",
+        "disclaimer": "We’ll only use your details to reply to your enquiry.",
+        "background_style": "paper",
+        "padding_top": 88,
+        "padding_bottom": 96
+      }
+    },
+    "faq": {
+      "type": "drivemist-faq",
+      "blocks": {
+        "q1": {
+          "type": "question",
+          "settings": {
+            "question": "How can I track my order?",
+            "answer": "<p>As soon as your order leaves our warehouse we email you a tracking link. You can also check the latest status any time on the <a href=\"/pages/track-your-order\" title=\"Track your order\">Track your order</a> page.</p>"
+          }
+        },
+        "q2": {
+          "type": "question",
+          "settings": {
+            "question": "What if I change my mind?",
+            "answer": "<p>Changed your mind? You can return an unused car humidifier in its original packaging within 30 days of delivery.</p><p>Email us your order number and we will send you the return address and next steps. As soon as the parcel is back with us and checked, we refund what you paid for the item.</p><p><a href=\"/pages/contact\">Start a return</a></p>"
+          }
+        },
+        "q3": {
+          "type": "question",
+          "settings": {
+            "question": "Can I change my delivery address?",
+            "answer": "<p>Get in touch as soon as possible and include your order number. We will happily update the address before dispatch; once the parcel is with the courier, changes may no longer be possible.</p>"
+          }
+        },
+        "q4": {
+          "type": "question",
+          "settings": {
+            "question": "Do you offer wholesale or business orders?",
+            "answer": "<p>Yes. If you run a car accessories shop, detailing studio, dealership or event and want DriveMist models, tell us about your business and the quantities you have in mind. We’ll reply with pricing.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3",
+        "q4"
+      ],
+      "settings": {
+        "eyebrow": "Quick answers",
+        "heading": "Most asked questions",
+        "intro": "",
+        "support_label": "View all FAQs",
+        "support_note": "Power, fragrance oils, delivery and returns",
+        "support_link": "/pages/faq",
+        "open_first": false,
+        "enable_schema": true,
+        "anchor": "",
+        "background_style": "sand",
+        "padding_top": 88,
+        "padding_bottom": 96
+      }
+    }
+  },
+  "order": [
+    "header",
+    "contact",
+    "faq"
+  ]
+}

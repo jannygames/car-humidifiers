@@ -1,0 +1,312 @@
+{%- liquid
+  assign s = section.settings
+  assign co_desktop = s.image
+  assign co_mobile = s.image_mobile
+  assign co_tablet = s.image_tablet
+-%}
+
+<section
+  class="co co-hero-banner{% if s.text_shadow %} co-hero-banner--shadowed{% endif %}"
+  style="--co-hero-h: {{ s.min_height }}px; --co-hero-h-t: {{ s.min_height_tablet }}px; --co-hero-h-m: {{ s.min_height_mobile }}px; --co-hero-text: {{ s.text_color }}; --co-hero-max-w: {{ s.text_width }}%;"
+>
+  <div class="co-hero-banner__media">
+    <picture>
+      {%- if co_mobile != blank -%}
+        <source
+          media="(max-width: 749px)"
+          srcset="{{ co_mobile | image_url: width: 500 }} 500w, {{ co_mobile | image_url: width: 750 }} 750w, {{ co_mobile | image_url: width: 1100 }} 1100w, {{ co_mobile | image_url: width: 1500 }} 1500w"
+          sizes="100vw"
+          width="{{ co_mobile.width }}"
+          height="{{ co_mobile.height }}"
+        >
+      {%- endif -%}
+      {%- if co_tablet != blank -%}
+        <source
+          media="(max-width: 1023px)"
+          srcset="{{ co_tablet | image_url: width: 750 }} 750w, {{ co_tablet | image_url: width: 1100 }} 1100w, {{ co_tablet | image_url: width: 1500 }} 1500w, {{ co_tablet | image_url: width: 2048 }} 2048w"
+          sizes="100vw"
+          width="{{ co_tablet.width }}"
+          height="{{ co_tablet.height }}"
+        >
+      {%- endif -%}
+      {%- if co_desktop != blank -%}
+        {{
+          co_desktop
+          | image_url: width: 3000
+          | image_tag:
+            loading: 'eager',
+            fetchpriority: 'high',
+            decoding: 'async',
+            sizes: '100vw',
+            widths: '750, 1100, 1500, 1900, 2400, 3000',
+            alt: s.image_alt
+        }}
+      {%- else -%}
+        <img
+          src="{{ 'drivemist-hero.svg' | asset_url }}"
+          alt="{{ s.image_alt | escape }}"
+          width="2400"
+          height="1100"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+        >
+      {%- endif -%}
+    </picture>
+  </div>
+
+  {%- if s.overlay_opacity > 0 -%}
+    <div class="co-hero-banner__scrim" style="--co-hero-scrim: {{ s.overlay_opacity | divided_by: 100.0 }};"></div>
+  {%- endif -%}
+
+  <div class="co-container co-hero-banner__inner">
+    <div class="co-hero-banner__content">
+      {%- if s.eyebrow != blank -%}
+        <p class="co-eyebrow co-hero-banner__eyebrow">{{ s.eyebrow }}</p>
+      {%- endif -%}
+
+      {%- if s.show_rating -%}
+        <div class="co-hero-banner__rating">
+          <span class="co-hero-banner__stars">{% render 'drivemist-stars', rating: s.rating_stars, size: 'lg' %}</span>
+          {%- if s.rating_text != blank -%}
+            <span>{{ s.rating_text }}</span>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      {%- if s.heading != blank -%}
+        <h1 class="co-hero-banner__title">{{ s.heading }}</h1>
+      {%- endif -%}
+
+      {%- if s.subheading != blank -%}
+        <div class="co-rte co-hero-banner__text">{{ s.subheading }}</div>
+      {%- endif -%}
+
+      {%- if s.button_label != blank or s.button_2_label != blank -%}
+        <div class="co-hero-banner__actions">
+          {%- if s.button_label != blank -%}
+            {%- liquid
+              case s.button_style
+                when 'brand'
+                  assign co_btn_class = 'co-btn-brand'
+                when 'cta'
+                  assign co_btn_class = 'co-btn-accent'
+                when 'ghost'
+                  assign co_btn_class = 'co-btn-ghost'
+                else
+                  assign co_btn_class = 'co-btn-primary'
+              endcase
+            -%}
+            <a href="{{ s.button_link | default: '#' }}" class="co-btn {{ co_btn_class }}">{{ s.button_label }}</a>
+          {%- endif -%}
+          {%- if s.button_2_label != blank -%}
+            <a href="{{ s.button_2_link | default: '#' }}" class="co-btn co-btn-ghost">{{ s.button_2_label }}</a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "DriveMist hero",
+  "tag": "section",
+  "class": "drivemist-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Images"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Desktop image",
+      "info": "Falls back to the packaged animated DriveMist night scene when empty. Wide crop works best — around 2:1."
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Mobile image",
+      "info": "Used below 750px. Leave empty to reuse the desktop image."
+    },
+    {
+      "type": "image_picker",
+      "id": "image_tablet",
+      "label": "Tablet image",
+      "info": "Used between 750px and 1023px. Leave empty to fall back to the desktop image."
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Image alt text",
+      "default": "DriveMist car humidifier glowing on a dashboard at night with mist flowing from the exhausts"
+    },
+    {
+      "type": "header",
+      "content": "Height"
+    },
+    {
+      "type": "range",
+      "id": "min_height",
+      "label": "Desktop height",
+      "min": 320,
+      "max": 900,
+      "step": 10,
+      "unit": "px",
+      "default": 620
+    },
+    {
+      "type": "range",
+      "id": "min_height_tablet",
+      "label": "Tablet height",
+      "min": 320,
+      "max": 1000,
+      "step": 10,
+      "unit": "px",
+      "default": 760,
+      "info": "750–1023px. A portrait image needs more height here than a landscape one."
+    },
+    {
+      "type": "range",
+      "id": "min_height_mobile",
+      "label": "Mobile height",
+      "min": 280,
+      "max": 800,
+      "step": 10,
+      "unit": "px",
+      "default": 560
+    },
+    {
+      "type": "header",
+      "content": "Text"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "label": "Show star rating",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "rating_stars",
+      "label": "Stars",
+      "min": 0,
+      "max": 5,
+      "step": 0.1,
+      "default": 4.8
+    },
+    {
+      "type": "text",
+      "id": "rating_text",
+      "label": "Rating text",
+      "info": "Shown next to the stars. Only claim reviews are verified if they actually are."
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Your dream car, <strong>misting on your dashboard</strong>",
+      "info": "Bold a phrase to render it in the body typeface instead — that is the mixed-font look."
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "label": "Text"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text colour",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "text_width",
+      "label": "Text column width",
+      "min": 40,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 50,
+      "info": "Keep it narrow enough on desktop that the copy never lands on the subject of the photo."
+    },
+    {
+      "type": "checkbox",
+      "id": "text_shadow",
+      "label": "Soft shadow behind text",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Image tint",
+      "min": 0,
+      "max": 60,
+      "step": 5,
+      "unit": "%",
+      "default": 0,
+      "info": "Darkens the image behind the text. Raise it if a photo makes the copy hard to read."
+    },
+    {
+      "type": "header",
+      "content": "Buttons"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Shop the collection"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Button style",
+      "options": [
+        {
+          "value": "primary",
+          "label": "CTA (orange)"
+        },
+        {
+          "value": "brand",
+          "label": "Brand (purple)"
+        },
+        {
+          "value": "cta",
+          "label": "Accent"
+        },
+        {
+          "value": "ghost",
+          "label": "Outline"
+        }
+      ],
+      "default": "primary"
+    },
+    {
+      "type": "text",
+      "id": "button_2_label",
+      "label": "Second button label"
+    },
+    {
+      "type": "url",
+      "id": "button_2_link",
+      "label": "Second button link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "DriveMist hero"
+    }
+  ]
+}
+{% endschema %}

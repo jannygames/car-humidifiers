@@ -1,0 +1,293 @@
+{%- liquid
+  assign s = section.settings
+
+  assign co_embed_url = s.embed_url
+  assign co_lead = co_embed_url | slice: 0
+  if co_lead == '/'
+    assign co_bare = co_embed_url | remove_first: '/'
+    assign co_first = co_bare | split: '/' | first
+    assign co_storefront_routes = 'apps,a,tools,community,pages,products,collections,blogs,cart,account,search,policies,recommendations,variants' | split: ','
+    unless co_storefront_routes contains co_first
+      assign co_tail = co_bare | remove_first: co_first
+      assign co_embed_url = '/apps' | append: co_tail
+    endunless
+  endif
+
+  assign co_app_blocks = 0
+  for block in section.blocks
+    if block.type == '@app'
+      assign co_app_blocks = co_app_blocks | plus: 1
+    endif
+  endfor
+-%}
+
+<section
+  class="co {% render 'drivemist-surface', style: s.background_style %}"
+  style="{% render 'drivemist-pad', padding_top: s.padding_top, padding_bottom: s.padding_bottom %}"
+  {% if s.anchor != blank %}id="{{ s.anchor }}"{% endif %}
+>
+  <div class="{% if s.width == 'narrow' %}co-container-narrow{% else %}co-container{% endif %} co-section">
+    {%- if s.eyebrow != blank or s.heading != blank or s.intro != blank -%}
+      <div class="co-reveal co-flex max-w-2xl flex-col gap-4">
+        {%- if s.eyebrow != blank -%}
+          <p class="co-eyebrow text-accent">{{ s.eyebrow }}</p>
+        {%- endif -%}
+        {%- if s.heading != blank -%}
+          <h1 class="co-display text-[clamp(2rem,1.3rem+2.6vw,3.25rem)]">{{ s.heading }}</h1>
+        {%- endif -%}
+        {%- if s.intro != blank -%}
+          <div class="co-rte text-[1.0625rem] leading-relaxed text-muted">{{ s.intro }}</div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="co-embed co-reveal mt-10">
+      {%- if co_app_blocks > 0 -%}
+        {%- comment -%} Native route: the app's own theme block, styled by our page. {%- endcomment -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == '@app' -%}
+            {% render block %}
+          {%- endif -%}
+        {%- endfor -%}
+
+      {%- elsif co_embed_url != blank -%}
+        {%- comment -%}
+          Fallback for apps that only expose an /apps/… proxy returning plain HTML rather
+          than Liquid — Shopify does not wrap those in the theme, so they lose the header
+          and footer entirely. The proxy is same-origin, so drivemist.js can measure the
+          frame's real content and size it, giving a seamless page with no inner scrollbar.
+        {%- endcomment -%}
+        <div
+          class="co-embed__panel{% if s.frame_border %} co-embed__panel--bordered{% endif %}"
+          style="--co-embed-radius: {{ s.frame_radius }}px;"
+        >
+          <iframe
+            src="{{ co_embed_url }}"
+            title="{{ s.embed_title | default: s.heading | escape }}"
+            loading="lazy"
+            class="co-embed__frame"
+            style="min-height: {{ s.min_height }}px;"
+            data-co-embed
+            data-co-embed-min="{{ s.min_height }}"
+            data-co-embed-button-bg="{{ s.embed_button_bg }}"
+            data-co-embed-button-text="{{ s.embed_button_text }}"
+            data-co-embed-radius="{{ s.embed_radius }}"
+            data-co-embed-blend="{{ s.blend_background }}"
+            data-co-embed-css="{{ s.embed_css | escape }}"
+          ></iframe>
+        </div>
+
+      {%- else -%}
+        <div class="rounded-card border border-current/15 px-6 py-10 text-center text-[0.9375rem] text-muted">
+          Add the app's block to this section, or set an embed URL in the section settings.
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if s.note != blank -%}
+      <p class="co-reveal mt-6 text-[0.875rem] text-muted">{{ s.note }}</p>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "DriveMist app embed",
+  "tag": "section",
+  "class": "drivemist-section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Drops an app into a normal DriveMist page, with the header, footer and page styling around it. Add the app's block below if it has one; otherwise point the embed URL at its /apps/… address."
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Track your DriveMist order"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Follow your parcel"
+    },
+    {
+      "type": "richtext",
+      "id": "intro",
+      "label": "Text",
+      "default": "<p>Enter your order number and the contact details used at checkout to see the latest delivery updates for your car humidifier.</p>"
+    },
+    {
+      "type": "text",
+      "id": "note",
+      "label": "Note under the embed",
+      "default": "No update yet? Carrier information may take a little while to appear after dispatch. Contact us with your order number if you need help."
+    },
+    {
+      "type": "header",
+      "content": "Embed"
+    },
+    {
+      "type": "text",
+      "id": "embed_url",
+      "label": "Embed URL",
+      "default": "/apps/track123",
+      "info": "Only used when no app block is added above. Use the relative path so it works on every domain."
+    },
+    {
+      "type": "text",
+      "id": "embed_title",
+      "label": "Embed title",
+      "default": "Track your DriveMist delivery",
+      "info": "Describes the frame to screen readers."
+    },
+    {
+      "type": "range",
+      "id": "min_height",
+      "label": "Minimum height",
+      "min": 300,
+      "max": 1600,
+      "step": 20,
+      "unit": "px",
+      "default": 640
+    },
+    {
+      "type": "range",
+      "id": "frame_radius",
+      "label": "Frame corner radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 20,
+      "info": "Rounds the embed itself so it reads as a card in the page rather than a rectangle cut into it."
+    },
+    {
+      "type": "checkbox",
+      "id": "frame_border",
+      "label": "Show frame border",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "blend_background",
+      "label": "Blend the app's background",
+      "default": true,
+      "info": "Makes the embedded page transparent so your section background shows through and the rounded corners read cleanly."
+    },
+    {
+      "type": "header",
+      "content": "Embed styling"
+    },
+    {
+      "type": "paragraph",
+      "content": "The embedded app is served from your own domain, so the theme can restyle it. Set the app's own colours in its dashboard first; these override whatever it renders."
+    },
+    {
+      "type": "color",
+      "id": "embed_button_bg",
+      "label": "Button background",
+      "default": "#086683"
+    },
+    {
+      "type": "color",
+      "id": "embed_button_text",
+      "label": "Button text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "embed_radius",
+      "label": "Inner panel corner radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 20,
+      "info": "Rounds the app's own result panel inside the frame."
+    },
+    {
+      "type": "textarea",
+      "id": "embed_css",
+      "label": "Custom CSS for the embed",
+      "info": "Applied inside the embedded page. Use it for anything the two colours above don't cover."
+    },
+    {
+      "type": "header",
+      "content": "Section"
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "Width",
+      "options": [
+        {
+          "value": "narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "wide",
+          "label": "Wide"
+        }
+      ],
+      "default": "wide"
+    },
+    {
+      "type": "select",
+      "id": "background_style",
+      "label": "Background",
+      "options": [
+        {
+          "value": "paper",
+          "label": "Paper"
+        },
+        {
+          "value": "sand",
+          "label": "Sand"
+        },
+        {
+          "value": "shell",
+          "label": "Shell"
+        }
+      ],
+      "default": "paper"
+    },
+    {
+      "type": "text",
+      "id": "anchor",
+      "label": "Anchor ID"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    }
+  ],
+  "presets": [
+    {
+      "name": "DriveMist app embed"
+    }
+  ]
+}
+{% endschema %}

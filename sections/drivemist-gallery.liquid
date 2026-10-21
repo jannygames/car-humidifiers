@@ -1,0 +1,422 @@
+{%- liquid
+  assign s = section.settings
+-%}
+
+<section
+  class="co co-section {% render 'drivemist-surface', style: s.background_style %}"
+  style="{% render 'drivemist-pad', padding_top: s.padding_top, padding_bottom: s.padding_bottom %}"
+
+  {% if s.anchor != blank %}id="{{ s.anchor }}"{% endif %}
+>
+  <div class="co-container">
+    {% render 'drivemist-section-header',
+      eyebrow: s.eyebrow,
+      heading: s.heading,
+      intro: s.intro,
+      align: 'center'
+    %}
+
+    {%- liquid
+      case s.grid_width
+        when 'narrow'
+          assign co_grid_width = 'mx-auto max-w-4xl'
+        when 'wide'
+          assign co_grid_width = 'mx-auto max-w-6xl'
+        else
+          assign co_grid_width = ''
+      endcase
+    -%}
+    {%- comment -%}
+    <div class="mt-12 co-grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4 lg:gap-5 {{ co_grid_width }}">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign span = ''
+          if block.settings.size == 'wide'
+            assign span = 'lg:col-span-2'
+          endif
+          assign ratio = '1 / 1'
+          if block.settings.size == 'tall'
+            assign ratio = '3 / 4'
+          endif
+          if block.settings.size == 'wide'
+            assign ratio = '3 / 2'
+          endif
+        -%}
+        <figure
+          class="co-reveal group relative {{ span }}"
+          style="transition-delay: {{ forloop.index0 | times: 60 }}ms"
+          {{ block.shopify_attributes }}
+        >
+          {%- if block.settings.link != blank -%}<a href="{{ block.settings.link }}" class="block">{%- endif -%}
+          {% render 'drivemist-image',
+            image: block.settings.image,
+            ratio: ratio,
+            class: 'co-media rounded-tile',
+            sizes: '(min-width: 1024px) 300px, 48vw',
+            alt: block.settings.caption,
+            placeholder: 'lifestyle-1'
+          %}
+          {%- if block.settings.caption != blank -%}
+            <figcaption class="absolute inset-x-3 bottom-3 rounded-full bg-paper/92 px-3.5 py-2 text-[0.75rem] leading-tight text-ink opacity-0 backdrop-blur transition-opacity duration-300 group-hover:opacity-100">
+              {{ block.settings.caption }}
+            </figcaption>
+          {%- endif -%}
+          {%- if block.settings.link != blank -%}</a>{%- endif -%}
+        </figure>
+      {%- endfor -%}
+    </div>
+    {%- endcomment -%}
+     
+    {%- if s.cta_heading != blank or s.cta_button_label != blank -%}
+      {%- comment -%}
+        The whole point of a UGC grid is getting more of it, so the ask is a panel with a
+        real button rather than a caption nobody reads.
+      {%- endcomment -%}
+      <div class="co-reveal mx-auto mt-12 co-flex max-w-3xl flex-col items-center gap-4 rounded-card bg-accent-wash px-6 py-10 text-center text-ink sm:px-10">
+        {%- comment -%}
+          Social marks are filled brand glyphs and live in their own snippet; everything
+          else comes from the stroke-based set. Route by name so both stay usable here.
+        {%- endcomment -%}
+        {%- assign co_social_icons = 'instagram,facebook,tiktok,youtube,pinterest,x' | split: ',' -%}
+        <span class="co-flex h-12 w-12 items-center justify-center rounded-full bg-paper text-accent shadow-lift">
+          {%- if co_social_icons contains s.cta_icon -%}
+            {% render 'drivemist-social-icon', network: s.cta_icon, class: 'w-5 h-5' %}
+          {%- else -%}
+            {% render 'drivemist-icon', icon: s.cta_icon, class: 'w-5 h-5' %}
+          {%- endif -%}
+        </span>
+        {%- if s.cta_heading != blank -%}
+          <h3 class="co-display text-[clamp(1.35rem,1rem+1.4vw,1.9rem)]">{{ s.cta_heading }}</h3>
+        {%- endif -%}
+        {%- if s.cta_text != blank -%}
+          <p class="max-w-xl text-[0.9375rem] leading-relaxed text-muted">{{ s.cta_text }}</p>
+        {%- endif -%}
+        {%- if s.cta_button_label != blank -%}
+          <a href="{{ s.cta_button_link | default: '#' }}" class="co-btn co-btn-brand mt-2" target="_blank" rel="noopener">
+            {{ s.cta_button_label }}
+            {% render 'drivemist-icon', icon: 'arrow-right', class: 'w-4 h-4' %}
+          </a>
+        {%- endif -%}
+        {%- if s.cta_note != blank -%}
+          <p class="text-[0.75rem] leading-relaxed text-muted">{{ s.cta_note }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "DriveMist gallery",
+  "tag": "section",
+  "class": "drivemist-section",
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "The DriveMist garage"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Setups from dashboards, desks and gaming rooms."
+    },
+    {
+      "type": "richtext",
+      "id": "intro",
+      "label": "Text"
+    },
+    {
+      "type": "select",
+      "id": "grid_width",
+      "label": "Gallery width",
+      "options": [
+        {
+          "value": "full",
+          "label": "Full width"
+        },
+        {
+          "value": "wide",
+          "label": "Wide"
+        },
+        {
+          "value": "narrow",
+          "label": "Narrow"
+        }
+      ],
+      "default": "wide",
+      "info": "Narrower means smaller tiles. The 4-column composition stays the same either way."
+    },
+    {
+      "type": "header",
+      "content": "Get featured call to action"
+    },
+    {
+      "type": "text",
+      "id": "cta_heading",
+      "label": "Heading",
+      "default": "Share your DriveMist creation"
+    },
+    {
+      "type": "textarea",
+      "id": "cta_text",
+      "label": "Text",
+      "default": "Post your DriveMist setup and tag us. We feature our favourites every week and sometimes surprise the owner with a new model."
+    },
+    {
+      "type": "text",
+      "id": "cta_button_label",
+      "label": "Button label",
+      "default": "Visit us on Instagram"
+    },
+    {
+      "type": "url",
+      "id": "cta_button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "text",
+      "id": "cta_note",
+      "label": "Small print",
+      "default": "Make sure your account is public so we can see and celebrate your post."
+    },
+    {
+      "type": "select",
+      "id": "cta_icon",
+      "label": "Icon",
+      "options": [
+        {
+          "value": "instagram",
+          "label": "Instagram"
+        },
+        {
+          "value": "facebook",
+          "label": "Facebook"
+        },
+        {
+          "value": "tiktok",
+          "label": "TikTok"
+        },
+        {
+          "value": "youtube",
+          "label": "YouTube"
+        },
+        {
+          "value": "heart",
+          "label": "Heart"
+        },
+        {
+          "value": "sparkle",
+          "label": "Sparkle"
+        },
+        {
+          "value": "gift",
+          "label": "Gift"
+        },
+        {
+          "value": "car",
+          "label": "Car"
+        },
+        {
+          "value": "mist",
+          "label": "Mist"
+        },
+        {
+          "value": "wind",
+          "label": "Airflow"
+        },
+        {
+          "value": "usb",
+          "label": "USB power"
+        },
+        {
+          "value": "gauge",
+          "label": "Gauge"
+        },
+        {
+          "value": "bolt",
+          "label": "Power"
+        },
+        {
+          "value": "bulb",
+          "label": "Lights"
+        },
+        {
+          "value": "quiet",
+          "label": "Quiet"
+        },
+        {
+          "value": "steering",
+          "label": "Steering wheel"
+        },
+        {
+          "value": "key",
+          "label": "Key"
+        },
+        {
+          "value": "timer",
+          "label": "Timer"
+        },
+        {
+          "value": "trophy",
+          "label": "Trophy"
+        }
+      ],
+      "default": "instagram"
+    },
+    {
+      "type": "header",
+      "content": "Section"
+    },
+    {
+      "type": "text",
+      "id": "anchor",
+      "label": "Anchor ID",
+      "info": "Used for on-page links, e.g. #how-it-works."
+    },
+    {
+      "type": "select",
+      "id": "background_style",
+      "label": "Background",
+      "options": [
+        {
+          "value": "paper",
+          "label": "Paper"
+        },
+        {
+          "value": "sand",
+          "label": "Sand"
+        },
+        {
+          "value": "shell",
+          "label": "Shell"
+        },
+        {
+          "value": "deep",
+          "label": "Deep purple"
+        },
+        {
+          "value": "ink",
+          "label": "Ink"
+        }
+      ],
+      "default": "paper"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 104
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 104
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "caption",
+          "label": "Caption"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "select",
+          "id": "size",
+          "label": "Size",
+          "options": [
+            {
+              "value": "square",
+              "label": "Square"
+            },
+            {
+              "value": "tall",
+              "label": "Tall"
+            },
+            {
+              "value": "wide",
+              "label": "Wide"
+            }
+          ],
+          "default": "square"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "DriveMist gallery",
+      "blocks": [
+        {
+          "type": "image",
+          "settings": {
+            "caption": "Cup-holder ready",
+            "size": "square"
+          }
+        },
+        {
+          "type": "image",
+          "settings": {
+            "caption": "Bringing the rainforest scene to life",
+            "size": "wide"
+          }
+        },
+        {
+          "type": "image",
+          "settings": {
+            "caption": "Exhaust mist at night",
+            "size": "square"
+          }
+        },
+        {
+          "type": "image",
+          "settings": {
+            "caption": "Desk setup",
+            "size": "square"
+          }
+        },
+        {
+          "type": "image",
+          "settings": {
+            "caption": "Bedside night light",
+            "size": "square"
+          }
+        },
+        {
+          "type": "image",
+          "settings": {
+            "caption": "Gift-ready box",
+            "size": "wide"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

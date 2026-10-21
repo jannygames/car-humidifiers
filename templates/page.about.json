@@ -1,0 +1,228 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "header": {
+      "type": "drivemist-page-header",
+      "settings": {
+        "eyebrow": "The DriveMist story",
+        "heading": "Built by car people, for car people",
+        "intro": "<p>DriveMist started with a simple question on a long winter drive: why does every car air freshener look the same? We set out to make one that car lovers would actually want on their dashboard.</p>",
+        "show_breadcrumbs": true,
+        "alignment": "left",
+        "background_style": "sand",
+        "padding_top": 88,
+        "padding_bottom": 88
+      }
+    },
+    "story": {
+      "type": "drivemist-feature",
+      "settings": {
+        "eyebrow": "Why we exist",
+        "heading": "Air freshener meets collector model",
+        "text": "<p>A DriveMist car humidifier is part display model, part ultrasonic humidifier, part aroma diffuser. It adds moisture to dry cabin air, carries your favourite scent and puts on a mist-and-light show that gets a reaction from every passenger.</p>",
+        "image_position": "right",
+        "image_alt": "A row of DriveMist car model humidifiers lined up on a workbench",
+        "image_ratio": "5 / 4",
+        "background_style": "paper",
+        "padding_top": 96,
+        "padding_bottom": 64
+      },
+      "blocks": {
+        "p1": {
+          "type": "point",
+          "settings": {
+            "title": "Styled after icons",
+            "text": "Every model is inspired by a car that made us stop and stare – from JDM legends to Italian hypercars.",
+            "icon": "car"
+          }
+        },
+        "p2": {
+          "type": "point",
+          "settings": {
+            "title": "Tested on real commutes",
+            "text": "Before a model joins the line-up we live with it in our own cars, desks and bedrooms.",
+            "icon": "steering"
+          }
+        },
+        "p3": {
+          "type": "point",
+          "settings": {
+            "title": "Made to be used daily",
+            "text": "Refillable, USB powered and easy to clean, so it never ends up forgotten in a drawer.",
+            "icon": "usb"
+          }
+        }
+      },
+      "block_order": [
+        "p1",
+        "p2",
+        "p3"
+      ]
+    },
+    "values": {
+      "type": "drivemist-value-props",
+      "settings": {
+        "eyebrow": "What we stand for",
+        "heading": "Every model, carefully considered",
+        "alignment": "left",
+        "background_style": "paper",
+        "padding_top": 64,
+        "padding_bottom": 96
+      },
+      "blocks": {
+        "p1": {
+          "type": "prop",
+          "settings": {
+            "title": "Detail that matters",
+            "text": "Sculpted body lines, wheels and lights on every model.",
+            "icon": "car"
+          }
+        },
+        "p2": {
+          "type": "prop",
+          "settings": {
+            "title": "Ready in a minute",
+            "text": "USB cable and quick-start guide in every box.",
+            "icon": "bolt"
+          }
+        },
+        "p3": {
+          "type": "prop",
+          "settings": {
+            "title": "Real people behind the inbox",
+            "text": "Questions about a model or an order? We reply within 24 hours.",
+            "icon": "chat"
+          }
+        },
+        "p4": {
+          "type": "prop",
+          "settings": {
+            "title": "30-day returns",
+            "text": "Not quite right? Send it back within 30 days.",
+            "icon": "shield"
+          }
+        }
+      },
+      "block_order": [
+        "p1",
+        "p2",
+        "p3",
+        "p4"
+      ]
+    },
+    "gallery": {
+      "type": "drivemist-gallery",
+      "settings": {
+        "eyebrow": "The DriveMist garage",
+        "heading": "Setups from our community",
+        "background_style": "sand",
+        "padding_top": 96,
+        "padding_bottom": 96,
+        "cta_heading": "Show us your setup",
+        "cta_text": "Post your DriveMist on Instagram or TikTok and tag us. We feature our favourite setups every week, and sometimes surprise the owner with a new model.",
+        "cta_button_label": "Follow @drivemist",
+        "cta_button_link": "https://www.instagram.com/drivemist/",
+        "cta_note": "Make sure your account is public so we can see your post.",
+        "cta_icon": "instagram",
+        "grid_width": "wide"
+      },
+      "blocks": {
+        "i1": {
+          "type": "image",
+          "settings": {
+            "caption": "JDM legend on the dash",
+            "size": "square"
+          }
+        },
+        "i2": {
+          "type": "image",
+          "settings": {
+            "caption": "Late-night mist",
+            "size": "wide"
+          }
+        },
+        "i3": {
+          "type": "image",
+          "settings": {
+            "caption": "The office upgrade",
+            "size": "square"
+          }
+        },
+        "i4": {
+          "type": "image",
+          "settings": {
+            "caption": "Bedside night light",
+            "size": "square"
+          }
+        }
+      },
+      "block_order": [
+        "i1",
+        "i2",
+        "i3",
+        "i4"
+      ]
+    },
+    "guarantee": {
+      "type": "drivemist-guarantee",
+      "settings": {
+        "badge": true,
+        "icon": "heart",
+        "eyebrow": "Drive with confidence",
+        "heading": "Find the model that matches your garage",
+        "text": "<p>Try it for 30 days. If it isn’t right, get in touch and we’ll walk you through a return.</p>",
+        "button_label": "Shop car humidifiers",
+        "button_link": "shopify://collections/all",
+        "background_style": "deep",
+        "padding_top": 104,
+        "padding_bottom": 104
+      },
+      "blocks": {
+        "p1": {
+          "type": "pillar",
+          "settings": {
+            "title": "30-day returns",
+            "text": "Simple help if your model isn’t right for you.",
+            "icon": "refresh"
+          }
+        },
+        "p2": {
+          "type": "pillar",
+          "settings": {
+            "title": "Helpful customer care",
+            "text": "Real people answering your questions.",
+            "icon": "chat"
+          }
+        },
+        "p3": {
+          "type": "pillar",
+          "settings": {
+            "title": "Tracked delivery",
+            "text": "Follow your parcel from our warehouse to your door.",
+            "icon": "truck"
+          }
+        }
+      },
+      "block_order": [
+        "p1",
+        "p2",
+        "p3"
+      ]
+    }
+  },
+  "order": [
+    "header",
+    "story",
+    "values",
+    "gallery",
+    "guarantee"
+  ]
+}

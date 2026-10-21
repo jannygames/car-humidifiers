@@ -1,0 +1,94 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "embed": {
+      "type": "drivemist-app-embed",
+      "settings": {
+        "eyebrow": "Track your DriveMist order",
+        "heading": "Track your parcel",
+        "intro": "<p>Enter your order number and the email address you used at checkout to see where your car humidifier is right now.</p>",
+        "note": "No updates yet? It can take up to 24 hours after dispatch for the carrier’s first scan to appear. Need help? Get in touch and include your order number.",
+        "embed_url": "/apps/track123",
+        "embed_title": "Track your DriveMist parcel",
+        "min_height": 640,
+        "width": "wide",
+        "background_style": "paper",
+        "anchor": "track",
+        "padding_top": 72,
+        "padding_bottom": 88,
+        "embed_button_bg": "#086683",
+        "embed_button_text": "#ffffff",
+        "embed_radius": 20,
+        "embed_css": "",
+        "frame_radius": 20,
+        "frame_border": true,
+        "blend_background": true
+      }
+    },
+    "faq": {
+      "type": "drivemist-faq",
+      "settings": {
+        "anchor": "",
+        "eyebrow": "Delivery help",
+        "heading": "Helpful answers while you wait",
+        "intro": "",
+        "support_label": "Contact our team",
+        "support_note": "Friendly help with tracking and delivery",
+        "support_link": "/pages/contact",
+        "open_first": false,
+        "enable_schema": true,
+        "background_style": "sand",
+        "padding_top": 88,
+        "padding_bottom": 96
+      },
+      "blocks": {
+        "q1": {
+          "type": "question",
+          "settings": {
+            "question": "When will tracking information appear?",
+            "answer": "<p>We email you a tracking link as soon as your parcel ships. The first tracking update usually appears within 24 hours.</p>"
+          }
+        },
+        "q2": {
+          "type": "question",
+          "settings": {
+            "question": "How long does delivery take?",
+            "answer": "<p>Every order ships with free tracked delivery. Most parcels arrive within 7–14 working days, and you will see the estimated delivery date before you pay.</p><p><a href=\"/pages/track-your-order\">Track your order</a></p>"
+          }
+        },
+        "q3": {
+          "type": "question",
+          "settings": {
+            "question": "Why isn’t my tracking updating?",
+            "answer": "<p>Parcels sometimes travel a few days between scans, especially when crossing borders. If the status hasn’t changed for longer than the estimated delivery time, get in touch with your order number and we’ll chase it with the carrier.</p>"
+          }
+        },
+        "q4": {
+          "type": "question",
+          "settings": {
+            "question": "Can I change my delivery address?",
+            "answer": "<p>Get in touch as soon as possible and include your order number. We will happily update the address before dispatch; once the parcel is with the courier, changes may no longer be possible.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3",
+        "q4"
+      ]
+    }
+  },
+  "order": [
+    "embed",
+    "faq"
+  ]
+}

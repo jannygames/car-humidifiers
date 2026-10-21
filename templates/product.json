@@ -1,0 +1,746 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "drivemist-product",
+      "blocks": {
+        "judge_me_reviews_preview_badge_bUzFTx": {
+          "type": "shopify://apps/judge-me-reviews/blocks/preview_badge/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {}
+        },
+        "variants_9cHiLK": {
+          "type": "variants",
+          "settings": {
+            "variant_style": "buttons",
+            "show_swatches": true,
+            "option_label_text_color": "",
+            "variant_style_class": "default",
+            "custom_variant_background": "#f5f7fa",
+            "custom_variant_text": "#12151b",
+            "custom_variant_border": "#dbe2ea",
+            "selected_variant_style_class": "default",
+            "custom_selected_variant_background": "#12151b",
+            "custom_selected_variant_text": "#f5f7fa",
+            "custom_selected_variant_border": "#12151b",
+            "alignment": "left",
+            "padding-block-start": 0,
+            "padding-block-end": 8,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          }
+        },
+        "b1": {
+          "type": "bullet",
+          "settings": {
+            "text": "Real exhaust mist: an ultrasonic atomiser sends cool mist rolling out of the exhausts.",
+            "icon": "mist"
+          }
+        },
+        "b2": {
+          "type": "bullet",
+          "settings": {
+            "text": "Glowing LED headlights and tail-lights double as a soft ambient night light.",
+            "icon": "bulb"
+          }
+        },
+        "b3": {
+          "type": "bullet",
+          "settings": {
+            "text": "Add 2–3 drops of essential oil to use it as an aroma diffuser and car air freshener.",
+            "icon": "wind"
+          }
+        },
+        "b4": {
+          "type": "bullet",
+          "settings": {
+            "text": "USB powered with auto shut-off – fits most cup holders, dashboards and desks.",
+            "icon": "usb"
+          }
+        },
+        "t1": {
+          "type": "trust",
+          "settings": {
+            "text": "Free tracked shipping",
+            "icon": "truck"
+          }
+        },
+        "t2": {
+          "type": "trust",
+          "settings": {
+            "text": "30-day returns",
+            "icon": "refresh"
+          }
+        },
+        "t3": {
+          "type": "trust",
+          "settings": {
+            "text": "Secure checkout",
+            "icon": "lock"
+          }
+        },
+        "t4": {
+          "type": "trust",
+          "settings": {
+            "text": "Questions? info@drivemist.com",
+            "icon": "chat"
+          }
+        },
+        "a1": {
+          "type": "accordion",
+          "settings": {
+            "title": "What’s in the box?",
+            "content": "<p>Your car model humidifier, a USB charging cable and an illustrated quick-start guide, packed in a protective gift-ready box.</p>",
+            "icon": "box"
+          }
+        },
+        "a2": {
+          "type": "accordion",
+          "settings": {
+            "title": "Shipping & delivery",
+            "content": "<p>Every order ships with free tracked delivery. Most parcels arrive within 7–14 working days, and you will see the estimated delivery date before you pay.</p><p><a href=\"/pages/track-your-order\">Track your order</a></p>",
+            "icon": "truck"
+          }
+        },
+        "a3": {
+          "type": "accordion",
+          "settings": {
+            "title": "30-day returns",
+            "content": "<p>Changed your mind? You can return an unused car humidifier in its original packaging within 30 days of delivery.</p><p>Email us your order number and we will send you the return address and next steps. As soon as the parcel is back with us and checked, we refund what you paid for the item.</p><p><a href=\"/pages/contact\">Start a return</a></p>",
+            "icon": "refresh"
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_preview_badge_bUzFTx",
+        "variants_9cHiLK",
+        "b1",
+        "b2",
+        "b3",
+        "b4",
+        "t1",
+        "t2",
+        "t3",
+        "t4",
+        "a1",
+        "a2",
+        "a3"
+      ],
+      "settings": {
+        "show_breadcrumbs": true,
+        "metafield_namespace": "custom",
+        "default_highlight_icon": "check",
+        "badge_text": "",
+        "show_save_badge": true,
+        "image_ratio": "1 / 1",
+        "image_max_height": 62,
+        "show_rating": true,
+        "rating_text": "",
+        "rating_link": "#drivemist-reviews",
+        "price_note": "",
+        "atc_label": "Add to cart",
+        "show_quantity": false,
+        "show_variant_picker": true,
+        "quantity_label": "Quantity",
+        "show_dynamic_checkout": false,
+        "show_sticky_bar": true,
+        "show_delivery": true,
+        "shipping_text": "Free tracked shipping",
+        "delivery_label": "Estimated delivery",
+        "delivery_min_days": 7,
+        "delivery_max_days": 14,
+        "stock_text": "In stock – ships within 1–2 working days",
+        "show_cert": false,
+        "cert_placement": "top",
+        "cert_number": "",
+        "cert_title": "CE · FCC · RoHS",
+        "cert_text": "Low-voltage USB device tested to CE, FCC and RoHS requirements.",
+        "cert_link": "",
+        "cert_link_label": "View certificate",
+        "show_description": true,
+        "open_description": true,
+        "description_label": "Product details",
+        "show_payment_icons": true,
+        "payment_note": "Secure checkout",
+        "padding_top": 40,
+        "padding_bottom": 88
+      }
+    },
+    "demo": {
+      "type": "drivemist-product-demo",
+      "blocks": {
+        "c1": {
+          "type": "clip",
+          "settings": {
+            "heading": "Out of the box",
+            "text": "Unbox, fill the tank and plug in. Ready in under a minute."
+          }
+        },
+        "c2": {
+          "type": "clip",
+          "settings": {
+            "heading": "Lights on",
+            "text": "Headlights and tail-lights glow the moment you press the button."
+          }
+        },
+        "c3": {
+          "type": "clip",
+          "settings": {
+            "heading": "Exhaust mist",
+            "text": "Cool mist rolls out of the exhausts like an engine on a cold night."
+          }
+        },
+        "c4": {
+          "type": "clip",
+          "settings": {
+            "heading": "Night mode",
+            "text": "On the dash or by the bed, it doubles as a calming night light."
+          }
+        }
+      },
+      "block_order": [
+        "c1",
+        "c2",
+        "c3",
+        "c4"
+      ],
+      "settings": {
+        "eyebrow": "See it in action",
+        "heading": "The mist-and-light show, from every angle",
+        "intro": "<p>Short clips from real dashboards, desks and bedside tables.</p>",
+        "note": "",
+        "metafield_namespace": "",
+        "metafield_key": "",
+        "max_items": 4,
+        "media_ratio": "9 / 16",
+        "background_style": "sand",
+        "anchor": "see-it",
+        "padding_top": 88,
+        "padding_bottom": 88
+      }
+    },
+    "ticker": {
+      "type": "drivemist-marquee",
+      "blocks": {
+        "i1": {
+          "type": "item",
+          "settings": {
+            "text": "Exhaust mist effect"
+          }
+        },
+        "i2": {
+          "type": "item",
+          "settings": {
+            "text": "LED headlights"
+          }
+        },
+        "i3": {
+          "type": "item",
+          "settings": {
+            "text": "USB powered"
+          }
+        },
+        "i4": {
+          "type": "item",
+          "settings": {
+            "text": "Auto shut-off"
+          }
+        },
+        "i5": {
+          "type": "item",
+          "settings": {
+            "text": "Free tracked shipping"
+          }
+        },
+        "i6": {
+          "type": "item",
+          "settings": {
+            "text": "30-day returns"
+          }
+        }
+      },
+      "block_order": [
+        "i1",
+        "i2",
+        "i3",
+        "i4",
+        "i5",
+        "i6"
+      ],
+      "settings": {
+        "background_style": "deep",
+        "speed": 45
+      }
+    },
+    "steps": {
+      "type": "drivemist-steps",
+      "blocks": {
+        "s1": {
+          "type": "step",
+          "settings": {
+            "title": "Fill the tank",
+            "text": "<p>Clean water plus a few drops of fragrance oil if you like.</p>",
+            "icon": "droplet"
+          }
+        },
+        "s2": {
+          "type": "step",
+          "settings": {
+            "title": "Plug in via USB",
+            "text": "<p>Car USB port, laptop, power bank or phone charger.</p>",
+            "icon": "usb"
+          }
+        },
+        "s3": {
+          "type": "step",
+          "settings": {
+            "title": "Press start",
+            "text": "<p>Mist and lights on. Auto shut-off when the tank is empty.</p>",
+            "icon": "mist"
+          }
+        }
+      },
+      "block_order": [
+        "s1",
+        "s2",
+        "s3"
+      ],
+      "disabled": true,
+      "settings": {
+        "eyebrow": "How it works",
+        "heading": "Up and misting in 60 seconds",
+        "intro": "<p>No tools, no batteries. The USB cable is included.</p>",
+        "alignment": "center",
+        "style": "image",
+        "image_width": 360,
+        "image_ratio": "4 / 3",
+        "show_connector": true,
+        "button_label": "",
+        "button_link": "",
+        "anchor": "how-it-works",
+        "background_style": "paper",
+        "padding_top": 104,
+        "padding_bottom": 88
+      }
+    },
+    "feature": {
+      "type": "drivemist-feature",
+      "blocks": {
+        "p1": {
+          "type": "point",
+          "settings": {
+            "title": "Whisper-quiet ultrasonic mist",
+            "text": "Quiet enough for a bedroom or office, fine enough to feel cool rather than wet.",
+            "icon": "quiet"
+          }
+        },
+        "p2": {
+          "type": "point",
+          "settings": {
+            "title": "Detailed collector styling",
+            "text": "Sculpted body lines, wheels and lights inspired by the real car.",
+            "icon": "car"
+          }
+        },
+        "p3": {
+          "type": "point",
+          "settings": {
+            "title": "Auto shut-off",
+            "text": "Switches itself off when the water runs out, so it never runs dry.",
+            "icon": "timer"
+          }
+        }
+      },
+      "block_order": [
+        "p1",
+        "p2",
+        "p3"
+      ],
+      "settings": {
+        "eyebrow": "Built to be used",
+        "heading": "Looks like a model. Works like a humidifier.",
+        "text": "<p>Every DriveMist humidifier combines a detailed car model shell with a proper ultrasonic mist module, LED lighting and a refillable water tank, so it earns its place on your dashboard every single day.</p>",
+        "image_position": "left",
+        "image_alt": "Close-up of the detailed wheels and lights on a DriveMist car humidifier",
+        "image_ratio": "5 / 4",
+        "button_label": "",
+        "button_link": "",
+        "button_style": "primary",
+        "anchor": "",
+        "background_style": "paper",
+        "padding_top": 96,
+        "padding_bottom": 96
+      }
+    },
+    "compare": {
+      "type": "drivemist-compare",
+      "blocks": {
+        "r1": {
+          "type": "row",
+          "settings": {
+            "label": "Adds moisture to dry air",
+            "note": "Helps against dry eyes and throat from heating and A/C",
+            "us": true,
+            "them": false
+          }
+        },
+        "r2": {
+          "type": "row",
+          "settings": {
+            "label": "Refillable with any fragrance",
+            "note": "Swap essential oils whenever you like",
+            "us": true,
+            "them": false
+          }
+        },
+        "r3": {
+          "type": "row",
+          "settings": {
+            "label": "Collector-style car model",
+            "note": "A display piece, not a cardboard tree",
+            "us": true,
+            "them": false
+          }
+        },
+        "r4": {
+          "type": "row",
+          "settings": {
+            "label": "Light and exhaust-mist show",
+            "note": "Glowing LEDs and real mist effect",
+            "us": true,
+            "them": false
+          }
+        },
+        "r5": {
+          "type": "row",
+          "settings": {
+            "label": "Auto shut-off",
+            "note": "Turns off when the tank is empty",
+            "us": true,
+            "them": false
+          }
+        },
+        "r6": {
+          "type": "row",
+          "settings": {
+            "label": "Freshens the air",
+            "note": "Both do – only one looks this good",
+            "us": true,
+            "them": true
+          }
+        }
+      },
+      "block_order": [
+        "r1",
+        "r2",
+        "r3",
+        "r4",
+        "r5",
+        "r6"
+      ],
+      "settings": {
+        "eyebrow": "Why upgrade",
+        "heading": "Why a car humidifier beats an air freshener",
+        "intro": "<p>More moisture, better scent, and a supercar on your dashboard.</p>",
+        "column_us": "DriveMist",
+        "show_logo_us": true,
+        "logo_height": 26,
+        "column_them": "Air freshener",
+        "highlight_color": "#137a54",
+        "button_label": "Add to cart",
+        "button_link": "#",
+        "button_note": "Free tracked shipping · 30-day returns",
+        "anchor": "",
+        "background_style": "shell",
+        "padding_top": 96,
+        "padding_bottom": 96
+      }
+    },
+    "gallery": {
+      "type": "drivemist-gallery",
+      "blocks": {
+        "i1": {
+          "type": "image",
+          "settings": {
+            "caption": "Cup-holder ready",
+            "link": "",
+            "size": "square"
+          }
+        },
+        "i2": {
+          "type": "image",
+          "settings": {
+            "caption": "Exhaust mist at night",
+            "link": "",
+            "size": "wide"
+          }
+        },
+        "i3": {
+          "type": "image",
+          "settings": {
+            "caption": "Desk setup",
+            "link": "",
+            "size": "square"
+          }
+        },
+        "i4": {
+          "type": "image",
+          "settings": {
+            "caption": "Bedside night light",
+            "link": "",
+            "size": "square"
+          }
+        }
+      },
+      "block_order": [
+        "i1",
+        "i2",
+        "i3",
+        "i4"
+      ],
+      "disabled": true,
+      "settings": {
+        "eyebrow": "#DriveMist on the road",
+        "heading": "Where our customers park theirs",
+        "intro": "",
+        "grid_width": "wide",
+        "cta_heading": "",
+        "cta_text": "",
+        "cta_button_label": "",
+        "cta_button_link": "",
+        "cta_note": "",
+        "cta_icon": "instagram",
+        "anchor": "",
+        "background_style": "paper",
+        "padding_top": 96,
+        "padding_bottom": 96
+      }
+    },
+    "reviews": {
+      "type": "drivemist-reviews",
+      "blocks": {
+        "judge_me_reviews_review_widget_mBxpdy": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "review_data": "sample_data",
+            "max_width": 1200,
+            "show_shop_reviews": false,
+            "empty_state": "empty_widget"
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_review_widget_mBxpdy"
+      ],
+      "settings": {
+        "eyebrow": "Reviews",
+        "heading": "What drivers say about DriveMist",
+        "show_summary": false,
+        "summary_score": "",
+        "summary_text": "",
+        "button_label": "",
+        "button_link": "",
+        "anchor": "drivemist-reviews",
+        "background_style": "sand",
+        "padding_top": 96,
+        "padding_bottom": 96
+      }
+    },
+    "bundle": {
+      "type": "drivemist-bundle",
+      "blocks": {
+        "p1": {
+          "type": "product",
+          "settings": {
+            "product": "nissan-gtr-car-humidifier",
+            "title_override": "Nissan GT-R Car Humidifier",
+            "price_placeholder": "€49"
+          }
+        },
+        "p2": {
+          "type": "product",
+          "settings": {
+            "product": "bugatti-chiron-car-humidifier",
+            "title_override": "Bugatti Chiron Car Humidifier",
+            "price_placeholder": "€49"
+          }
+        }
+      },
+      "block_order": [
+        "p1",
+        "p2"
+      ],
+      "settings": {
+        "eyebrow": "Garage Duo",
+        "bundle_product": "garage-duo-car-humidifier-set",
+        "heading": "Two models, better value",
+        "intro": "<p>One for the car, one for the desk – and save when you buy them together.</p>",
+        "total_label": "Better value together",
+        "total_placeholder": "€98",
+        "discount_fixed": 15,
+        "bundle_discount": 0,
+        "loading_label": "Adding…",
+        "added_label": "Added to cart",
+        "button_label": "Add the duo to cart",
+        "note": "Free tracked shipping · 30-day returns",
+        "anchor": "",
+        "background_style": "paper",
+        "padding_top": 96,
+        "padding_bottom": 96
+      }
+    },
+    "faq": {
+      "type": "drivemist-faq",
+      "blocks": {
+        "q1": {
+          "type": "question",
+          "settings": {
+            "question": "How does the car humidifier work?",
+            "answer": "<p>Open the water tank, fill it with clean tap water, add a few drops of car-safe diffuser oil if you like, and plug it into any USB port. Press the button once and cool mist rolls out of the exhausts while the headlights and tail-lights glow.</p>"
+          }
+        },
+        "q2": {
+          "type": "question",
+          "settings": {
+            "question": "How is it powered?",
+            "answer": "<p>Every DriveMist humidifier runs on 5 V USB power, so it works from the USB port in your car, a laptop, a power bank or a standard phone charger. The cable is included in the box.</p>"
+          }
+        },
+        "q3": {
+          "type": "question",
+          "settings": {
+            "question": "Can I add essential oils?",
+            "answer": "<p>Yes. Add 2–3 drops of water-soluble essential oil or car diffuser fragrance to the water tank and it doubles as an aroma diffuser and car air freshener. Avoid thick or oil-only perfumes, which can clog the atomiser.</p>"
+          }
+        },
+        "q4": {
+          "type": "question",
+          "settings": {
+            "question": "Is it safe to use in the car?",
+            "answer": "<p>Yes. It runs on low-voltage USB power and switches itself off automatically when the tank runs dry, so it never runs empty. Place it in a cup holder or on a flat, non-slip surface, never where it could block your view or an airbag, and refill it only while parked.</p>"
+          }
+        },
+        "q5": {
+          "type": "question",
+          "settings": {
+            "question": "How do I clean it?",
+            "answer": "<p>Empty the tank after use, wipe it dry and clean the atomiser once a week with a cotton bud and a little white vinegar. That keeps the mist strong and the water fresh.</p>"
+          }
+        },
+        "q6": {
+          "type": "question",
+          "settings": {
+            "question": "How long does delivery take?",
+            "answer": "<p>Every order ships with free tracked delivery. Most parcels arrive within 7–14 working days, and you will see the estimated delivery date before you pay.</p><p><a href=\"/pages/track-your-order\">Track your order</a></p>"
+          }
+        },
+        "q7": {
+          "type": "question",
+          "settings": {
+            "question": "What if it isn’t right for me?",
+            "answer": "<p>Changed your mind? You can return an unused car humidifier in its original packaging within 30 days of delivery.</p><p>Email us your order number and we will send you the return address and next steps. As soon as the parcel is back with us and checked, we refund what you paid for the item.</p><p><a href=\"/pages/contact\">Start a return</a></p>"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5",
+        "q6",
+        "q7"
+      ],
+      "settings": {
+        "eyebrow": "FAQ",
+        "heading": "Questions before you order?",
+        "intro": "<p>Can’t find your answer? Write to us – we’re happy to help.</p>",
+        "support_label": "Write to us",
+        "support_note": "info@drivemist.com – we usually reply within 24 hours.",
+        "support_link": "/pages/contact",
+        "open_first": true,
+        "enable_schema": true,
+        "anchor": "faq",
+        "background_style": "paper",
+        "padding_top": 96,
+        "padding_bottom": 96
+      }
+    },
+    "guarantee": {
+      "type": "drivemist-guarantee",
+      "blocks": {
+        "p1": {
+          "type": "pillar",
+          "settings": {
+            "title": "Free tracked shipping",
+            "text": "Every order ships tracked, free of charge.",
+            "icon": "truck"
+          }
+        },
+        "p2": {
+          "type": "pillar",
+          "settings": {
+            "title": "30-day returns",
+            "text": "Simple returns if it isn’t right for you.",
+            "icon": "refresh"
+          }
+        },
+        "p3": {
+          "type": "pillar",
+          "settings": {
+            "title": "Fast answers by email",
+            "text": "We reply within one working day.",
+            "icon": "chat"
+          }
+        },
+        "p4": {
+          "type": "pillar",
+          "settings": {
+            "title": "Secure checkout",
+            "text": "Pay safely by card or online banking.",
+            "icon": "lock"
+          }
+        }
+      },
+      "block_order": [
+        "p1",
+        "p2",
+        "p3",
+        "p4"
+      ],
+      "settings": {
+        "badge": false,
+        "icon": "shield",
+        "eyebrow": "Why drivers trust us",
+        "heading": "",
+        "text": "",
+        "button_label": "",
+        "button_link": "",
+        "anchor": "",
+        "background_style": "wash",
+        "padding_top": 88,
+        "padding_bottom": 88
+      }
+    }
+  },
+  "order": [
+    "main",
+    "demo",
+    "ticker",
+    "steps",
+    "feature",
+    "compare",
+    "gallery",
+    "reviews",
+    "bundle",
+    "faq",
+    "guarantee"
+  ]
+}

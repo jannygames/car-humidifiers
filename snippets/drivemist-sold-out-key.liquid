@@ -1,0 +1,16 @@
+{%- liquid
+  assign co_key = variant.metafields.custom.sold_out_note.value | default: variant.metafields.custom.sold_out_note
+  if co_key == blank
+    assign co_key = product.metafields.custom.sold_out_note.value | default: product.metafields.custom.sold_out_note
+  endif
+  if co_key == blank
+    if product.has_only_default_variant
+      assign co_key = 'blanket'
+    elsif variant.position == 1
+      assign co_key = 'small'
+    else
+      assign co_key = 'large'
+    endif
+  endif
+  echo co_key | strip | downcase
+-%}

@@ -1,0 +1,71 @@
+{%- doc -%}
+  Renders the social links row.
+
+  URLs come from the global DriveMist brand settings so they are set once and reused.
+  A section may pass its own URL for a network to override the global one.
+
+  @param {string} [class] - Classes for the wrapper
+  @param {string} [instagram] - Per-section override
+  @param {string} [facebook] - Per-section override
+  @param {string} [tiktok] - Per-section override
+  @param {string} [youtube] - Per-section override
+  @param {string} [pinterest] - Per-section override
+  @param {string} [x] - Per-section override
+{%- enddoc -%}
+
+{%- liquid
+  assign co_nets = 'instagram,facebook,tiktok,youtube,pinterest,x' | split: ','
+  assign co_labels = 'Instagram,Facebook,TikTok,YouTube,Pinterest,X' | split: ','
+  assign co_wrap = class | default: 'co-flex flex-wrap items-center gap-2.5'
+
+  comment
+    Liquid has no array append, so the resolved URLs are collected into a delimited
+    string and split back out. The marker cannot occur inside a URL.
+  endcomment
+  assign co_sep = '|~|'
+  assign co_resolved = ''
+
+  for co_net in co_nets
+    assign co_override = ''
+    case co_net
+      when 'instagram'
+        assign co_override = instagram
+      when 'facebook'
+        assign co_override = facebook
+      when 'tiktok'
+        assign co_override = tiktok
+      when 'youtube'
+        assign co_override = youtube
+      when 'pinterest'
+        assign co_override = pinterest
+      when 'x'
+        assign co_override = x
+    endcase
+
+    assign co_global_key = 'social_' | append: co_net | append: '_link'
+    assign co_url = co_override | default: settings[co_global_key]
+    assign co_resolved = co_resolved | append: co_url | append: co_sep
+  endfor
+
+  assign co_urls = co_resolved | split: co_sep
+  assign co_any = co_resolved | replace: co_sep, '' | strip
+-%}
+
+{%- if co_any != blank -%}
+  <div class="{{ co_wrap }}">
+    {%- for co_net in co_nets -%}
+      {%- assign co_url = co_urls[forloop.index0] -%}
+      {%- if co_url != blank -%}
+        <a
+          href="{{ co_url }}"
+          class="co-social"
+          target="_blank"
+          rel="noopener"
+          aria-label="{{ co_labels[forloop.index0] }}"
+        >
+          {% render 'drivemist-social-icon', network: co_net %}
+        </a>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+{%- endif -%}

@@ -1,0 +1,30 @@
+{%- liquid
+  if key == blank
+    capture key
+      render 'drivemist-sold-out-key', product: product, variant: variant
+    endcapture
+  endif
+  assign co_show = false
+  if settings.show_sold_out_note
+    if key == 'small' or key == 'large' or key == 'blanket'
+      assign co_show = true
+    endif
+  endif
+-%}
+
+<div
+  class="co-soldout-note {{ class }}"
+  data-co-soldout-note
+  data-co-soldout-key="{{ key }}"
+  role="status"
+  {% if hidden or co_show == false %}
+    hidden
+  {% endif %}
+>
+  {%- if co_show -%}
+    {%- assign co_title_key = 'drivemist.sold_out_note.' | append: key | append: '.title' -%}
+    {%- assign co_text_key = 'drivemist.sold_out_note.' | append: key | append: '.text_html' -%}
+    <p class="co-soldout-note__title">{{ co_title_key | t }}</p>
+    <div class="co-soldout-note__text">{{ co_text_key | t }}</div>
+  {%- endif -%}
+</div>
