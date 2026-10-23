@@ -13,7 +13,7 @@
     "brand_shell": "#151f36",
     "brand_deep": "#04070f",
     "brand_line": "#1e2a42",
-    "brand_muted": "#97a5ba",
+    "brand_muted": "#a8b5c7",
     "brand_accent": "#72d9f5",
     "brand_accent_soft": "#4cc9f0",
     "brand_accent_ink": "#03121b",
@@ -171,7 +171,7 @@
     "color_palette": {
       "background": "#070b16",
       "foreground": "#eaf1f8",
-      "color1": "#97a5ba",
+      "color1": "#a8b5c7",
       "color2": "#1e2a42"
     }
   },

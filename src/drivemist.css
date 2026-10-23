@@ -12,7 +12,7 @@
   --color-shell: var(--co-shell, #151f36);
   --color-deep: var(--co-deep, #04070f);
   --color-line: var(--co-line, #1e2a42);
-  --color-muted: var(--co-muted, #97a5ba);
+  --color-muted: var(--co-muted, #a8b5c7);
   --color-accent: var(--co-accent, #72d9f5);
   --color-accent-soft: var(--co-accent-soft, #4cc9f0);
   --color-accent-ink: var(--co-accent-ink, #03121b);
@@ -5025,6 +5025,10 @@ main > .shopify-section:last-child:not(:has(.co-section)) {
   }
 }
 
+:root {
+  --co-fog: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='400'%3E%3Cfilter id='f' x='0' y='0' width='100%' height='100%'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.004 0.011' numOctaves='4' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.66 0 0 0 0 0.82 0 0 0 0 0.95 0 0 0 2.6 -1.05'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23f)'/%3E%3C/svg%3E");
+}
+
 .co-sky {
   position: fixed;
   inset: 0;
@@ -5135,29 +5139,60 @@ main > .shopify-section:last-child:not(:has(.co-section)) {
 
 .co-sky__mist--a {
   left: -20vmax;
-  top: 18vh;
+  top: 10vh;
   width: 70vmax;
   height: 40vmax;
-  background: radial-gradient(closest-side, color-mix(in oklab, var(--color-accent-soft) 15%, transparent), transparent);
+  background: radial-gradient(closest-side, color-mix(in oklab, var(--color-accent-soft) 22%, transparent), transparent);
   animation: co-sky-mist-a 46s ease-in-out infinite alternate;
 }
 
 .co-sky__mist--b {
   right: -25vmax;
-  top: 48vh;
+  top: 40vh;
   width: 80vmax;
   height: 42vmax;
-  background: radial-gradient(closest-side, color-mix(in oklab, var(--co-marker-4, #a78bfa) 12%, transparent), transparent);
+  background: radial-gradient(closest-side, color-mix(in oklab, var(--co-marker-4, #a78bfa) 18%, transparent), transparent);
   animation: co-sky-mist-b 58s ease-in-out infinite alternate;
 }
 
-.co-sky__mist--c {
-  left: 10vw;
-  bottom: -18vmax;
-  width: 90vmax;
-  height: 36vmax;
-  background: radial-gradient(closest-side, color-mix(in oklab, var(--co-marker-5, #5eead4) 10%, transparent), transparent);
-  animation: co-sky-mist-c 64s ease-in-out infinite alternate;
+.co-sky__fog {
+  position: absolute;
+  left: 0;
+  width: calc(100% + 800px);
+  background: var(--co-fog) repeat 0 0 / 800px 400px;
+  will-change: transform;
+  -webkit-mask: linear-gradient(180deg, transparent, #000 30%, #000 70%, transparent);
+  mask: linear-gradient(180deg, transparent, #000 30%, #000 70%, transparent);
+}
+
+.co-sky__fog--low {
+  bottom: -4vh;
+  height: 46vh;
+  opacity: 0.32;
+  animation: co-fog-scroll 70s linear infinite;
+}
+
+.co-sky__fog--high {
+  top: 6vh;
+  height: 34vh;
+  opacity: 0.18;
+  transform: scaleY(-1);
+  animation: co-fog-scroll-rev 95s linear infinite;
+}
+
+@keyframes co-fog-scroll {
+  to {
+    transform: translate3d(-800px, 0, 0);
+  }
+}
+
+@keyframes co-fog-scroll-rev {
+  from {
+    transform: translate3d(-800px, 0, 0) scaleY(-1);
+  }
+  to {
+    transform: translate3d(0, 0, 0) scaleY(-1);
+  }
 }
 
 .co-sky__haze {
@@ -5228,12 +5263,6 @@ main > .shopify-section:last-child:not(:has(.co-section)) {
   }
 }
 
-@keyframes co-sky-mist-c {
-  to {
-    transform: translate3d(-18vw, -6vh, 0) scale(1.2);
-  }
-}
-
 @media (width < 48rem) {
   .co-sky__stars--near,
   .co-sky__shoot--late {
@@ -5259,6 +5288,7 @@ main > .shopify-section:last-child:not(:has(.co-section)) {
 
 .co.bg-paper {
   background-color: transparent;
+  background-image: radial-gradient(70% 62% at 50% 50%, color-mix(in oklab, var(--color-paper) 78%, transparent) 0%, color-mix(in oklab, var(--color-paper) 45%, transparent) 55%, transparent 100%);
 }
 
 .co.bg-sand {
@@ -5307,7 +5337,19 @@ main > .shopify-section:last-child:not(:has(.co-section)) {
 }
 
 .co .co-display {
-  text-shadow: 0 0 40px color-mix(in oklab, var(--color-accent-soft) 18%, transparent);
+  text-shadow: 0 2px 28px color-mix(in oklab, var(--color-deep) 85%, transparent),
+    0 0 46px color-mix(in oklab, var(--color-accent-soft) 14%, transparent);
+}
+
+.co.bg-paper :where(p, li, span, a, h3, h4),
+.co.bg-sand :where(p, li, span, a, h3, h4),
+.co.bg-shell :where(p, li, span, a, h3, h4) {
+  text-shadow: 0 1px 14px color-mix(in oklab, var(--color-deep) 80%, transparent);
+}
+
+.co.co :where(.rounded-card, .co-review-card, button, .co-btn) :where(p, li, span, a, h3, h4),
+.co.co :where(.co-btn, button) {
+  text-shadow: none;
 }
 
 .co-btn-primary,
@@ -5351,4 +5393,127 @@ main > .shopify-section:last-child:not(:has(.co-section)) {
 ::selection {
   background: color-mix(in oklab, var(--color-accent-soft) 40%, transparent);
   color: var(--color-ink);
+}
+
+.shopify-section > .co-section {
+  position: relative;
+  isolation: isolate;
+  overflow-x: clip;
+}
+
+.shopify-section > .co-section::before,
+.shopify-section > .co-section::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: -1;
+  width: min(52vw, 46rem);
+  background: var(--co-fog) repeat 0 0 / 800px 400px;
+  pointer-events: none;
+  opacity: 0;
+  will-change: transform, opacity;
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+
+.shopify-section > .co-section::before {
+  left: 0;
+  -webkit-mask-image: linear-gradient(90deg, #000 0%, rgb(0 0 0 / 0.55) 30%, transparent 85%),
+    linear-gradient(180deg, transparent 0%, #000 22%, #000 78%, transparent 100%);
+  mask-image: linear-gradient(90deg, #000 0%, rgb(0 0 0 / 0.55) 30%, transparent 85%),
+    linear-gradient(180deg, transparent 0%, #000 22%, #000 78%, transparent 100%);
+  transform-origin: left center;
+}
+
+.shopify-section > .co-section::after {
+  right: 0;
+  background-position: 380px 120px;
+  -webkit-mask-image: linear-gradient(270deg, #000 0%, rgb(0 0 0 / 0.55) 30%, transparent 85%),
+    linear-gradient(180deg, transparent 0%, #000 22%, #000 78%, transparent 100%);
+  mask-image: linear-gradient(270deg, #000 0%, rgb(0 0 0 / 0.55) 30%, transparent 85%),
+    linear-gradient(180deg, transparent 0%, #000 22%, #000 78%, transparent 100%);
+  transform-origin: right center;
+}
+
+.shopify-section:nth-child(odd) > .co-section::before,
+.shopify-section:nth-child(even) > .co-section::after,
+.shopify-section:nth-child(3n) > .co-section::before {
+  opacity: 0.7;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .shopify-section > .co-section::before {
+    animation: co-fog-roll-left 16s ease-in-out infinite alternate;
+  }
+
+  .shopify-section > .co-section::after {
+    animation: co-fog-roll-right 19s ease-in-out -6s infinite alternate;
+  }
+
+  .shopify-section:nth-child(odd) > .co-section::after,
+  .shopify-section:nth-child(even):not(:nth-child(3n)) > .co-section::before {
+    animation: none;
+  }
+}
+
+@keyframes co-fog-roll-left {
+  0% {
+    opacity: 0.3;
+    transform: translate3d(-38%, 0, 0) scaleX(0.9);
+  }
+  100% {
+    opacity: 0.8;
+    transform: translate3d(4%, 0, 0) scaleX(1.12);
+  }
+}
+
+@keyframes co-fog-roll-right {
+  0% {
+    opacity: 0.3;
+    transform: translate3d(38%, 0, 0) scaleX(0.9);
+  }
+  100% {
+    opacity: 0.8;
+    transform: translate3d(-4%, 0, 0) scaleX(1.12);
+  }
+}
+
+.co-hero-banner__media::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: calc(100% + 800px);
+  bottom: -2%;
+  height: 55%;
+  background: var(--co-fog) repeat-x 0 100% / 800px 400px;
+  opacity: 0.75;
+  pointer-events: none;
+  -webkit-mask: linear-gradient(0deg, #000 25%, transparent 100%);
+  mask: linear-gradient(0deg, #000 25%, transparent 100%);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .co-hero-banner__media::after {
+    animation: co-fog-pan 40s linear infinite;
+  }
+}
+
+@keyframes co-fog-pan {
+  to {
+    transform: translate3d(-800px, 0, 0);
+  }
+}
+
+@media (width < 48rem) {
+  .shopify-section > .co-section::before,
+  .shopify-section > .co-section::after {
+    width: 70vw;
+  }
+
+  .shopify-section:nth-child(odd) > .co-section::before,
+  .shopify-section:nth-child(even) > .co-section::after,
+  .shopify-section:nth-child(3n) > .co-section::before {
+    opacity: 0.5;
+  }
 }
