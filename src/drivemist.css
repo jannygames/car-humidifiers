@@ -6,28 +6,28 @@
 @source "../layout/**/*.liquid";
 
 @theme {
-  --color-ink: var(--co-ink, #12151b);
-  --color-paper: var(--co-paper, #f5f7fa);
-  --color-sand: var(--co-sand, #e9eef3);
-  --color-shell: var(--co-shell, #d9e2ea);
-  --color-deep: var(--co-deep, #0b1220);
-  --color-line: var(--co-line, #dbe2ea);
-  --color-muted: var(--co-muted, #566170);
-  --color-accent: var(--co-accent, #086683);
-  --color-accent-soft: var(--co-accent-soft, #6fd3f0);
-  --color-accent-ink: var(--co-accent-ink, #0b1220);
-  --color-accent-wash: var(--co-accent-wash, #dff3fa);
+  --color-ink: var(--co-ink, #eaf1f8);
+  --color-paper: var(--co-paper, #070b16);
+  --color-sand: var(--co-sand, #0d1424);
+  --color-shell: var(--co-shell, #151f36);
+  --color-deep: var(--co-deep, #04070f);
+  --color-line: var(--co-line, #1e2a42);
+  --color-muted: var(--co-muted, #97a5ba);
+  --color-accent: var(--co-accent, #72d9f5);
+  --color-accent-soft: var(--co-accent-soft, #4cc9f0);
+  --color-accent-ink: var(--co-accent-ink, #03121b);
+  --color-accent-wash: var(--co-accent-wash, #0c2533);
   /* The one loud colour: add to cart, checkout, sale badges — ignition orange. */
-  --color-cta: var(--co-cta, #d03f12);
-  --color-cta-ink: var(--co-cta-ink, #ffffff);
-  --color-cta-wash: var(--co-cta-wash, #fde6dc);
-  --color-sale: var(--co-sale, #d03f12);
-  --color-sale-ink: var(--co-sale-ink, #ffffff);
-  --color-sun: var(--co-sun, #ffc53d);
-  --color-sky: var(--co-sky, #8f7bff);
-  --color-moss: var(--co-moss, #5fd39a);
+  --color-cta: var(--co-cta, #ff6b35);
+  --color-cta-ink: var(--co-cta-ink, #160903);
+  --color-cta-wash: var(--co-cta-wash, #35160b);
+  --color-sale: var(--co-sale, #ff6b35);
+  --color-sale-ink: var(--co-sale-ink, #160903);
+  --color-sun: var(--co-sun, #ffd166);
+  --color-sky: var(--co-sky, #a78bfa);
+  --color-moss: var(--co-moss, #5eead4);
   --color-plum: var(--co-plum, #6fd3f0);
-  --color-success: var(--co-success, #137a54);
+  --color-success: var(--co-success, #4fd69c);
 
   --font-display: var(--font-heading--family, "Barlow", ui-sans-serif, system-ui, sans-serif);
   --font-body: var(--font-body--family, "Inter", ui-sans-serif, system-ui, sans-serif);
@@ -36,8 +36,8 @@
   --radius-card: 1.25rem;
   --radius-tile: 0.75rem;
 
-  --shadow-lift: 0 1px 2px rgb(11 18 32 / 0.04), 0 12px 32px -18px rgb(11 18 32 / 0.28);
-  --shadow-float: 0 2px 4px rgb(11 18 32 / 0.05), 0 24px 60px -28px rgb(11 18 32 / 0.4);
+  --shadow-lift: 0 1px 2px rgb(0 0 0 / 0.3), 0 14px 36px -18px rgb(0 0 0 / 0.7);
+  --shadow-float: 0 2px 4px rgb(0 0 0 / 0.3), 0 28px 70px -28px rgb(0 0 0 / 0.8), 0 0 0 1px rgb(114 217 245 / 0.06);
 
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -201,7 +201,7 @@
   color: var(--color-cta-ink);
   box-shadow: var(--shadow-lift);
   &:hover {
-    background-color: color-mix(in oklab, var(--color-cta) 88%, #000);
+    background-color: color-mix(in oklab, var(--color-cta) 88%, #fff);
     transform: translateY(-1px);
   }
   &:active {
@@ -214,7 +214,7 @@
   color: var(--color-cta-ink);
   box-shadow: var(--shadow-lift);
   &:hover {
-    background-color: color-mix(in oklab, var(--color-cta) 84%, #000);
+    background-color: color-mix(in oklab, var(--color-cta) 84%, #fff);
     transform: translateY(-1px);
   }
 }
@@ -224,7 +224,7 @@
   color: var(--color-paper);
   box-shadow: var(--shadow-lift);
   &:hover {
-    background-color: color-mix(in oklab, var(--color-accent) 86%, #000);
+    background-color: color-mix(in oklab, var(--color-accent) 86%, #fff);
     transform: translateY(-1px);
   }
   &:active {
@@ -237,7 +237,7 @@
   color: var(--color-cta-ink);
   box-shadow: var(--shadow-lift);
   &:hover {
-    background-color: color-mix(in oklab, var(--color-cta) 86%, #000);
+    background-color: color-mix(in oklab, var(--color-cta) 86%, #fff);
     transform: translateY(-1px);
   }
   &:active {
@@ -416,10 +416,10 @@
 }
 
 .co-ph--studio {
-  background: radial-gradient(120% 90% at 50% 34%, #ffffff 0%, #e9eef3 46%, #c6d2de 100%);
-  --co-ph-body: #141a24;
-  --co-ph-glass: #6f8aa3;
-  --co-ph-mist: #7fb9cc;
+  background: radial-gradient(90% 70% at 50% 38%, #1d2c46 0%, #0e1729 48%, #060a14 100%);
+  --co-ph-body: #d7e1ec;
+  --co-ph-glass: #1d2c46;
+  --co-ph-mist: #6fd3f0;
 }
 
 .co-ph--night {
@@ -527,10 +527,10 @@
 }
 
 .co-atc__button.button:hover:not([disabled]) {
-  --button-background-color: color-mix(in oklab, var(--color-cta) 88%, #000);
+  --button-background-color: color-mix(in oklab, var(--color-cta) 88%, #fff);
   --button-color: var(--color-cta-ink);
 
-  background-color: color-mix(in oklab, var(--color-cta) 88%, #000);
+  background-color: color-mix(in oklab, var(--color-cta) 88%, #fff);
   transform: translateY(-1px);
 }
 
@@ -762,16 +762,16 @@
   --co-nav-marker: var(--co-marker-1, #6fd3f0);
 }
 .menu-list .menu-list__list-item:nth-child(5n + 2) {
-  --co-nav-marker: var(--co-marker-2, #ff7a45);
+  --co-nav-marker: var(--co-marker-2, #ff8a5c);
 }
 .menu-list .menu-list__list-item:nth-child(5n + 3) {
-  --co-nav-marker: var(--co-marker-3, #f4c56b);
+  --co-nav-marker: var(--co-marker-3, #ffd166);
 }
 .menu-list .menu-list__list-item:nth-child(5n + 4) {
-  --co-nav-marker: var(--co-marker-4, #7cbbd6);
+  --co-nav-marker: var(--co-marker-4, #a78bfa);
 }
 .menu-list .menu-list__list-item:nth-child(5n + 5) {
-  --co-nav-marker: var(--co-marker-5, #8cc9a4);
+  --co-nav-marker: var(--co-marker-5, #5eead4);
 }
 
 .menu-list .menu-list__link {
@@ -1097,9 +1097,9 @@
 }
 
 .co-card-atc.button:hover:not([disabled]) {
-  --button-background-color: color-mix(in oklab, var(--color-cta) 86%, #000);
+  --button-background-color: color-mix(in oklab, var(--color-cta) 86%, #fff);
 
-  background-color: color-mix(in oklab, var(--color-cta) 86%, #000);
+  background-color: color-mix(in oklab, var(--color-cta) 86%, #fff);
   transform: translateY(-1px);
 }
 
@@ -1253,21 +1253,21 @@
 }
 
 .co-social:nth-of-type(5n + 2) {
-  --co-social-hover: var(--co-marker-2, #ff7a45);
+  --co-social-hover: var(--co-marker-2, #ff8a5c);
 }
 .co-social:nth-of-type(5n + 3) {
-  --co-social-hover: var(--co-marker-3, #f4c56b);
+  --co-social-hover: var(--co-marker-3, #ffd166);
 }
 .co-social:nth-of-type(5n + 4) {
-  --co-social-hover: var(--co-marker-4, #7cbbd6);
+  --co-social-hover: var(--co-marker-4, #a78bfa);
 }
 .co-social:nth-of-type(5n + 5) {
-  --co-social-hover: var(--co-marker-5, #8cc9a4);
+  --co-social-hover: var(--co-marker-5, #5eead4);
 }
 
 .co-social:hover {
   background: var(--co-social-hover);
-  color: var(--co-ink, #12151b);
+  color: var(--co-ink, #eaf1f8);
   transform: translateY(-2px);
 }
 
@@ -1287,7 +1287,7 @@
 .co-social-light .co-social:hover {
   background: var(--co-social-hover);
   box-shadow: inset 0 0 0 1px transparent;
-  color: var(--co-ink, #12151b);
+  color: var(--co-ink, #eaf1f8);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1435,8 +1435,8 @@
   inset-block-start: -0.15rem;
   width: 2.5rem;
   height: 2.15rem;
-  border-inline-start: 2px solid color-mix(in oklab, var(--color-success, #137a54) 34%, transparent);
-  border-block-end: 2px solid color-mix(in oklab, var(--color-success, #137a54) 34%, transparent);
+  border-inline-start: 2px solid color-mix(in oklab, var(--color-success, #4fd69c) 34%, transparent);
+  border-block-end: 2px solid color-mix(in oklab, var(--color-success, #4fd69c) 34%, transparent);
   border-end-start-radius: 0.75rem;
   pointer-events: none;
 }
@@ -1477,8 +1477,8 @@
   gap: 0.3rem;
   padding: 0.2rem 0.55rem;
   border-radius: 999px;
-  background: color-mix(in oklab, var(--color-success, #137a54) 14%, transparent);
-  color: var(--color-success, #137a54);
+  background: color-mix(in oklab, var(--color-success, #4fd69c) 14%, transparent);
+  color: var(--color-success, #4fd69c);
   font-family: var(--font-sub);
   font-size: 0.75rem;
   font-weight: 700;
@@ -1490,7 +1490,7 @@
 
 /* The gift's price reads as the reward, not a number. */
 .cart-page .co-cart-row--gift .cart-items__unit-price-wrapper span:not(.visually-hidden) {
-  color: var(--color-success, #137a54);
+  color: var(--color-success, #4fd69c);
 }
 
 /* The line total would just repeat "free" in the right-hand column — the price beside the
@@ -2046,8 +2046,8 @@ html:has(dialog[open]) .co-cart-sticky {
 #mc-shipping-wrapper .mc-carrier-btn[data-co-free='true'] .mc-carrier-price {
   padding: 0.2rem 0.55rem;
   border-radius: 999px;
-  background: color-mix(in oklab, var(--color-success, #137a54) 14%, transparent);
-  color: var(--color-success, #137a54);
+  background: color-mix(in oklab, var(--color-success, #4fd69c) 14%, transparent);
+  color: var(--color-success, #4fd69c);
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.04em;
@@ -2198,7 +2198,7 @@ html:has(dialog[open]) .co-cart-sticky {
   font-size: 0.8125rem;
   line-height: 1.4;
   font-weight: 500;
-  color: var(--co-sale, #d03f12);
+  color: var(--co-sale, #ff6b35);
   margin-block-start: 0.5rem;
 }
 
@@ -2214,16 +2214,16 @@ html:has(dialog[open]) .co-cart-sticky {
 #mc-shipping-wrapper .mc-field-highlight .ts-control,
 #mc-shipping-wrapper .mc-field-highlight.ts-wrapper .ts-control,
 #mc-shipping-wrapper .ts-wrapper.mc-field-highlight .ts-control {
-  border-color: var(--co-sale, #d03f12) !important;
-  box-shadow: 0 0 0 3px color-mix(in oklab, var(--co-sale, #d03f12) 15%, transparent) !important;
+  border-color: var(--co-sale, #ff6b35) !important;
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--co-sale, #ff6b35) 15%, transparent) !important;
 }
 
 /* Whichever element the module tags, give it the same treatment. */
 #mc-shipping-wrapper select.mc-field-highlight,
 #mc-shipping-wrapper input.mc-field-highlight,
 #mc-shipping-wrapper .mc-field-highlight:not(.ts-wrapper):not(:has(.ts-control)) {
-  border: 1px solid var(--co-sale, #d03f12) !important;
-  box-shadow: 0 0 0 3px color-mix(in oklab, var(--co-sale, #d03f12) 15%, transparent) !important;
+  border: 1px solid var(--co-sale, #ff6b35) !important;
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--co-sale, #ff6b35) 15%, transparent) !important;
 }
 
 #mc-shipping-wrapper .mc-skeleton-line,
@@ -2343,16 +2343,16 @@ html:has(dialog[open]) .co-cart-sticky {
   --co-drawer-marker: var(--co-marker-1, #6fd3f0);
 }
 .menu-drawer .menu-drawer__menu li:nth-child(5n + 2) {
-  --co-drawer-marker: var(--co-marker-2, #ff7a45);
+  --co-drawer-marker: var(--co-marker-2, #ff8a5c);
 }
 .menu-drawer .menu-drawer__menu li:nth-child(5n + 3) {
-  --co-drawer-marker: var(--co-marker-3, #f4c56b);
+  --co-drawer-marker: var(--co-marker-3, #ffd166);
 }
 .menu-drawer .menu-drawer__menu li:nth-child(5n + 4) {
-  --co-drawer-marker: var(--co-marker-4, #7cbbd6);
+  --co-drawer-marker: var(--co-marker-4, #a78bfa);
 }
 .menu-drawer .menu-drawer__menu li:nth-child(5n + 5) {
-  --co-drawer-marker: var(--co-marker-5, #8cc9a4);
+  --co-drawer-marker: var(--co-marker-5, #5eead4);
 }
 
 /* Child links stay quiet so the hierarchy is obvious at a glance. */
@@ -2418,9 +2418,9 @@ html:has(dialog[open]) .co-cart-sticky {
 }
 
 .co-bundle-atc.button:hover:not([disabled]) {
-  --button-background-color: color-mix(in oklab, var(--color-accent) 86%, #000);
+  --button-background-color: color-mix(in oklab, var(--color-accent) 86%, #fff);
 
-  background-color: color-mix(in oklab, var(--color-accent) 86%, #000);
+  background-color: color-mix(in oklab, var(--color-accent) 86%, #fff);
   transform: translateY(-1px);
 }
 
@@ -2711,7 +2711,7 @@ html:has(dialog[open]) .co-cart-sticky {
   margin-block-start: 0.5rem;
   font-size: 0.8125rem;
   line-height: 1.4;
-  color: var(--co-sale, #d03f12);
+  color: var(--co-sale, #ff6b35);
 }
 
 /* The gate: until the box is ticked, the checkout button and any accelerated wallet
@@ -2781,9 +2781,9 @@ html:has(dialog[open]) .co-cart-sticky {
 }
 
 .cart-drawer__inner .cart__checkout-button.button:hover:not([disabled]) {
-  --button-background-color: color-mix(in oklab, var(--color-accent) 86%, #000);
+  --button-background-color: color-mix(in oklab, var(--color-accent) 86%, #fff);
 
-  background-color: color-mix(in oklab, var(--color-accent) 86%, #000);
+  background-color: color-mix(in oklab, var(--color-accent) 86%, #fff);
   transform: translateY(-1px);
 }
 
@@ -2961,7 +2961,7 @@ html:has(dialog[open]) [data-co-sticky-bar],
   left: 0;
   bottom: 0.45rem;
   width: 3.5rem;
-  color: var(--color-paper);
+  color: var(--color-ink);
   animation: co-car-cruise 16s cubic-bezier(0.45, 0, 0.55, 1) infinite;
 }
 
@@ -3107,9 +3107,9 @@ html:has(dialog[open]) [data-co-sticky-bar],
 }
 
 .cart-drawer__inner .cart-discount__button.button:hover:not([disabled]) {
-  --button-background-color: color-mix(in oklab, var(--color-accent) 86%, #000);
+  --button-background-color: color-mix(in oklab, var(--color-accent) 86%, #fff);
 
-  background-color: color-mix(in oklab, var(--color-accent) 86%, #000);
+  background-color: color-mix(in oklab, var(--color-accent) 86%, #fff);
 }
 
 .cart-drawer__inner .cart-discount__input {
@@ -3524,7 +3524,7 @@ html:has(.co-lightbox[open]) .page-wrapper {
 }
 
 .co-lightbox__arrow:hover {
-  background: color-mix(in oklab, var(--color-cta) 86%, #000);
+  background: color-mix(in oklab, var(--color-cta) 86%, #fff);
 }
 
 .co-lightbox__arrow:disabled,
@@ -4752,7 +4752,7 @@ main > .shopify-section:last-child:not(:has(.co-section)) {
   --jm-btn-bg: var(--color-cta);
   --jm-btn-color: var(--color-cta-ink);
   --jm-btn-border: var(--color-cta);
-  --jm-btn-hover-bg: color-mix(in oklab, var(--color-cta) 88%, #000);
+  --jm-btn-hover-bg: color-mix(in oklab, var(--color-cta) 88%, #fff);
   box-shadow: var(--shadow-lift);
 }
 
@@ -5023,4 +5023,332 @@ main > .shopify-section:last-child:not(:has(.co-section)) {
   50% {
     background-position: 0 0;
   }
+}
+
+.co-sky {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  contain: strict;
+  background:
+    radial-gradient(120% 70% at 50% 120%, color-mix(in oklab, var(--color-accent-soft) 10%, transparent) 0%, transparent 60%),
+    linear-gradient(180deg, color-mix(in oklab, var(--color-deep) 70%, var(--color-paper)) 0%, var(--color-paper) 55%, color-mix(in oklab, var(--color-sand) 70%, var(--color-paper)) 100%);
+}
+
+.co-sky__glow {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(60% 45% at 12% 0%, color-mix(in oklab, var(--color-accent-soft) 16%, transparent) 0%, transparent 70%),
+    radial-gradient(50% 40% at 92% 8%, color-mix(in oklab, var(--co-marker-4, #a78bfa) 14%, transparent) 0%, transparent 70%);
+}
+
+.co-sky__stars {
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  will-change: transform;
+}
+
+.co-sky__stars--far {
+  height: calc(100% + 211px);
+  background-image:
+    radial-gradient(circle at 84px 40px, rgb(160 230 255 / 0.37) 0 0.62px, transparent 1.22px),
+    radial-gradient(circle at 26px 95px, rgb(255 255 255 / 0.67) 0 0.67px, transparent 1.27px),
+    radial-gradient(circle at 11px 24px, rgb(255 255 255 / 0.37) 0 0.63px, transparent 1.23px),
+    radial-gradient(circle at 143px 110px, rgb(255 255 255 / 0.55) 0 0.52px, transparent 1.12px),
+    radial-gradient(circle at 163px 162px, rgb(160 230 255 / 0.37) 0 0.67px, transparent 1.27px),
+    radial-gradient(circle at 103px 14px, rgb(255 255 255 / 0.37) 0 0.79px, transparent 1.39px),
+    radial-gradient(circle at 76px 109px, rgb(255 255 255 / 0.39) 0 0.54px, transparent 1.14px),
+    radial-gradient(circle at 145px 176px, rgb(160 230 255 / 0.55) 0 0.55px, transparent 1.15px),
+    radial-gradient(circle at 50px 97px, rgb(160 230 255 / 0.6) 0 0.53px, transparent 1.13px),
+    radial-gradient(circle at 17px 160px, rgb(255 255 255 / 0.59) 0 0.56px, transparent 1.16px),
+    radial-gradient(circle at 200px 82px, rgb(255 255 255 / 0.67) 0 0.64px, transparent 1.24px),
+    radial-gradient(circle at 78px 65px, rgb(255 255 255 / 0.59) 0 0.74px, transparent 1.34px),
+    radial-gradient(circle at 22px 149px, rgb(255 255 255 / 0.52) 0 0.59px, transparent 1.19px),
+    radial-gradient(circle at 188px 116px, rgb(255 255 255 / 0.69) 0 0.59px, transparent 1.19px);
+  background-size: 211px 211px;
+  opacity: 0.7;
+  animation: co-sky-rise-far 140s linear infinite;
+}
+
+.co-sky__stars--mid {
+  height: calc(100% + 307px);
+  background-image:
+    radial-gradient(circle at 264px 216px, rgb(160 230 255 / 0.62) 0 0.77px, transparent 1.37px),
+    radial-gradient(circle at 217px 22px, rgb(200 185 255 / 0.53) 0 1.08px, transparent 1.68px),
+    radial-gradient(circle at 295px 162px, rgb(160 230 255 / 0.62) 0 0.84px, transparent 1.44px),
+    radial-gradient(circle at 298px 235px, rgb(160 230 255 / 0.53) 0 0.73px, transparent 1.33px),
+    radial-gradient(circle at 244px 35px, rgb(200 185 255 / 0.75) 0 0.72px, transparent 1.32px),
+    radial-gradient(circle at 297px 230px, rgb(200 185 255 / 0.64) 0 0.81px, transparent 1.41px),
+    radial-gradient(circle at 179px 13px, rgb(200 185 255 / 0.62) 0 1.08px, transparent 1.68px),
+    radial-gradient(circle at 61px 254px, rgb(255 255 255 / 0.77) 0 0.72px, transparent 1.32px),
+    radial-gradient(circle at 128px 205px, rgb(255 255 255 / 0.8) 0 0.86px, transparent 1.46px),
+    radial-gradient(circle at 87px 231px, rgb(255 255 255 / 0.6) 0 0.86px, transparent 1.46px);
+  background-size: 307px 307px;
+  animation: co-sky-rise-mid 110s linear infinite, co-sky-twinkle 5.5s ease-in-out infinite;
+}
+
+.co-sky__stars--near {
+  height: calc(100% + 463px);
+  background-image:
+    radial-gradient(circle at 421px 222px, rgb(255 214 170 / 0.82) 0 1.43px, transparent 2.03px),
+    radial-gradient(circle at 185px 351px, rgb(255 255 255 / 0.99) 0 1.44px, transparent 2.04px),
+    radial-gradient(circle at 44px 92px, rgb(255 255 255 / 0.91) 0 1.08px, transparent 1.68px),
+    radial-gradient(circle at 250px 427px, rgb(255 255 255 / 0.82) 0 1.29px, transparent 1.89px),
+    radial-gradient(circle at 76px 216px, rgb(160 230 255 / 0.9) 0 1.27px, transparent 1.87px),
+    radial-gradient(circle at 66px 355px, rgb(255 255 255 / 0.99) 0 1.43px, transparent 2.03px);
+  background-size: 463px 463px;
+  filter: drop-shadow(0 0 2px rgb(160 230 255 / 0.8));
+  animation: co-sky-rise-near 90s linear infinite, co-sky-twinkle 8s ease-in-out -3s infinite;
+}
+
+.co-sky__shoot {
+  position: absolute;
+  top: 12%;
+  left: 62%;
+  width: 9rem;
+  height: 1px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgb(255 255 255 / 0.95), color-mix(in oklab, var(--color-accent-soft) 60%, transparent) 30%, transparent);
+  opacity: 0;
+  transform: rotate(-24deg) translateX(0);
+  transform-origin: left center;
+  animation: co-sky-shoot 13s ease-in 4s infinite;
+}
+
+.co-sky__shoot--late {
+  top: 30%;
+  left: 18%;
+  width: 6rem;
+  animation-duration: 19s;
+  animation-delay: 11s;
+}
+
+.co-sky__mist {
+  position: absolute;
+  border-radius: 50%;
+  will-change: transform;
+}
+
+.co-sky__mist--a {
+  left: -20vmax;
+  top: 18vh;
+  width: 70vmax;
+  height: 40vmax;
+  background: radial-gradient(closest-side, color-mix(in oklab, var(--color-accent-soft) 15%, transparent), transparent);
+  animation: co-sky-mist-a 46s ease-in-out infinite alternate;
+}
+
+.co-sky__mist--b {
+  right: -25vmax;
+  top: 48vh;
+  width: 80vmax;
+  height: 42vmax;
+  background: radial-gradient(closest-side, color-mix(in oklab, var(--co-marker-4, #a78bfa) 12%, transparent), transparent);
+  animation: co-sky-mist-b 58s ease-in-out infinite alternate;
+}
+
+.co-sky__mist--c {
+  left: 10vw;
+  bottom: -18vmax;
+  width: 90vmax;
+  height: 36vmax;
+  background: radial-gradient(closest-side, color-mix(in oklab, var(--co-marker-5, #5eead4) 10%, transparent), transparent);
+  animation: co-sky-mist-c 64s ease-in-out infinite alternate;
+}
+
+.co-sky__haze {
+  position: absolute;
+  inset-inline: -10%;
+  bottom: 0;
+  height: 38vh;
+  background: linear-gradient(0deg, color-mix(in oklab, var(--color-accent-soft) 7%, transparent), transparent);
+  -webkit-mask: radial-gradient(60% 100% at 50% 100%, #000 30%, transparent 75%);
+  mask: radial-gradient(60% 100% at 50% 100%, #000 30%, transparent 75%);
+}
+
+@keyframes co-sky-rise-far {
+  to {
+    transform: translateY(-211px);
+  }
+}
+
+@keyframes co-sky-rise-mid {
+  to {
+    transform: translateY(-307px);
+  }
+}
+
+@keyframes co-sky-rise-near {
+  to {
+    transform: translateY(-463px);
+  }
+}
+
+@keyframes co-sky-twinkle {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+@keyframes co-sky-shoot {
+  0% {
+    opacity: 0;
+    transform: rotate(-24deg) translateX(0);
+  }
+  2% {
+    opacity: 1;
+  }
+  7% {
+    opacity: 0;
+    transform: rotate(-24deg) translateX(-28rem);
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(-24deg) translateX(-28rem);
+  }
+}
+
+@keyframes co-sky-mist-a {
+  to {
+    transform: translate3d(30vw, -8vh, 0) scale(1.15);
+  }
+}
+
+@keyframes co-sky-mist-b {
+  to {
+    transform: translate3d(-34vw, -12vh, 0) scale(1.1);
+  }
+}
+
+@keyframes co-sky-mist-c {
+  to {
+    transform: translate3d(-18vw, -6vh, 0) scale(1.2);
+  }
+}
+
+@media (width < 48rem) {
+  .co-sky__stars--near,
+  .co-sky__shoot--late {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .co-sky *,
+  .co-sky *::before,
+  .co-sky *::after {
+    animation: none !important;
+  }
+
+  .co-sky__shoot {
+    display: none;
+  }
+}
+
+:root {
+  color-scheme: dark;
+}
+
+.co.bg-paper {
+  background-color: transparent;
+}
+
+.co.bg-sand {
+  background-color: color-mix(in oklab, var(--color-sand) 72%, transparent);
+}
+
+.co.bg-shell {
+  background-color: color-mix(in oklab, var(--color-shell) 70%, transparent);
+}
+
+.co.bg-accent-wash {
+  background-color: color-mix(in oklab, var(--color-accent-wash) 75%, transparent);
+}
+
+.co.bg-sand,
+.co.bg-shell,
+.co.bg-accent-wash {
+  box-shadow: inset 0 1px 0 color-mix(in oklab, var(--color-accent-soft) 10%, transparent),
+    inset 0 -1px 0 color-mix(in oklab, var(--color-ink) 6%, transparent);
+}
+
+.co.bg-deep {
+  background-image:
+    radial-gradient(circle at 118px 232px, rgb(160 230 255 / 0.78) 0 0.94px, transparent 1.54px),
+    radial-gradient(circle at 103px 104px, rgb(160 230 255 / 0.57) 0 0.7px, transparent 1.3px),
+    radial-gradient(circle at 17px 50px, rgb(255 255 255 / 0.44) 0 0.53px, transparent 1.13px),
+    radial-gradient(circle at 30px 89px, rgb(255 255 255 / 0.4) 0 0.8px, transparent 1.4px),
+    radial-gradient(circle at 139px 27px, rgb(255 255 255 / 0.63) 0 0.97px, transparent 1.57px),
+    radial-gradient(circle at 225px 55px, rgb(160 230 255 / 0.42) 0 0.81px, transparent 1.41px),
+    radial-gradient(circle at 246px 90px, rgb(255 255 255 / 0.56) 0 0.8px, transparent 1.4px),
+    radial-gradient(circle at 219px 126px, rgb(160 230 255 / 0.56) 0 1.0px, transparent 1.6px),
+    radial-gradient(circle at 81px 23px, rgb(160 230 255 / 0.69) 0 0.57px, transparent 1.17px),
+    radial-gradient(circle at 124px 214px, rgb(255 255 255 / 0.58) 0 0.85px, transparent 1.45px);
+  background-size: 257px 257px;
+}
+
+.co-footer--clouds::before {
+  filter: drop-shadow(0 -8px 22px color-mix(in oklab, var(--color-accent-soft) 22%, transparent));
+}
+
+.co .rounded-card.bg-paper {
+  background-color: color-mix(in oklab, var(--color-shell) 55%, var(--color-paper));
+  background-image: linear-gradient(180deg, color-mix(in oklab, var(--color-ink) 4%, transparent), transparent 40%);
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--color-ink) 8%, transparent),
+    0 24px 60px -32px rgb(0 0 0 / 0.85);
+}
+
+.co .co-display {
+  text-shadow: 0 0 40px color-mix(in oklab, var(--color-accent-soft) 18%, transparent);
+}
+
+.co-btn-primary,
+.co-btn-cta {
+  box-shadow: 0 10px 30px -12px color-mix(in oklab, var(--color-cta) 70%, transparent),
+    inset 0 1px 0 rgb(255 255 255 / 0.25);
+}
+
+.co-btn-primary:hover,
+.co-btn-cta:hover {
+  box-shadow: 0 14px 38px -12px color-mix(in oklab, var(--color-cta) 85%, transparent),
+    inset 0 1px 0 rgb(255 255 255 / 0.3);
+}
+
+.co .text-accent svg,
+.co svg.text-accent {
+  filter: drop-shadow(0 0 6px color-mix(in oklab, var(--color-accent-soft) 45%, transparent));
+}
+
+.co article.group .rounded-card,
+.co .co-review-card {
+  transition: box-shadow 0.4s var(--ease-out-soft), transform 0.4s var(--ease-out-soft);
+}
+
+@media (hover: hover) {
+  .co article.group:hover .rounded-card,
+  .co .co-review-card:hover {
+    box-shadow: 0 0 0 1px color-mix(in oklab, var(--color-accent-soft) 35%, transparent),
+      0 20px 60px -24px color-mix(in oklab, var(--color-accent-soft) 45%, transparent);
+  }
+}
+
+#header-component {
+  --co-header-glow: color-mix(in oklab, var(--color-accent-soft) 14%, transparent);
+}
+
+#header-component[data-sticky-state='active'] {
+  box-shadow: 0 1px 0 var(--co-header-glow), 0 18px 40px -24px rgb(0 0 0 / 0.9);
+}
+
+::selection {
+  background: color-mix(in oklab, var(--color-accent-soft) 40%, transparent);
+  color: var(--color-ink);
 }

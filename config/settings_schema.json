@@ -22,33 +22,33 @@
         "type": "color",
         "id": "brand_sand",
         "label": "Soft surface",
-        "default": "#e9eef3",
+        "default": "#0d1424",
         "info": "Used for alternating section backgrounds and cards."
       },
       {
         "type": "color",
         "id": "brand_shell",
         "label": "Deep surface",
-        "default": "#d9e2ea"
+        "default": "#151f36"
       },
       {
         "type": "color",
         "id": "brand_deep",
         "label": "Deep surface",
-        "default": "#0b1220",
-        "info": "The dark band used by the footer and the promise sections. A midnight carbon blue rather than a neutral black."
+        "default": "#04070f",
+        "info": "The darkest band, used by the footer and the promise sections. Sits below the page background so those bands read as deeper night."
       },
       {
         "type": "color",
         "id": "brand_line",
         "label": "Hairline / border",
-        "default": "#dbe2ea"
+        "default": "#1e2a42"
       },
       {
         "type": "color",
         "id": "brand_muted",
         "label": "Muted text",
-        "default": "#566170"
+        "default": "#97a5ba"
       },
       {
         "type": "header",
@@ -58,27 +58,27 @@
         "type": "color",
         "id": "brand_accent",
         "label": "Accent",
-        "default": "#086683",
-        "info": "Used for text, icons and eyebrows, so it has to stay dark enough to read."
+        "default": "#72d9f5",
+        "info": "Used for text, icons and eyebrows, so it has to stay bright enough to read on the dark page."
       },
       {
         "type": "color",
         "id": "brand_accent_soft",
         "label": "Accent (soft)",
-        "default": "#6fd3f0",
-        "info": "The mist cyan from the logo. Fills, glows and decorative dots only — too pale for text on light backgrounds."
+        "default": "#4cc9f0",
+        "info": "The mist cyan from the logo. Fills, glows and decorative dots."
       },
       {
         "type": "color",
         "id": "brand_accent_ink",
         "label": "Text on accent",
-        "default": "#0b1220"
+        "default": "#03121b"
       },
       {
         "type": "color",
         "id": "brand_accent_wash",
         "label": "Accent wash",
-        "default": "#dff3fa",
+        "default": "#0c2533",
         "info": "Tinted background for badges and highlight pills."
       },
       {
@@ -93,25 +93,25 @@
         "type": "color",
         "id": "brand_cta",
         "label": "CTA",
-        "default": "#d03f12"
+        "default": "#ff6b35"
       },
       {
         "type": "color",
         "id": "brand_cta_ink",
         "label": "Text on CTA",
-        "default": "#ffffff"
+        "default": "#160903"
       },
       {
         "type": "color",
         "id": "brand_cta_wash",
         "label": "CTA wash",
-        "default": "#fde6dc"
+        "default": "#35160b"
       },
       {
         "type": "color",
         "id": "brand_success",
         "label": "Success / in stock",
-        "default": "#137a54"
+        "default": "#4fd69c"
       },
       {
         "type": "header",
@@ -131,25 +131,25 @@
         "type": "color",
         "id": "brand_marker_2",
         "label": "Marker 2",
-        "default": "#ff7a45"
+        "default": "#ff8a5c"
       },
       {
         "type": "color",
         "id": "brand_marker_3",
         "label": "Marker 3",
-        "default": "#ffc53d"
+        "default": "#ffd166"
       },
       {
         "type": "color",
         "id": "brand_marker_4",
         "label": "Marker 4",
-        "default": "#8f7bff"
+        "default": "#a78bfa"
       },
       {
         "type": "color",
         "id": "brand_marker_5",
         "label": "Marker 5",
-        "default": "#5fd39a"
+        "default": "#5eead4"
       },
       {
         "type": "header",
@@ -268,8 +268,8 @@
         "type": "color_palette",
         "id": "color_palette",
         "default": {
-          "background": "#ffffff",
-          "foreground": "#000000"
+          "background": "#070b16",
+          "foreground": "#eaf1f8"
         }
       }
     ]

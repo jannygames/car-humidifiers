@@ -54,9 +54,9 @@
       "settings": {
         "speed": 5,
         "section_width": "page-width",
-        "background_color": "#0b1220",
+        "background_color": "#04070f",
         "divider_width": 0,
-        "divider_color": "#0b1220",
+        "divider_color": "#04070f",
         "padding-block-start": 16,
         "padding-block-end": 16
       }
@@ -122,8 +122,8 @@
         "divider_color": "{{ settings.color_palette.color2 }}",
         "bottom_border_color": "{{ settings.color_palette.color2 }}",
         "bubble_style": "custom",
-        "bubble_background_color": "#d03f12",
-        "bubble_text_color": "#ffffff"
+        "bubble_background_color": "#ff6b35",
+        "bubble_text_color": "#160903"
       }
     }
   },
